@@ -1,25 +1,69 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { LanguageProvider } from './context/LanguageContext';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './components/pages/HomePage';
+import AboutPage from './components/pages/AboutPage';
+import CoursesPage from './components/pages/CoursesPage';
+import TestimonialsPage from './components/pages/TestimonialsPage';
+import GalleryPage from './components/pages/GalleryPage';
+import ContactPage from './components/pages/ContactPage';
+import LoginPage from './components/pages/LoginPage';
+import AdminDashboard from './components/pages/AdminDashboard';
+import PrivacyPage from './components/pages/PrivacyPage';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return <HomePage />;
+      case 'about':
+        return <AboutPage />;
+      case 'courses':
+        return <CoursesPage />;
+      case 'testimonials':
+        return <TestimonialsPage />;
+      case 'gallery':
+        return <GalleryPage />;
+      case 'contact':
+        return <ContactPage />;
+      case 'login':
+        return <LoginPage setIsAdmin={setIsAdmin} setCurrentPage={setCurrentPage} />;
+      case 'admin':
+        return isAdmin ? <AdminDashboard /> : <LoginPage setIsAdmin={setIsAdmin} setCurrentPage={setCurrentPage} />;
+      case 'privacy':
+        return <PrivacyPage />;
+      default:
+        return <HomePage />;
+    }
+  };
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <LanguageProvider>
+      <div className="min-h-screen bg-gray-50">
+        {currentPage !== 'login' && (
+          <Header 
+            currentPage={currentPage} 
+            setCurrentPage={setCurrentPage}
+            isAdmin={isAdmin}
+            setIsAdmin={setIsAdmin}
+          />
+        )}
+        
+        <main>
+          {renderPage()}
+        </main>
+        
+        {currentPage !== 'login' && (
+          <Footer setCurrentPage={setCurrentPage} />
+        )}
+      </div>
+    </LanguageProvider>
   );
-}
+};
 
 export default App;
