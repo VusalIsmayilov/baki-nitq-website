@@ -2,16 +2,130 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-/* Custom styles */
+/* Custom Variables */
+:root {
+  --color-background: #faf9f7;
+  --color-primary: #aed9e0;
+  --color-secondary: #f3d5b5;
+  --color-accent: #d8c3a5;
+  --text-dark: #333333;
+  --text-light: #555555;
+  --border-light: #e2e1df;
+}
+
+/* Base Styles */
+body {
+  background-color: var(--color-background);
+  color: var(--text-dark);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Container */
 .container {
   max-width: 1200px;
 }
 
-/* Responsive grid adjustments */
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, var(--color-secondary), #e8c4a0);
+  color: white;
+  padding: 6rem 0;
+}
+
+/* Courses Section */
+.courses-section {
+  background-color: var(--color-background);
+  padding: 4rem 0;
+}
+
+.course-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* About Section */
+.about-section {
+  background: white;
+  padding: 4rem 0;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+  background-color: var(--color-accent);
+  padding: 4rem 0;
+}
+
+.testimonial-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contact Section */
+.contact-section {
+  background-color: var(--color-background);
+  padding: 4rem 0;
+}
+
+/* Gallery Section */
+.gallery-section {
+  background: white;
+  padding: 4rem 0;
+}
+
+.gallery-item {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border-radius: 8px;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.02);
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Form Styles */
+.form-input {
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 0.75rem;
+  width: 100%;
+  background: white;
+  color: var(--text-dark);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(174, 217, 224, 0.2);
 }
 
 /* Smooth transitions */
@@ -19,11 +133,17 @@
   transition: all 0.3s ease;
 }
 
-/* Button hover effects */
-button {
-  transition: all 0.2s ease;
-}
-
-button:hover {
-  transform: translateY(-1px);
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-section {
+    padding: 4rem 0;
+  }
+  
+  .hero-section h1 {
+    font-size: 2rem !important;
+  }
 }

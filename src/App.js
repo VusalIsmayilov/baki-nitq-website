@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
+import { ContentProvider } from './context/ContentContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './components/pages/HomePage';
@@ -44,24 +45,26 @@ const App = () => {
   
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-gray-50">
-        {currentPage !== 'login' && (
-          <Header 
-            currentPage={currentPage} 
-            setCurrentPage={setCurrentPage}
-            isAdmin={isAdmin}
-            setIsAdmin={setIsAdmin}
-          />
-        )}
-        
-        <main>
-          {renderPage()}
-        </main>
-        
-        {currentPage !== 'login' && (
-          <Footer setCurrentPage={setCurrentPage} />
-        )}
-      </div>
+      <ContentProvider>
+        <div className="min-h-screen bg-gray-50">
+          {currentPage !== 'login' && (
+            <Header 
+              currentPage={currentPage} 
+              setCurrentPage={setCurrentPage}
+              isAdmin={isAdmin}
+              setIsAdmin={setIsAdmin}
+            />
+          )}
+          
+          <main>
+            {renderPage()}
+          </main>
+          
+          {currentPage !== 'login' && (
+            <Footer setCurrentPage={setCurrentPage} />
+          )}
+        </div>
+      </ContentProvider>
     </LanguageProvider>
   );
 };

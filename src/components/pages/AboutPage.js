@@ -1,25 +1,47 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useContent } from '../../context/ContentContext';
 
 const AboutPage = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { siteContent } = useContent();
+  
+  // Debug logging
+  console.log('📋 AboutPage render - siteContent:', siteContent);
+  console.log('📋 AboutPage - aboutMission:', siteContent.aboutMission);
+  console.log('📋 AboutPage - aboutVision:', siteContent.aboutVision);
   
   return (
-    <div className="py-16">
+    <div className="about-section">
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center mb-12">{t('aboutTitle')}</h1>
         
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-semibold mb-4">{t('mission')}</h2>
-              <p className="text-gray-700 leading-relaxed">{t('missionText')}</p>
+            <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+              <h2 className="text-2xl font-semibold mb-4 text-blue-600">{t('mission')}</h2>
+              <p className="text-gray-700 leading-relaxed">
+                {siteContent.aboutMission?.[language] || t('missionText')}
+              </p>
             </div>
             
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-semibold mb-4">{t('vision')}</h2>
-              <p className="text-gray-700 leading-relaxed">{t('visionText')}</p>
+            <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+              <h2 className="text-2xl font-semibold mb-4 text-blue-600">{t('vision')}</h2>
+              <p className="text-gray-700 leading-relaxed">
+                {siteContent.aboutVision?.[language] || t('visionText')}
+              </p>
             </div>
+          </div>
+          
+          {/* Debug Info - Remove this in production */}
+          <div className="bg-blue-50 p-4 mt-8 border border-blue-200 rounded">
+            <h4 className="font-semibold text-blue-800">🔍 Debug Info (Admin can see this):</h4>
+            <p className="text-sm text-blue-700">
+              Current Mission: "{siteContent.aboutMission?.[language]}"
+            </p>
+            <p className="text-sm text-blue-700">
+              Current Vision: "{siteContent.aboutVision?.[language]}"
+            </p>
           </div>
         </div>
       </div>

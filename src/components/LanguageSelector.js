@@ -5,11 +5,20 @@ const LanguageSelector = () => {
   const { language, setLanguage } = useLanguage();
   
   return (
-    <div className="relative">
+    <div className="language-selector">
       <select 
         value={language} 
         onChange={(e) => setLanguage(e.target.value)}
-        className="bg-white border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="focus:outline-none focus:ring-2"
+        style={{
+          padding: '0.5rem 1rem',
+          border: '1px solid var(--border-light)',
+          borderRadius: '4px',
+          backgroundColor: '#fff',
+          color: 'var(--text-dark)',
+          fontSize: '1rem',
+          cursor: 'pointer'
+        }}
       >
         <option value="az">AZ</option>
         <option value="en">EN</option>

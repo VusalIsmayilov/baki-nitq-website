@@ -1,9 +1,10 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { courses } from '../../data/courses';
+import { useContent } from '../../context/ContentContext';
 
 const CoursesPage = () => {
   const { t, language } = useLanguage();
+  const { courses } = useContent();
   
   return (
     <div className="py-16">
@@ -11,7 +12,7 @@ const CoursesPage = () => {
         <h1 className="text-4xl font-bold text-center mb-12">{t('coursesTitle')}</h1>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course) => (
+          {courses.filter(course => course.active).map((course) => (
             <div key={course.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="h-48 bg-gradient-to-r from-blue-500 to-blue-600"></div>
               <div className="p-6">
