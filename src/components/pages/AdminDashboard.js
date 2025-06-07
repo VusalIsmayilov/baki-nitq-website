@@ -16,6 +16,9 @@ const AdminDashboard = () => {
     updateSiteSettings,
     addMediaFile, 
     deleteMediaFile,
+    updateMediaFile,
+    toggleMediaInGallery,
+    getGalleryItems,
     addCourse,
     updateCourse,
     deleteCourse,
@@ -65,7 +68,7 @@ const AdminDashboard = () => {
     { id: 'content', name: 'Content Management', icon: FileText },
     { id: 'courses', name: 'Course Management', icon: BookOpen },
     { id: 'testimonials', name: 'Testimonials', icon: Users },
-    { id: 'media', name: 'Media Library', icon: Upload },
+    { id: 'media', name: 'Media & Gallery', icon: Upload },
     { id: 'analytics', name: 'Analytics', icon: BarChart3 },
     { id: 'settings', name: 'Settings', icon: Settings }
   ];
@@ -82,22 +85,9 @@ const AdminDashboard = () => {
 
   const saveContent = () => {
     console.log('🚀 Starting content save process...');
-    console.log('Current editingContent:', editingContent);
-    console.log('Current siteContent before save:', siteContent);
-    
-    // Use bulk update for better performance and reliability
     updateMultipleContent(editingContent);
-    
-    // Reset unsaved changes flag
     setHasUnsavedChanges(false);
-    
-    // Show success message
-    alert('✅ Content saved successfully! Changes are now live on the website. Check the Home and About pages to see your updates!');
-    
-    // Log after a short delay to see the updated state
-    setTimeout(() => {
-      console.log('🎉 Save process completed! Check the website for changes.');
-    }, 100);
+    alert('✅ Content saved successfully! Changes are now live on the website.');
   };
 
   const resetContent = () => {
@@ -114,7 +104,7 @@ const AdminDashboard = () => {
     const file = event.target.files[0];
     if (file) {
       addMediaFile(file);
-      alert('✅ File uploaded successfully!');
+      alert('✅ File uploaded successfully! You can now assign it to the gallery if it\'s an image.');
     }
   };
 
@@ -142,6 +132,151 @@ const AdminDashboard = () => {
     setEditingTestimonial(null);
   };
 
+  // Media File Card Component
+  const MediaFileCard = ({ file, onToggleGallery, onUpdateFile, onDelete }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setEditData] = useState({
+      title: { ...file.title },
+      description: { ...file.description }
+    });
+
+    const handleSave = () => {
+      onUpdateFile(editData);
+      setIsEditing(false);
+      alert('✅ Media file updated successfully!');
+    };
+
+    const getFileIcon = () => {
+      switch (file.type) {
+        case 'image': return '🖼️';
+        case 'video': return '📹';
+        default: return '📄';
+      }
+    };
+
+    return (
+      <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+        <div className="flex items-start space-x-4">
+          {file.type === 'image' ? (
+            <img 
+              src={file.url} 
+              alt={file.name}
+              className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+            />
+          ) : (
+            <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
+              {getFileIcon()}
+            </div>
+          )}
+          
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
+                {isEditing ? (
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      value={editData.title[language]}
+                      onChange={(e) => setEditData(prev => ({
+                        ...prev,
+                        title: { ...prev.title, [language]: e.target.value }
+                      }))}
+                      className="w-full p-2 border border-gray-300 rounded text-sm"
+                      placeholder="Enter title..."
+                    />
+                    <textarea
+                      value={editData.description[language]}
+                      onChange={(e) => setEditData(prev => ({
+                        ...prev,
+                        description: { ...prev.description, [language]: e.target.value }
+                      }))}
+                      className="w-full p-2 border border-gray-300 rounded text-sm"
+                      rows={2}
+                      placeholder="Enter description..."
+                    />
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={handleSave}
+                        className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setIsEditing(false)}
+                        className="bg-gray-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-600"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <h4 className="font-semibold text-gray-900 truncate">
+                      {file.title[language] || file.name}
+                    </h4>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {file.description[language] || 'No description'}
+                    </p>
+                    <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
+                      <span>{file.size}</span>
+                      <span>Uploaded {file.uploaded}</span>
+                      <span className={`px-2 py-1 rounded ${
+                        file.type === 'image' ? 'bg-green-100 text-green-800' :
+                        file.type === 'video' ? 'bg-blue-100 text-blue-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {file.type}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex flex-col space-y-2 ml-4">
+                {file.type === 'image' && (
+                  <div className="flex flex-col items-end">
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <span className="text-sm font-medium text-gray-700">Show in Gallery</span>
+                      <input
+                        type="checkbox"
+                        checked={file.inGallery}
+                        onChange={onToggleGallery}
+                        className="rounded"
+                      />
+                    </label>
+                    {file.inGallery && (
+                      <span className="mt-1 px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                        📸 In Gallery
+                      </span>
+                    )}
+                  </div>
+                )}
+                
+                <div className="flex space-x-1">
+                  <button
+                    onClick={() => setIsEditing(!isEditing)}
+                    className="text-blue-600 hover:text-blue-800 p-1"
+                    title="Edit details"
+                  >
+                    <Edit size={16} />
+                  </button>
+                  
+                  <button
+                    onClick={onDelete}
+                    className="text-red-600 hover:text-red-800 p-1"
+                    title="Delete file"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderOverview = () => (
     <div className="space-y-6">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -156,14 +291,14 @@ const AdminDashboard = () => {
           <p className="text-sm text-green-600">All courses active</p>
         </div>
         <div className="bg-yellow-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-yellow-900">Testimonials</h3>
-          <p className="text-3xl font-bold text-yellow-700">{testimonials.filter(t => t.approved).length}</p>
-          <p className="text-sm text-yellow-600">{testimonials.filter(t => !t.approved).length} pending</p>
+          <h3 className="text-lg font-semibold text-yellow-900">Gallery Images</h3>
+          <p className="text-3xl font-bold text-yellow-700">{getGalleryItems().length}</p>
+          <p className="text-sm text-yellow-600">{mediaLibrary.length} total files</p>
         </div>
         <div className="bg-purple-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-purple-900">Media Files</h3>
-          <p className="text-3xl font-bold text-purple-700">{mediaLibrary.length}</p>
-          <p className="text-sm text-purple-600">Images & videos</p>
+          <h3 className="text-lg font-semibold text-purple-900">Testimonials</h3>
+          <p className="text-3xl font-bold text-purple-700">{testimonials.filter(t => t.approved).length}</p>
+          <p className="text-sm text-purple-600">{testimonials.filter(t => !t.approved).length} pending</p>
         </div>
       </div>
 
@@ -178,25 +313,25 @@ const AdminDashboard = () => {
             <span className="block font-semibold">Edit Content</span>
           </button>
           <button 
-            onClick={() => setActiveSection('courses')}
+            onClick={() => setActiveSection('media')}
             className="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors"
           >
-            <Plus className="mx-auto text-green-600 mb-2" size={24} />
+            <Upload className="mx-auto text-green-600 mb-2" size={24} />
+            <span className="block font-semibold">Manage Gallery</span>
+          </button>
+          <button 
+            onClick={() => setActiveSection('courses')}
+            className="p-4 bg-yellow-50 rounded-lg text-center hover:bg-yellow-100 transition-colors"
+          >
+            <BookOpen className="mx-auto text-yellow-600 mb-2" size={24} />
             <span className="block font-semibold">Manage Courses</span>
           </button>
           <button 
             onClick={() => setActiveSection('testimonials')}
-            className="p-4 bg-yellow-50 rounded-lg text-center hover:bg-yellow-100 transition-colors"
-          >
-            <Users className="mx-auto text-yellow-600 mb-2" size={24} />
-            <span className="block font-semibold">Review Testimonials</span>
-          </button>
-          <button 
-            onClick={() => setActiveSection('media')}
             className="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors"
           >
-            <Upload className="mx-auto text-purple-600 mb-2" size={24} />
-            <span className="block font-semibold">Upload Media</span>
+            <Users className="mx-auto text-purple-600 mb-2" size={24} />
+            <span className="block font-semibold">Review Testimonials</span>
           </button>
         </div>
       </div>
@@ -220,24 +355,11 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
-        <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-          <p className="text-blue-800 text-sm">
-            💡 <strong>Live Editing:</strong> Changes you make here will immediately appear on the live website after saving.
-          </p>
-        </div>
         
         <div className="space-y-8">
           {/* Homepage Content */}
           <div className="border-b pb-6">
             <h4 className="text-lg font-semibold mb-4">Homepage Content</h4>
-            <div className="mb-4 p-3 bg-gray-50 rounded border">
-              <p className="text-sm text-gray-600 mb-2">
-                <strong>Current Live Content:</strong> {siteContent.homeHero[language]}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Editing:</strong> {editingContent.homeHero[language]}
-              </p>
-            </div>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -269,14 +391,6 @@ const AdminDashboard = () => {
           {/* About Page Content */}
           <div className="border-b pb-6">
             <h4 className="text-lg font-semibold mb-4">About Page Content</h4>
-            <div className="mb-4 p-3 bg-gray-50 rounded border">
-              <p className="text-sm text-gray-600 mb-1">
-                <strong>Current Mission:</strong> {siteContent.aboutMission[language]}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Current Vision:</strong> {siteContent.aboutVision[language]}
-              </p>
-            </div>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -325,29 +439,118 @@ const AdminDashboard = () => {
             <X size={18} />
             <span>Reset</span>
           </button>
-          <button
-            onClick={() => {
-              console.log('🔍 DEBUG INFO:');
-              console.log('Current siteContent:', siteContent);
-              console.log('Current editingContent:', editingContent);
-              console.log('Are they different?', JSON.stringify(siteContent) !== JSON.stringify(editingContent));
-            }}
-            className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700"
-          >
-            Debug: Show Content
-          </button>
-          <button
-            onClick={() => {
-              // Force a save and then navigate to home page
-              updateMultipleContent(editingContent);
-              setHasUnsavedChanges(false);
-              alert('✅ Content saved! Now navigate to Home page to see changes!');
-            }}
-            className="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700"
-          >
-            Save & Test Live
-          </button>
         </div>
+      </div>
+    </div>
+  );
+
+  const renderMediaLibrary = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">Upload New Media</h3>
+          <label className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 cursor-pointer flex items-center space-x-2">
+            <Upload size={18} />
+            <span>Upload File</span>
+            <input
+              type="file"
+              onChange={handleFileUpload}
+              className="hidden"
+              accept="image/*,video/*,.pdf,.doc,.docx"
+            />
+          </label>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-600">
+          <div className="p-4 bg-green-50 rounded-lg">
+            <strong>Images:</strong> JPG, PNG, GIF<br />
+            Max size: 10MB<br />
+            <span className="text-xs text-green-700">✅ Can be added to gallery</span>
+          </div>
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <strong>Videos:</strong> MP4, AVI, MOV<br />
+            Max size: 100MB<br />
+            <span className="text-xs text-blue-700">📹 For future video gallery</span>
+          </div>
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <strong>Documents:</strong> PDF, DOC, DOCX<br />
+            Max size: 50MB<br />
+            <span className="text-xs text-gray-700">📄 For downloads</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">Media Library ({mediaLibrary.length})</h3>
+          <div className="flex items-center space-x-2 text-sm">
+            <span className="px-2 py-1 bg-green-100 text-green-800 rounded">
+              📸 {getGalleryItems().length} in Gallery
+            </span>
+            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
+              📁 {mediaLibrary.filter(file => !file.inGallery).length} in Library
+            </span>
+          </div>
+        </div>
+        
+        {mediaLibrary.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <Upload size={48} className="mx-auto mb-4 opacity-50" />
+            <p>No files uploaded yet. Start by uploading your first file!</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {mediaLibrary.map((file) => (
+              <MediaFileCard 
+                key={file.id} 
+                file={file} 
+                onToggleGallery={() => toggleMediaInGallery(file.id)}
+                onUpdateFile={(updates) => updateMediaFile(file.id, updates)}
+                onDelete={() => {
+                  if (window.confirm('Are you sure you want to delete this file?')) {
+                    deleteMediaFile(file.id);
+                    alert('✅ File deleted successfully!');
+                  }
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Gallery Preview */}
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <h3 className="text-xl font-semibold mb-4">Gallery Preview</h3>
+        <p className="text-gray-600 mb-4">These images will appear on the public Gallery page:</p>
+        
+        {getGalleryItems().length === 0 ? (
+          <div className="text-center py-8 bg-gray-50 rounded-lg">
+            <p className="text-gray-500">No images assigned to gallery yet.</p>
+            <p className="text-sm text-gray-400 mt-2">Toggle "Show in Gallery" for images above to add them here.</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-4 gap-4">
+            {getGalleryItems().slice(0, 8).map((item) => (
+              <div key={item.id} className="relative group">
+                <img 
+                  src={item.url} 
+                  alt={item.title[language]}
+                  className="w-full h-32 object-cover rounded-lg"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 rounded-lg transition-all duration-200 flex items-center justify-center">
+                  <span className="text-white text-xs opacity-0 group-hover:opacity-100 text-center px-2">
+                    {item.title[language]}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {getGalleryItems().length > 8 && (
+          <p className="text-center mt-4 text-gray-500 text-sm">
+            ... and {getGalleryItems().length - 8} more images
+          </p>
+        )}
       </div>
     </div>
   );
@@ -499,81 +702,6 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const renderMediaLibrary = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold">Upload New Media</h3>
-          <label className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 cursor-pointer flex items-center space-x-2">
-            <Upload size={18} />
-            <span>Upload File</span>
-            <input
-              type="file"
-              onChange={handleFileUpload}
-              className="hidden"
-              accept="image/*,video/*,.pdf,.doc,.docx"
-            />
-          </label>
-        </div>
-        <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-600">
-          <div className="p-4 bg-green-50 rounded-lg">
-            <strong>Images:</strong> JPG, PNG, GIF<br />
-            Max size: 10MB
-          </div>
-          <div className="p-4 bg-blue-50 rounded-lg">
-            <strong>Videos:</strong> MP4, AVI, MOV<br />
-            Max size: 100MB
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <strong>Documents:</strong> PDF, DOC, DOCX<br />
-            Max size: 50MB
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Media Files ({mediaLibrary.length})</h3>
-        {mediaLibrary.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <Upload size={48} className="mx-auto mb-4 opacity-50" />
-            <p>No files uploaded yet. Start by uploading your first file!</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {mediaLibrary.map((file) => (
-              <div key={file.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
-                <div className="flex items-center space-x-3">
-                  <div className={`p-2 rounded ${
-                    file.type === 'image' ? 'bg-green-100 text-green-600' :
-                    file.type === 'video' ? 'bg-blue-100 text-blue-600' :
-                    'bg-gray-100 text-gray-600'
-                  }`}>
-                    <FileText size={20} />
-                  </div>
-                  <div>
-                    <h4 className="font-medium">{file.name}</h4>
-                    <p className="text-sm text-gray-600">{file.size} • Uploaded {file.uploaded}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    if (window.confirm('Are you sure you want to delete this file?')) {
-                      deleteMediaFile(file.id);
-                      alert('✅ File deleted successfully!');
-                    }
-                  }}
-                  className="text-red-600 hover:text-red-800 p-1"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
   const renderAnalytics = () => (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-lg p-6">
@@ -614,27 +742,6 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Language Usage</h3>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="text-center p-6 bg-blue-50 rounded-lg">
-            <h4 className="font-semibold text-blue-900">Azerbaijani</h4>
-            <p className="text-3xl font-bold text-blue-700">{siteStats.languageUsage.az}%</p>
-            <p className="text-sm text-blue-600">Primary language</p>
-          </div>
-          <div className="text-center p-6 bg-green-50 rounded-lg">
-            <h4 className="font-semibold text-green-900">English</h4>
-            <p className="text-3xl font-bold text-green-700">{siteStats.languageUsage.en}%</p>
-            <p className="text-sm text-green-600">International users</p>
-          </div>
-          <div className="text-center p-6 bg-purple-50 rounded-lg">
-            <h4 className="font-semibold text-purple-900">Russian</h4>
-            <p className="text-3xl font-bold text-purple-700">{siteStats.languageUsage.ru}%</p>
-            <p className="text-sm text-purple-600">Regional users</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 
@@ -652,26 +759,10 @@ const AdminDashboard = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Default Language</label>
-            <select className="w-full p-3 border border-gray-300 rounded-md">
-              <option value="az">Azerbaijani</option>
-              <option value="en">English</option>
-              <option value="ru">Russian</option>
-            </select>
-          </div>
-          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
             <input
               type="email"
               defaultValue={siteContent.contactInfo?.email || "info@bakinitqmerkezi.az"}
-              className="w-full p-3 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-            <input
-              type="tel"
-              defaultValue={siteContent.contactInfo?.phone || "+994 XX XXX XX XX"}
               className="w-full p-3 border border-gray-300 rounded-md"
             />
           </div>
@@ -682,40 +773,6 @@ const AdminDashboard = () => {
         >
           Save Settings
         </button>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">System Information</h3>
-        <div className="grid md:grid-cols-2 gap-4 text-sm">
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span>Website Status:</span>
-              <span className="text-green-600 font-semibold">Online</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Last Backup:</span>
-              <span>Today, 3:00 AM</span>
-            </div>
-            <div className="flex justify-between">
-              <span>SSL Certificate:</span>
-              <span className="text-green-600 font-semibold">Active</span>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span>Total Courses:</span>
-              <span>{courses.length}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Languages:</span>
-              <span>3</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Media Files:</span>
-              <span>{mediaLibrary.length}</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -839,46 +896,7 @@ const CourseForm = ({ course, onSubmit, onCancel }) => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description (AZ)</label>
-            <textarea
-              value={formData.description.az}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                description: { ...prev.description, az: e.target.value }
-              }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              rows={3}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description (EN)</label>
-            <textarea
-              value={formData.description.en}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                description: { ...prev.description, en: e.target.value }
-              }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              rows={3}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description (RU)</label>
-            <textarea
-              value={formData.description.ru}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                description: { ...prev.description, ru: e.target.value }
-              }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              rows={3}
-            />
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
             <input
@@ -898,17 +916,6 @@ const CourseForm = ({ course, onSubmit, onCancel }) => {
               className="w-full p-2 border border-gray-300 rounded-md"
               placeholder="e.g., 200 AZN"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-            <select
-              value={formData.active}
-              onChange={(e) => setFormData(prev => ({ ...prev, active: e.target.value === 'true' }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            >
-              <option value={true}>Active</option>
-              <option value={false}>Inactive</option>
-            </select>
           </div>
         </div>
       </div>
@@ -974,7 +981,6 @@ const TestimonialForm = ({ testimonial, onSubmit, onCancel }) => {
               }))}
               className="w-full p-2 border border-gray-300 rounded-md"
               rows={4}
-              placeholder="Enter testimonial in Azerbaijani"
             />
           </div>
           <div>
@@ -987,7 +993,6 @@ const TestimonialForm = ({ testimonial, onSubmit, onCancel }) => {
               }))}
               className="w-full p-2 border border-gray-300 rounded-md"
               rows={4}
-              placeholder="Enter testimonial in English"
             />
           </div>
           <div>
@@ -1000,21 +1005,8 @@ const TestimonialForm = ({ testimonial, onSubmit, onCancel }) => {
               }))}
               className="w-full p-2 border border-gray-300 rounded-md"
               rows={4}
-              placeholder="Enter testimonial in Russian"
             />
           </div>
-        </div>
-
-        <div>
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={formData.approved}
-              onChange={(e) => setFormData(prev => ({ ...prev, approved: e.target.checked }))}
-              className="rounded"
-            />
-            <span className="text-sm font-medium text-gray-700">Approved for display</span>
-          </label>
         </div>
       </div>
 

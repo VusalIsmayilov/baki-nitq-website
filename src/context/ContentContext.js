@@ -38,9 +38,82 @@ export const ContentProvider = ({ children }) => {
   });
 
   const [mediaLibrary, setMediaLibrary] = useState([
-    { id: 1, name: 'classroom1.jpg', type: 'image', size: '2.4 MB', uploaded: '2025-01-15', url: '#' },
-    { id: 2, name: 'student-presentation.mp4', type: 'video', size: '15.2 MB', uploaded: '2025-01-14', url: '#' },
-    { id: 3, name: 'course-outline.pdf', type: 'document', size: '1.1 MB', uploaded: '2025-01-13', url: '#' }
+    { 
+      id: 1, 
+      name: 'classroom1.jpg', 
+      type: 'image', 
+      size: '2.4 MB', 
+      uploaded: '2025-01-15', 
+      url: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=600&fit=crop',
+      inGallery: true,
+      title: {
+        az: 'Sinif otağı',
+        en: 'Classroom',
+        ru: 'Классная комната'
+      },
+      description: {
+        az: 'Modern təlim sinfi',
+        en: 'Modern training classroom',
+        ru: 'Современный учебный класс'
+      }
+    },
+    { 
+      id: 2, 
+      name: 'student-presentation.jpg', 
+      type: 'image', 
+      size: '3.1 MB', 
+      uploaded: '2025-01-14', 
+      url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop',
+      inGallery: true,
+      title: {
+        az: 'Tələbə təqdimatı',
+        en: 'Student presentation',
+        ru: 'Презентация студента'
+      },
+      description: {
+        az: 'Tələbə öz təqdimatını edir',
+        en: 'Student giving presentation',
+        ru: 'Студент делает презентацию'
+      }
+    },
+    { 
+      id: 3, 
+      name: 'speech-training.jpg', 
+      type: 'image', 
+      size: '2.8 MB', 
+      uploaded: '2025-01-13', 
+      url: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop',
+      inGallery: true,
+      title: {
+        az: 'Nitq məşqi',
+        en: 'Speech training',
+        ru: 'Тренировка речи'
+      },
+      description: {
+        az: 'Qrup halında nitq məşqi',
+        en: 'Group speech training session',
+        ru: 'Групповая тренировка речи'
+      }
+    },
+    { 
+      id: 4, 
+      name: 'course-outline.pdf', 
+      type: 'document', 
+      size: '1.1 MB', 
+      uploaded: '2025-01-13', 
+      url: '#',
+      inGallery: false,
+      title: {
+        az: 'Kurs proqramı',
+        en: 'Course outline',
+        ru: 'Программа курса'
+      },
+      description: {
+        az: 'Ətraflı kurs proqramı',
+        en: 'Detailed course outline',
+        ru: 'Подробная программа курса'
+      }
+    }
   ]);
 
   const [siteStats, setSiteStats] = useState({
@@ -195,7 +268,18 @@ export const ContentProvider = ({ children }) => {
             file.type.startsWith('video/') ? 'video' : 'document',
       size: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
       uploaded: new Date().toISOString().split('T')[0],
-      url: URL.createObjectURL(file)
+      url: URL.createObjectURL(file),
+      inGallery: false, // Default to not in gallery
+      title: {
+        az: file.name.split('.')[0],
+        en: file.name.split('.')[0],
+        ru: file.name.split('.')[0]
+      },
+      description: {
+        az: '',
+        en: '',
+        ru: ''
+      }
     };
     setMediaLibrary(prev => [newFile, ...prev]);
     return newFile;
@@ -203,6 +287,23 @@ export const ContentProvider = ({ children }) => {
 
   const deleteMediaFile = (fileId) => {
     setMediaLibrary(prev => prev.filter(file => file.id !== fileId));
+  };
+
+  const updateMediaFile = (fileId, updates) => {
+    setMediaLibrary(prev => prev.map(file => 
+      file.id === fileId ? { ...file, ...updates } : file
+    ));
+  };
+
+  const toggleMediaInGallery = (fileId) => {
+    setMediaLibrary(prev => prev.map(file => 
+      file.id === fileId ? { ...file, inGallery: !file.inGallery } : file
+    ));
+  };
+
+  // Get gallery items (media files marked for gallery display)
+  const getGalleryItems = () => {
+    return mediaLibrary.filter(file => file.inGallery && file.type === 'image');
   };
 
   // Course Management Functions
@@ -275,6 +376,9 @@ export const ContentProvider = ({ children }) => {
       // Media Management
       addMediaFile,
       deleteMediaFile,
+      updateMediaFile,
+      toggleMediaInGallery,
+      getGalleryItems,
       
       // Course Management
       addCourse,
@@ -293,7 +397,8 @@ export const ContentProvider = ({ children }) => {
       // Direct state setters for advanced operations
       setSiteContent,
       setCourses,
-      setTestimonials
+      setTestimonials,
+      setMediaLibrary
     }}>
       {children}
     </ContentContext.Provider>
