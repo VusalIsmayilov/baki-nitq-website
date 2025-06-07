@@ -118,6 +118,90 @@ export const ContentProvider = ({ children }) => {
     }
   ]);
 
+  const [news, setNews] = useState([
+    {
+      id: 1,
+      title: {
+        az: 'Yeni Natiqlik Kursu Başladı',
+        en: 'New Oratory Course Started',
+        ru: 'Начался новый курс ораторского искусства'
+      },
+      content: {
+        az: 'Bu ay yeni natiqlik kursumuz böyük maraq görərək başladı. 25 iştirakçı ilə dolu sinifimizda peşəkar natiqlik bacarıqları öyrədilir.',
+        en: 'This month our new oratory course started with great interest. Our classroom is full with 25 participants learning professional speaking skills.',
+        ru: 'В этом месяце наш новый курс ораторского искусства начался с большим интересом. Наш класс заполнен 25 участниками, изучающими профессиональные навыки выступления.'
+      },
+      excerpt: {
+        az: '25 iştirakçı ilə yeni natiqlik kursu başladı',
+        en: 'New oratory course started with 25 participants',
+        ru: 'Новый курс ораторского искусства начался с 25 участниками'
+      },
+      date: '2025-01-15',
+      imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
+      category: {
+        az: 'Kurs Xəbərləri',
+        en: 'Course News',
+        ru: 'Новости курсов'
+      },
+      published: true,
+      featured: true
+    },
+    {
+      id: 2,
+      title: {
+        az: 'Tələbə Uğur Hekayələri',
+        en: 'Student Success Stories',
+        ru: 'Истории успеха студентов'
+      },
+      content: {
+        az: 'Mərkəzimizdən məzun olan tələbələrimiz iş həyatlarında böyük uğurlara imza atıb. Onların təcrübələrini paylaşırdıq.',
+        en: 'Our graduates have achieved great success in their professional lives. We shared their experiences.',
+        ru: 'Наши выпускники добились больших успехов в своей профессиональной жизни. Мы поделились их опытом.'
+      },
+      excerpt: {
+        az: 'Məzunlarımızın iş həyatındakı uğurları',
+        en: 'Our graduates success in professional life',
+        ru: 'Успехи наших выпускников в профессиональной жизни'
+      },
+      date: '2025-01-10',
+      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop',
+      category: {
+        az: 'Uğur Hekayələri',
+        en: 'Success Stories',
+        ru: 'Истории успеха'
+      },
+      published: true,
+      featured: false
+    },
+    {
+      id: 3,
+      title: {
+        az: 'Nitq Mədəniyyəti Seminarı',
+        en: 'Speech Culture Seminar',
+        ru: 'Семинар по культуре речи'
+      },
+      content: {
+        az: 'Gələn həftə ictimaiyyət üçün açıq nitq mədəniyyəti seminarı keçiriləcək. İştirak pulsuz və qeydiyyat tələb olunur.',
+        en: 'Next week, a public speech culture seminar will be held. Participation is free and registration is required.',
+        ru: 'На следующей неделе состоится открытый семинар по культуре речи. Участие бесплатное, требуется регистрация.'
+      },
+      excerpt: {
+        az: 'Pulsuz açıq seminar gələn həftə',
+        en: 'Free public seminar next week',
+        ru: 'Бесплатный открытый семинар на следующей неделе'
+      },
+      date: '2025-01-08',
+      imageUrl: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=600&fit=crop',
+      category: {
+        az: 'Tədbirlər',
+        en: 'Events',
+        ru: 'Мероприятия'
+      },
+      published: true,
+      featured: true
+    }
+  ]);
+
   const [siteStats, setSiteStats] = useState({
     totalVisitors: 1247,
     totalPageViews: 3891,
@@ -378,6 +462,48 @@ export const ContentProvider = ({ children }) => {
     return mediaLibrary.filter(file => file.inGallery && file.type === 'image');
   };
 
+  // News Management Functions
+  const addNews = (newsData) => {
+    const newNews = {
+      id: news.length + 1,
+      ...newsData,
+      date: new Date().toISOString().split('T')[0],
+      published: false
+    };
+    setNews(prev => [newNews, ...prev]);
+    return newNews;
+  };
+
+  const updateNews = (newsId, newsData) => {
+    setNews(prev => prev.map(item => 
+      item.id === newsId ? { ...item, ...newsData } : item
+    ));
+  };
+
+  const deleteNews = (newsId) => {
+    setNews(prev => prev.filter(item => item.id !== newsId));
+  };
+
+  const publishNews = (newsId) => {
+    setNews(prev => prev.map(item => 
+      item.id === newsId ? { ...item, published: true } : item
+    ));
+  };
+
+  const toggleNewsFeatured = (newsId) => {
+    setNews(prev => prev.map(item => 
+      item.id === newsId ? { ...item, featured: !item.featured } : item
+    ));
+  };
+
+  const getPublishedNews = () => {
+    return news.filter(item => item.published).sort((a, b) => new Date(b.date) - new Date(a.date));
+  };
+
+  const getFeaturedNews = () => {
+    return news.filter(item => item.published && item.featured).sort((a, b) => new Date(b.date) - new Date(a.date));
+  };
+
   // Course Management Functions
   const addCourse = (courseData) => {
     const newCourse = {
@@ -502,6 +628,7 @@ export const ContentProvider = ({ children }) => {
       siteStats,
       courses,
       testimonials,
+      news,
       
       // Content Management
       updateContent,
@@ -515,6 +642,15 @@ export const ContentProvider = ({ children }) => {
       updateMediaFile,
       toggleMediaInGallery,
       getGalleryItems,
+      
+      // News Management
+      addNews,
+      updateNews,
+      deleteNews,
+      publishNews,
+      toggleNewsFeatured,
+      getPublishedNews,
+      getFeaturedNews,
       
       // Course Management
       addCourse,
@@ -540,7 +676,8 @@ export const ContentProvider = ({ children }) => {
       setSiteContent,
       setCourses,
       setTestimonials,
-      setMediaLibrary
+      setMediaLibrary,
+      setNews
     }}>
       {children}
     </ContentContext.Provider>

@@ -61,7 +61,14 @@ export const translations = {
     socialMedia: 'Sosial Media',
     instagram: 'Instagram',
     facebook: 'Facebook',
-    quickLinks: 'Sürətli Keçidlər',
+
+    // News & Activities
+    newsTitle: 'Son Xəbərlər və Fəaliyyətlər',
+    readMore: 'Daha Ətraflı',
+    newsDate: 'Tarix',
+    category: 'Kateqoriya',
+    viewAllNews: 'Bütün Xəbərləri Gör',
+    
     
     // Admin
     adminLogin: 'Admin Girişi',
@@ -133,8 +140,14 @@ export const translations = {
     socialMedia: 'Social Media',
     instagram: 'Instagram',
     facebook: 'Facebook',
-    quickLinks: 'Quick Links',
     
+    // News & Activities
+    newsTitle: 'Recent News & Activities',
+    readMore: 'Read More',
+    newsDate: 'Date',
+    category: 'Category',
+    viewAllNews: 'View All News',
+
     // Admin
     adminLogin: 'Admin Login',
     dashboard: 'Dashboard',
@@ -205,7 +218,13 @@ export const translations = {
     socialMedia: 'Социальные сети',
     instagram: 'Instagram',
     facebook: 'Facebook',
-    quickLinks: 'Быстрые ссылки',
+
+    // News & Activities
+    newsTitle: 'Последние новости и активности',
+    readMore: 'Читать далее',
+    newsDate: 'Дата',
+    category: 'Категория',
+    viewAllNews: 'Смотреть все новости',
     
     // Admin
     adminLogin: 'Вход админа',
