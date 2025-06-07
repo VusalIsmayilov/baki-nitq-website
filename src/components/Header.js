@@ -21,7 +21,7 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-blue-900">Bakı Nitq Mərkəzi</h1>
+            <h1 className="text-2xl font-bold text-blue-900 whitespace-nowrap">Bakı Nitq Mərkəzi</h1>
           </div>
           
           <nav className="hidden md:flex space-x-6">
@@ -29,7 +29,7 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
               <button
                 key={key}
                 onClick={() => setCurrentPage(key)}
-                className={`flex items-center space-x-1 px-3 py-2 rounded-md transition-colors ${
+                className={`flex items-center space-x-1 px-3 py-2 rounded-md transition-colors whitespace-nowrap ${
                   currentPage === key 
                     ? 'bg-blue-100 text-blue-900' 
                     : 'text-gray-700 hover:text-blue-900'
@@ -47,14 +47,14 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setCurrentPage('admin')}
-                  className="flex items-center space-x-1 px-3 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800"
+                  className="flex items-center space-x-1 px-3 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 whitespace-nowrap"
                 >
                   <Settings size={18} />
                   <span>{t('dashboard')}</span>
                 </button>
                 <button
                   onClick={() => setIsAdmin(false)}
-                  className="flex items-center space-x-1 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                  className="flex items-center space-x-1 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 whitespace-nowrap"
                 >
                   <LogOut size={18} />
                   <span>{t('logout')}</span>
@@ -63,7 +63,7 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
             ) : (
               <button
                 onClick={() => setCurrentPage('login')}
-                className="flex items-center space-x-1 px-3 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800"
+                className="flex items-center space-x-1 px-3 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 whitespace-nowrap"
               >
                 <User size={18} />
                 <span>{t('adminLogin')}</span>

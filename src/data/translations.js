@@ -61,6 +61,7 @@ export const translations = {
     socialMedia: 'Sosial Media',
     instagram: 'Instagram',
     facebook: 'Facebook',
+    quickLinks: 'Sürətli Keçidlər',
     
     // Admin
     adminLogin: 'Admin Girişi',
@@ -132,6 +133,7 @@ export const translations = {
     socialMedia: 'Social Media',
     instagram: 'Instagram',
     facebook: 'Facebook',
+    quickLinks: 'Quick Links',
     
     // Admin
     adminLogin: 'Admin Login',
@@ -203,6 +205,7 @@ export const translations = {
     socialMedia: 'Социальные сети',
     instagram: 'Instagram',
     facebook: 'Facebook',
+    quickLinks: 'Быстрые ссылки',
     
     // Admin
     adminLogin: 'Вход админа',

@@ -7,10 +7,6 @@ const CoursesPage = ({ setCurrentPage }) => {
   const { courses } = useContent();
   const [selectedCourse, setSelectedCourse] = useState(null);
   
-  // Debug logging to see what courses are being used
-  console.log('📚 CoursesPage render - courses from context:', courses);
-  console.log('📚 CoursesPage - active courses:', courses.filter(course => course.active));
-  
   const openCourseModal = (course) => {
     setSelectedCourse(course);
   };
@@ -72,17 +68,6 @@ const CoursesPage = ({ setCurrentPage }) => {
             }
           </div>
         )}
-        
-        {/* Debug Info - Remove this in production */}
-        <div className="bg-blue-50 p-4 mt-8 border border-blue-200 rounded">
-          <h4 className="font-semibold text-blue-800">🔍 Debug Info (Admin can see this):</h4>
-          <p className="text-sm text-blue-700">
-            Total Courses: {courses.length} | Active Courses: {courses.filter(c => c.active).length}
-          </p>
-          <p className="text-sm text-blue-700">
-            Course IDs: {courses.map(c => c.id).join(', ')}
-          </p>
-        </div>
       </div>
       
       {/* Course Detail Modal */}
@@ -167,3 +152,4 @@ const CoursesPage = ({ setCurrentPage }) => {
 };
 
 export default CoursesPage;
+                

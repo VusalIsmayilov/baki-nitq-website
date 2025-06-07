@@ -6,12 +6,6 @@ const HomePage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
   const { siteContent, courses } = useContent();
   
-  // Debug logging to see what content is being used
-  console.log('🏠 HomePage render - siteContent:', siteContent);
-  console.log('🏠 HomePage - homeHero:', siteContent.homeHero);
-  console.log('🏠 HomePage - courses from context:', courses);
-  console.log('🏠 HomePage - current language:', language);
-  
   return (
     <div>
       {/* Hero Section */}
@@ -79,20 +73,6 @@ const HomePage = ({ setCurrentPage }) => {
           )}
         </div>
       </section>
-      
-      {/* Debug Info - Remove this in production */}
-      <div className="bg-yellow-50 p-4 mx-4 mb-4 border border-yellow-200 rounded">
-        <h4 className="font-semibold text-yellow-800">🔍 Debug Info (Admin can see this):</h4>
-        <p className="text-sm text-yellow-700">
-          Current Hero Title: "{siteContent.homeHero?.[language]}"
-        </p>
-        <p className="text-sm text-yellow-700">
-          Current Description: "{siteContent.homeDesc?.[language]}"
-        </p>
-        <p className="text-sm text-yellow-700">
-          Active Courses Count: {courses.filter(c => c.active).length}
-        </p>
-      </div>
     </div>
   );
 };

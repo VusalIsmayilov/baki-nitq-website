@@ -10,8 +10,6 @@ const GalleryPage = () => {
   
   const galleryItems = getGalleryItems();
   
-  console.log('🖼️ GalleryPage - Gallery items:', galleryItems);
-  
   const openLightbox = (item) => {
     setSelectedImage(item);
   };
@@ -82,17 +80,6 @@ const GalleryPage = () => {
             </div>
           </>
         )}
-        
-        {/* Debug Info - Remove this in production */}
-        <div className="bg-purple-50 p-4 mt-8 border border-purple-200 rounded">
-          <h4 className="font-semibold text-purple-800">🔍 Debug Info (Admin can see this):</h4>
-          <p className="text-sm text-purple-700">
-            Gallery Items Count: {galleryItems.length}
-          </p>
-          <p className="text-sm text-purple-700">
-            Gallery Item IDs: {galleryItems.map(item => item.id).join(', ')}
-          </p>
-        </div>
       </div>
       
       {/* Lightbox Modal */}

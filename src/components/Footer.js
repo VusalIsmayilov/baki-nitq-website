@@ -16,7 +16,7 @@ const Footer = ({ setCurrentPage }) => {
           </div>
           
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-semibold mb-4">{t('quickLinks')}</h4>
             <div className="space-y-2">
               <button onClick={() => setCurrentPage('about')} className="block text-gray-300 hover:text-white">
                 {t('about')}
@@ -31,7 +31,7 @@ const Footer = ({ setCurrentPage }) => {
           </div>
           
           <div>
-            <h4 className="font-semibold mb-4">Contact Info</h4>
+            <h4 className="font-semibold mb-4">{t('contactInfo')}</h4>
             <div className="space-y-2 text-gray-300">
               <p>{siteContent.contactInfo?.address || 'Bakı, Azərbaycan'}</p>
               <p>{siteContent.contactInfo?.phone || '+994 XX XXX XX XX'}</p>
@@ -85,7 +85,7 @@ const Footer = ({ setCurrentPage }) => {
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-pink-400 transition-colors"
             >
-              📷 Instagram
+              📷 {t('instagram')}
             </a>
             <span>•</span>
             <a 
@@ -94,7 +94,7 @@ const Footer = ({ setCurrentPage }) => {
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-blue-400 transition-colors"
             >
-              👥 Facebook
+              👥 {t('facebook')}
             </a>
           </div>
         </div>

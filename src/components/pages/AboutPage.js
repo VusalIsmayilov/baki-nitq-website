@@ -6,11 +6,6 @@ const AboutPage = () => {
   const { t, language } = useLanguage();
   const { siteContent } = useContent();
   
-  // Debug logging
-  console.log('📋 AboutPage render - siteContent:', siteContent);
-  console.log('📋 AboutPage - aboutMission:', siteContent.aboutMission);
-  console.log('📋 AboutPage - aboutVision:', siteContent.aboutVision);
-  
   return (
     <div className="about-section">
       <div className="container mx-auto px-4">
@@ -31,17 +26,6 @@ const AboutPage = () => {
                 {siteContent.aboutVision?.[language] || t('visionText')}
               </p>
             </div>
-          </div>
-          
-          {/* Debug Info - Remove this in production */}
-          <div className="bg-blue-50 p-4 mt-8 border border-blue-200 rounded">
-            <h4 className="font-semibold text-blue-800">🔍 Debug Info (Admin can see this):</h4>
-            <p className="text-sm text-blue-700">
-              Current Mission: "{siteContent.aboutMission?.[language]}"
-            </p>
-            <p className="text-sm text-blue-700">
-              Current Vision: "{siteContent.aboutVision?.[language]}"
-            </p>
           </div>
         </div>
       </div>
