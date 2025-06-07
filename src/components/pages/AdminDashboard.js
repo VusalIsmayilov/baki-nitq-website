@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
-import { FileText, Upload, BarChart3, Edit, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen } from 'lucide-react';
+import { FileText, Upload, BarChart3, Edit, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Newspaper, Eye, EyeOff, Star } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { t, language } = useLanguage();
@@ -11,6 +11,7 @@ const AdminDashboard = () => {
     siteStats, 
     courses,
     testimonials,
+    news,
     updateContent,
     updateMultipleContent,
     updateSiteSettings,
@@ -30,7 +31,14 @@ const AdminDashboard = () => {
     addTestimonial,
     updateTestimonial,
     deleteTestimonial,
-    approveTestimonial
+    approveTestimonial,
+    addNews,
+    updateNews,
+    deleteNews,
+    publishNews,
+    toggleNewsFeatured,
+    getPublishedNews,
+    getFeaturedNews
   } = useContent();
   
   const [activeSection, setActiveSection] = useState('overview');
@@ -42,8 +50,10 @@ const AdminDashboard = () => {
   });
   const [showCourseForm, setShowCourseForm] = useState(false);
   const [showTestimonialForm, setShowTestimonialForm] = useState(false);
+  const [showNewsForm, setShowNewsForm] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
+  const [editingNews, setEditingNews] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [editingCurriculum, setEditingCurriculum] = useState(null);
 
@@ -73,6 +83,7 @@ const AdminDashboard = () => {
     { id: 'overview', name: 'Overview', icon: BarChart3 },
     { id: 'content', name: 'Content Management', icon: FileText },
     { id: 'courses', name: 'Course Management', icon: BookOpen },
+    { id: 'news', name: 'News & Activities', icon: Newspaper },
     { id: 'testimonials', name: 'Testimonials', icon: Users },
     { id: 'media', name: 'Media & Gallery', icon: Upload },
     { id: 'contact', name: 'Contact Information', icon: Globe },
@@ -139,6 +150,39 @@ const AdminDashboard = () => {
     setEditingTestimonial(null);
   };
 
+  const handleNewsSubmit = (newsData) => {
+    if (editingNews) {
+      updateNews(editingNews.id, newsData);
+      alert('✅ News updated successfully!');
+    } else {
+      addNews(newsData);
+      alert('✅ News added successfully!');
+    }
+    setShowNewsForm(false);
+    setEditingNews(null);
+  };
+
+  const handlePublishToggle = (newsId) => {
+    const newsItem = news.find(item => item.id === newsId);
+    if (newsItem) {
+      updateNews(newsId, { published: !newsItem.published });
+      alert(`✅ News ${newsItem.published ? 'unpublished' : 'published'} successfully!`);
+    }
+  };
+
+  const handleFeaturedToggle = (newsId) => {
+    toggleNewsFeatured(newsId);
+    alert('✅ Featured status updated successfully!');
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
   const renderOverview = () => (
     <div className="space-y-6">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -153,9 +197,9 @@ const AdminDashboard = () => {
           <p className="text-sm text-green-600">All courses active</p>
         </div>
         <div className="bg-yellow-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-yellow-900">Gallery Images</h3>
-          <p className="text-3xl font-bold text-yellow-700">{getGalleryItems().length}</p>
-          <p className="text-sm text-yellow-600">{mediaLibrary.length} total files</p>
+          <h3 className="text-lg font-semibold text-yellow-900">Published News</h3>
+          <p className="text-3xl font-bold text-yellow-700">{getPublishedNews().length}</p>
+          <p className="text-sm text-yellow-600">{getFeaturedNews().length} featured</p>
         </div>
         <div className="bg-purple-50 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-purple-900">Testimonials</h3>
@@ -166,13 +210,20 @@ const AdminDashboard = () => {
 
       <div className="bg-white rounded-lg shadow-lg p-6">
         <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           <button 
             onClick={() => setActiveSection('content')}
             className="p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors"
           >
             <FileText className="mx-auto text-blue-600 mb-2" size={24} />
             <span className="block font-semibold">Edit Content</span>
+          </button>
+          <button 
+            onClick={() => setActiveSection('news')}
+            className="p-4 bg-orange-50 rounded-lg text-center hover:bg-orange-100 transition-colors"
+          >
+            <Newspaper className="mx-auto text-orange-600 mb-2" size={24} />
+            <span className="block font-semibold">Manage News</span>
           </button>
           <button 
             onClick={() => setActiveSection('media')}
@@ -306,6 +357,122 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const renderNewsManagement = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl font-semibold">{t('newsManagement')}</h3>
+          <button
+            onClick={() => setShowNewsForm(true)}
+            className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 flex items-center space-x-2"
+          >
+            <Plus size={18} />
+            <span>{t('addNews')}</span>
+          </button>
+        </div>
+        
+        <div className="space-y-4">
+          {news.length === 0 ? (
+            <div className="text-center py-8">
+              <Newspaper className="mx-auto text-gray-400 mb-4" size={48} />
+              <p className="text-gray-600">No news articles yet. Create your first news article!</p>
+            </div>
+          ) : (
+            news.map((newsItem) => (
+              <div key={newsItem.id} className="border border-gray-200 rounded-lg p-4">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h4 className="font-semibold text-lg">{newsItem.title[language]}</h4>
+                      <div className="flex items-center space-x-2">
+                        {newsItem.published ? (
+                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
+                            {t('published')}
+                          </span>
+                        ) : (
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs font-medium">
+                            {t('draft')}
+                          </span>
+                        )}
+                        {newsItem.featured && (
+                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">
+                            ⭐ {t('featured')}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-gray-600 mb-2">{newsItem.excerpt[language]}</p>
+                    <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <span>📅 {formatDate(newsItem.date)}</span>
+                      <span>📂 {newsItem.category[language]}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 ml-4">
+                    <button
+                      onClick={() => handlePublishToggle(newsItem.id)}
+                      className={`p-2 rounded text-white ${
+                        newsItem.published 
+                          ? 'bg-red-500 hover:bg-red-600' 
+                          : 'bg-green-500 hover:bg-green-600'
+                      }`}
+                      title={newsItem.published ? t('unpublish') : t('publish')}
+                    >
+                      {newsItem.published ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                    <button
+                      onClick={() => handleFeaturedToggle(newsItem.id)}
+                      className={`p-2 rounded ${
+                        newsItem.featured 
+                          ? 'bg-yellow-500 text-white hover:bg-yellow-600' 
+                          : 'bg-gray-300 text-gray-600 hover:bg-gray-400'
+                      }`}
+                      title={t('toggleFeatured')}
+                    >
+                      <Star size={16} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditingNews(newsItem);
+                        setShowNewsForm(true);
+                      }}
+                      className="text-blue-600 hover:text-blue-800 p-2"
+                      title={t('edit')}
+                    >
+                      <Edit size={16} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (window.confirm('Are you sure you want to delete this news article?')) {
+                          deleteNews(newsItem.id);
+                          alert('✅ News article deleted successfully!');
+                        }
+                      }}
+                      className="text-red-600 hover:text-red-800 p-2"
+                      title={t('delete')}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {showNewsForm && (
+        <NewsForm
+          news={editingNews}
+          onSubmit={handleNewsSubmit}
+          onCancel={() => {
+            setShowNewsForm(false);
+            setEditingNews(null);
+          }}
+        />
+      )}
+    </div>
+  );
+
   const renderCourseManagement = () => (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-lg p-6">
@@ -405,6 +572,7 @@ const AdminDashboard = () => {
       case 'overview': return renderOverview();
       case 'content': return renderContentManagement();
       case 'courses': return renderCourseManagement();
+      case 'news': return renderNewsManagement();
       case 'contact': return <ContactInformationSection />;
       default: return renderOverview();
     }
@@ -449,6 +617,273 @@ const AdminDashboard = () => {
             {renderContent()}
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// News Form Component
+const NewsForm = ({ news, onSubmit, onCancel }) => {
+  const { t } = useLanguage();
+  const [formData, setFormData] = useState({
+    title: news?.title || { az: '', en: '', ru: '' },
+    content: news?.content || { az: '', en: '', ru: '' },
+    excerpt: news?.excerpt || { az: '', en: '', ru: '' },
+    category: news?.category || { az: '', en: '', ru: '' },
+    imageUrl: news?.imageUrl || '',
+    published: news?.published ?? false,
+    featured: news?.featured ?? false
+  });
+
+  const handleSubmit = () => {
+    if (formData.title.az && formData.title.en && formData.title.ru && 
+        formData.content.az && formData.content.en && formData.content.ru) {
+      onSubmit(formData);
+    } else {
+      alert('Please fill in all required fields for all languages');
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h4 className="text-lg font-semibold mb-4">{news ? t('editNews') : t('addNews')}</h4>
+      
+      <div className="space-y-6">
+        {/* Title Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t('newsTitle')}</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <input
+                type="text"
+                value={formData.title.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Xəbər başlığı..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <input
+                type="text"
+                value={formData.title.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="News title..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <input
+                type="text"
+                value={formData.title.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Заголовок новости..."
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Excerpt Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t('newsExcerpt')}</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <textarea
+                value={formData.excerpt.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  excerpt: { ...prev.excerpt, az: e.target.value }
+                }))}
+                rows={2}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Qısa məzmun..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <textarea
+                value={formData.excerpt.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  excerpt: { ...prev.excerpt, en: e.target.value }
+                }))}
+                rows={2}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Short excerpt..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <textarea
+                value={formData.excerpt.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  excerpt: { ...prev.excerpt, ru: e.target.value }
+                }))}
+                rows={2}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Краткое содержание..."
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Content Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t('newsContent')}</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <textarea
+                value={formData.content.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  content: { ...prev.content, az: e.target.value }
+                }))}
+                rows={4}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Tam məzmun..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <textarea
+                value={formData.content.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  content: { ...prev.content, en: e.target.value }
+                }))}
+                rows={4}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Full content..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <textarea
+                value={formData.content.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  content: { ...prev.content, ru: e.target.value }
+                }))}
+                rows={4}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Полное содержание..."
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Category Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t('newsCategory')}</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <input
+                type="text"
+                value={formData.category.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  category: { ...prev.category, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Kateqoriya..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <input
+                type="text"
+                value={formData.category.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  category: { ...prev.category, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Category..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <input
+                type="text"
+                value={formData.category.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  category: { ...prev.category, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Категория..."
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Image URL and Settings */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('imageUrl')}</label>
+            <input
+              type="url"
+              value={formData.imageUrl}
+              onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+          <div className="space-y-3">
+            <label className="block text-sm font-medium text-gray-700">{t('newsStatus')}</label>
+            <div className="flex items-center space-x-4">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={formData.published}
+                  onChange={(e) => setFormData(prev => ({ ...prev, published: e.target.checked }))}
+                  className="mr-2"
+                />
+                {t('published')}
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={formData.featured}
+                  onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+                  className="mr-2"
+                />
+                {t('featured')}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex space-x-4 mt-6">
+        <button
+          onClick={handleSubmit}
+          className="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700"
+        >
+          {news ? t('save') : t('addNews')}
+        </button>
+        <button
+          onClick={onCancel}
+          className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600"
+        >
+          {t('cancel')}
+        </button>
       </div>
     </div>
   );

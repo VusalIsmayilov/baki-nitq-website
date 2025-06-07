@@ -76,7 +76,33 @@ export const translations = {
     login: 'Giriş',
     logout: 'Çıxış',
     username: 'İstifadəçi adı',
-    password: 'Parol'
+    password: 'Parol',
+
+    // Admin News Management
+    newsManagement: 'Xəbər İdarəçiliyi',
+    addNews: 'Xəbər Əlavə Et',
+    editNews: 'Xəbəri Redaktə Et',
+    deleteNews: 'Xəbəri Sil',
+    publishNews: 'Xəbəri Dərc Et',
+    unpublishNews: 'Xəbəri Gizlət',
+    featuredNews: 'Seçilmiş Xəbər',
+    newsStatus: 'Xəbər Statusu',
+    published: 'Dərc Edilib',
+    draft: 'Qaralama',
+    featured: 'Seçilmiş',
+    newsTitle: 'Xəbər Başlığı',
+    newsContent: 'Xəbər Məzmunu',
+    newsExcerpt: 'Qısa Məzmun',
+    newsCategory: 'Xəbər Kateqoriyası',
+    newsImage: 'Xəbər Şəkli',
+    imageUrl: 'Şəkil URL-i',
+    save: 'Saxla',
+    cancel: 'Ləğv Et',
+    edit: 'Redaktə Et',
+    delete: 'Sil',
+    publish: 'Dərc Et',
+    unpublish: 'Gizlət',
+    toggleFeatured: 'Seçilmiş Status Dəyiş',
   },
   en: {
     // Navigation
@@ -154,7 +180,33 @@ export const translations = {
     login: 'Login',
     logout: 'Logout',
     username: 'Username',
-    password: 'Password'
+    password: 'Password',
+
+    // Admin News Management
+    newsManagement: 'News Management',
+    addNews: 'Add News',
+    editNews: 'Edit News',
+    deleteNews: 'Delete News',
+    publishNews: 'Publish News',
+    unpublishNews: 'Unpublish News',
+    featuredNews: 'Featured News',
+    newsStatus: 'News Status',
+    published: 'Published',
+    draft: 'Draft',
+    featured: 'Featured',
+    newsTitle: 'News Title',
+    newsContent: 'News Content',
+    newsExcerpt: 'News Excerpt',
+    newsCategory: 'News Category',
+    newsImage: 'News Image',
+    imageUrl: 'Image URL',
+    save: 'Save',
+    cancel: 'Cancel',
+    edit: 'Edit',
+    delete: 'Delete',
+    publish: 'Publish',
+    unpublish: 'Unpublish',
+    toggleFeatured: 'Toggle Featured',
   },
   ru: {
     // Navigation
@@ -220,18 +272,44 @@ export const translations = {
     facebook: 'Facebook',
 
     // News & Activities
-    newsTitle: 'Последние новости и активности',
+    newsTitle: 'Последние новости и мероприятия',
     readMore: 'Читать далее',
     newsDate: 'Дата',
     category: 'Категория',
-    viewAllNews: 'Смотреть все новости',
-    
+    viewAllNews: 'Посмотреть все новости',
+
     // Admin
     adminLogin: 'Вход админа',
     dashboard: 'Панель управления',
     login: 'Войти',
     logout: 'Выйти',
     username: 'Имя пользователя',
-    password: 'Пароль'
+    password: 'Пароль',
+
+    // Admin News Management
+    newsManagement: 'Управление новостями',
+    addNews: 'Добавить новость',
+    editNews: 'Редактировать новость',
+    deleteNews: 'Удалить новость',
+    publishNews: 'Опубликовать новость',
+    unpublishNews: 'Скрыть новость',
+    featuredNews: 'Рекомендуемые новости',
+    newsStatus: 'Статус новости',
+    published: 'Опубликовано',
+    draft: 'Черновик',
+    featured: 'Рекомендуемое',
+    newsTitle: 'Заголовок новости',
+    newsContent: 'Содержание новости',
+    newsExcerpt: 'Краткое содержание',
+    newsCategory: 'Категория новости',
+    newsImage: 'Изображение новости',
+    imageUrl: 'URL изображения',
+    save: 'Сохранить',
+    cancel: 'Отмена',
+    edit: 'Редактировать',
+    delete: 'Удалить',
+    publish: 'Опубликовать',
+    unpublish: 'Скрыть',
+    toggleFeatured: 'Переключить рекомендуемое',
   }
 };
