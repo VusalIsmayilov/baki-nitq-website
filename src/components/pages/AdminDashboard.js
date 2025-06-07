@@ -14,6 +14,7 @@ const AdminDashboard = () => {
     updateContent,
     updateMultipleContent,
     updateSiteSettings,
+    updateContactInfo,
     addMediaFile, 
     deleteMediaFile,
     updateMediaFile,
@@ -22,6 +23,10 @@ const AdminDashboard = () => {
     addCourse,
     updateCourse,
     deleteCourse,
+    updateCourseCurriculum,
+    addCurriculumItem,
+    removeCurriculumItem,
+    updateCurriculumItem,
     addTestimonial,
     updateTestimonial,
     deleteTestimonial,
@@ -40,6 +45,7 @@ const AdminDashboard = () => {
   const [editingCourse, setEditingCourse] = useState(null);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [editingCurriculum, setEditingCurriculum] = useState(null);
 
   // Sync editingContent with siteContent when siteContent changes
   useEffect(() => {
@@ -69,6 +75,7 @@ const AdminDashboard = () => {
     { id: 'courses', name: 'Course Management', icon: BookOpen },
     { id: 'testimonials', name: 'Testimonials', icon: Users },
     { id: 'media', name: 'Media & Gallery', icon: Upload },
+    { id: 'contact', name: 'Contact Information', icon: Globe },
     { id: 'analytics', name: 'Analytics', icon: BarChart3 },
     { id: 'settings', name: 'Settings', icon: Settings }
   ];
@@ -132,151 +139,6 @@ const AdminDashboard = () => {
     setEditingTestimonial(null);
   };
 
-  // Media File Card Component
-  const MediaFileCard = ({ file, onToggleGallery, onUpdateFile, onDelete }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [editData, setEditData] = useState({
-      title: { ...file.title },
-      description: { ...file.description }
-    });
-
-    const handleSave = () => {
-      onUpdateFile(editData);
-      setIsEditing(false);
-      alert('✅ Media file updated successfully!');
-    };
-
-    const getFileIcon = () => {
-      switch (file.type) {
-        case 'image': return '🖼️';
-        case 'video': return '📹';
-        default: return '📄';
-      }
-    };
-
-    return (
-      <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-        <div className="flex items-start space-x-4">
-          {file.type === 'image' ? (
-            <img 
-              src={file.url} 
-              alt={file.name}
-              className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
-            />
-          ) : (
-            <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
-              {getFileIcon()}
-            </div>
-          )}
-          
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                {isEditing ? (
-                  <div className="space-y-2">
-                    <input
-                      type="text"
-                      value={editData.title[language]}
-                      onChange={(e) => setEditData(prev => ({
-                        ...prev,
-                        title: { ...prev.title, [language]: e.target.value }
-                      }))}
-                      className="w-full p-2 border border-gray-300 rounded text-sm"
-                      placeholder="Enter title..."
-                    />
-                    <textarea
-                      value={editData.description[language]}
-                      onChange={(e) => setEditData(prev => ({
-                        ...prev,
-                        description: { ...prev.description, [language]: e.target.value }
-                      }))}
-                      className="w-full p-2 border border-gray-300 rounded text-sm"
-                      rows={2}
-                      placeholder="Enter description..."
-                    />
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={handleSave}
-                        className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => setIsEditing(false)}
-                        className="bg-gray-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-600"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <h4 className="font-semibold text-gray-900 truncate">
-                      {file.title[language] || file.name}
-                    </h4>
-                    <p className="text-sm text-gray-600 mt-1">
-                      {file.description[language] || 'No description'}
-                    </p>
-                    <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
-                      <span>{file.size}</span>
-                      <span>Uploaded {file.uploaded}</span>
-                      <span className={`px-2 py-1 rounded ${
-                        file.type === 'image' ? 'bg-green-100 text-green-800' :
-                        file.type === 'video' ? 'bg-blue-100 text-blue-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {file.type}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              <div className="flex flex-col space-y-2 ml-4">
-                {file.type === 'image' && (
-                  <div className="flex flex-col items-end">
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                      <span className="text-sm font-medium text-gray-700">Show in Gallery</span>
-                      <input
-                        type="checkbox"
-                        checked={file.inGallery}
-                        onChange={onToggleGallery}
-                        className="rounded"
-                      />
-                    </label>
-                    {file.inGallery && (
-                      <span className="mt-1 px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
-                        📸 In Gallery
-                      </span>
-                    )}
-                  </div>
-                )}
-                
-                <div className="flex space-x-1">
-                  <button
-                    onClick={() => setIsEditing(!isEditing)}
-                    className="text-blue-600 hover:text-blue-800 p-1"
-                    title="Edit details"
-                  >
-                    <Edit size={16} />
-                  </button>
-                  
-                  <button
-                    onClick={onDelete}
-                    className="text-red-600 hover:text-red-800 p-1"
-                    title="Delete file"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const renderOverview = () => (
     <div className="space-y-6">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -327,11 +189,11 @@ const AdminDashboard = () => {
             <span className="block font-semibold">Manage Courses</span>
           </button>
           <button 
-            onClick={() => setActiveSection('testimonials')}
+            onClick={() => setActiveSection('contact')}
             className="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors"
           >
-            <Users className="mx-auto text-purple-600 mb-2" size={24} />
-            <span className="block font-semibold">Review Testimonials</span>
+            <Globe className="mx-auto text-purple-600 mb-2" size={24} />
+            <span className="block font-semibold">Contact Info</span>
           </button>
         </div>
       </div>
@@ -444,117 +306,6 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const renderMediaLibrary = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold">Upload New Media</h3>
-          <label className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 cursor-pointer flex items-center space-x-2">
-            <Upload size={18} />
-            <span>Upload File</span>
-            <input
-              type="file"
-              onChange={handleFileUpload}
-              className="hidden"
-              accept="image/*,video/*,.pdf,.doc,.docx"
-            />
-          </label>
-        </div>
-        <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-600">
-          <div className="p-4 bg-green-50 rounded-lg">
-            <strong>Images:</strong> JPG, PNG, GIF<br />
-            Max size: 10MB<br />
-            <span className="text-xs text-green-700">✅ Can be added to gallery</span>
-          </div>
-          <div className="p-4 bg-blue-50 rounded-lg">
-            <strong>Videos:</strong> MP4, AVI, MOV<br />
-            Max size: 100MB<br />
-            <span className="text-xs text-blue-700">📹 For future video gallery</span>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <strong>Documents:</strong> PDF, DOC, DOCX<br />
-            Max size: 50MB<br />
-            <span className="text-xs text-gray-700">📄 For downloads</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold">Media Library ({mediaLibrary.length})</h3>
-          <div className="flex items-center space-x-2 text-sm">
-            <span className="px-2 py-1 bg-green-100 text-green-800 rounded">
-              📸 {getGalleryItems().length} in Gallery
-            </span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
-              📁 {mediaLibrary.filter(file => !file.inGallery).length} in Library
-            </span>
-          </div>
-        </div>
-        
-        {mediaLibrary.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <Upload size={48} className="mx-auto mb-4 opacity-50" />
-            <p>No files uploaded yet. Start by uploading your first file!</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {mediaLibrary.map((file) => (
-              <MediaFileCard 
-                key={file.id} 
-                file={file} 
-                onToggleGallery={() => toggleMediaInGallery(file.id)}
-                onUpdateFile={(updates) => updateMediaFile(file.id, updates)}
-                onDelete={() => {
-                  if (window.confirm('Are you sure you want to delete this file?')) {
-                    deleteMediaFile(file.id);
-                    alert('✅ File deleted successfully!');
-                  }
-                }}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Gallery Preview */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Gallery Preview</h3>
-        <p className="text-gray-600 mb-4">These images will appear on the public Gallery page:</p>
-        
-        {getGalleryItems().length === 0 ? (
-          <div className="text-center py-8 bg-gray-50 rounded-lg">
-            <p className="text-gray-500">No images assigned to gallery yet.</p>
-            <p className="text-sm text-gray-400 mt-2">Toggle "Show in Gallery" for images above to add them here.</p>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-4 gap-4">
-            {getGalleryItems().slice(0, 8).map((item) => (
-              <div key={item.id} className="relative group">
-                <img 
-                  src={item.url} 
-                  alt={item.title[language]}
-                  className="w-full h-32 object-cover rounded-lg"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 rounded-lg transition-all duration-200 flex items-center justify-center">
-                  <span className="text-white text-xs opacity-0 group-hover:opacity-100 text-center px-2">
-                    {item.title[language]}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        
-        {getGalleryItems().length > 8 && (
-          <p className="text-center mt-4 text-gray-500 text-sm">
-            ... and {getGalleryItems().length - 8} more images
-          </p>
-        )}
-      </div>
-    </div>
-  );
-
   const renderCourseManagement = () => (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-lg p-6">
@@ -583,8 +334,20 @@ const AdminDashboard = () => {
                       {course.active ? 'Active' : 'Inactive'}
                     </span>
                   </div>
+                  <div className="mt-2">
+                    <span className="text-xs text-gray-500">
+                      Curriculum items: {course.curriculum?.[language]?.length || 0}
+                    </span>
+                  </div>
                 </div>
                 <div className="flex space-x-2">
+                  <button
+                    onClick={() => setEditingCurriculum(course)}
+                    className="text-green-600 hover:text-green-800 p-1"
+                    title="Edit curriculum"
+                  >
+                    <BookOpen size={16} />
+                  </button>
                   <button
                     onClick={() => {
                       setEditingCourse(course);
@@ -612,6 +375,18 @@ const AdminDashboard = () => {
         </div>
       </div>
 
+      {editingCurriculum && (
+        <CurriculumEditor
+          course={editingCurriculum}
+          language={language}
+          onClose={() => setEditingCurriculum(null)}
+          onUpdateCurriculum={updateCourseCurriculum}
+          onAddItem={addCurriculumItem}
+          onRemoveItem={removeCurriculumItem}
+          onUpdateItem={updateCurriculumItem}
+        />
+      )}
+
       {showCourseForm && (
         <CourseForm
           course={editingCourse}
@@ -625,167 +400,12 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const renderTestimonialManagement = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-semibold">Testimonial Management</h3>
-          <button
-            onClick={() => setShowTestimonialForm(true)}
-            className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 flex items-center space-x-2"
-          >
-            <Plus size={18} />
-            <span>Add Testimonial</span>
-          </button>
-        </div>
-        
-        <div className="space-y-4">
-          {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="border border-gray-200 rounded-lg p-4">
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <h4 className="font-semibold">{testimonial.name}</h4>
-                  <p className="text-gray-600 mt-1 italic">"{testimonial.text[language]}"</p>
-                  <span className={`inline-block mt-2 px-2 py-1 rounded text-xs ${testimonial.approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                    {testimonial.approved ? 'Approved' : 'Pending Review'}
-                  </span>
-                </div>
-                <div className="flex space-x-2">
-                  {!testimonial.approved && (
-                    <button
-                      onClick={() => {
-                        approveTestimonial(testimonial.id);
-                        alert('✅ Testimonial approved!');
-                      }}
-                      className="text-green-600 hover:text-green-800 p-1"
-                    >
-                      <Check size={16} />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => {
-                      setEditingTestimonial(testimonial);
-                      setShowTestimonialForm(true);
-                    }}
-                    className="text-blue-600 hover:text-blue-800 p-1"
-                  >
-                    <Edit size={16} />
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (window.confirm('Are you sure you want to delete this testimonial?')) {
-                        deleteTestimonial(testimonial.id);
-                        alert('✅ Testimonial deleted successfully!');
-                      }
-                    }}
-                    className="text-red-600 hover:text-red-800 p-1"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {showTestimonialForm && (
-        <TestimonialForm
-          testimonial={editingTestimonial}
-          onSubmit={handleTestimonialSubmit}
-          onCancel={() => {
-            setShowTestimonialForm(false);
-            setEditingTestimonial(null);
-          }}
-        />
-      )}
-    </div>
-  );
-
-  const renderAnalytics = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Website Analytics</h3>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <h4 className="font-semibold mb-3">Top Pages</h4>
-            <div className="space-y-2">
-              {siteStats.topPages.map((page, index) => (
-                <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                  <span className="flex items-center">
-                    <span className="w-6 h-6 bg-blue-100 text-blue-800 rounded-full text-xs flex items-center justify-center mr-3">
-                      {index + 1}
-                    </span>
-                    {page.page}
-                  </span>
-                  <span className="font-semibold text-blue-700">{page.views}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-3">Traffic Sources</h4>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <span>Direct Traffic</span>
-                <span className="font-semibold">{siteStats.trafficSources.direct}%</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <span>Search Engines</span>
-                <span className="font-semibold">{siteStats.trafficSources.search}%</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <span>Social Media</span>
-                <span className="font-semibold">{siteStats.trafficSources.social}%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderSettings = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Site Settings</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Site Title</label>
-            <input
-              type="text"
-              defaultValue={siteContent.siteSettings?.siteName || "Bakı Nitq Mərkəzi"}
-              className="w-full p-3 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
-            <input
-              type="email"
-              defaultValue={siteContent.contactInfo?.email || "info@bakinitqmerkezi.az"}
-              className="w-full p-3 border border-gray-300 rounded-md"
-            />
-          </div>
-        </div>
-        <button
-          onClick={() => alert('✅ Settings saved successfully!')}
-          className="mt-4 bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-800"
-        >
-          Save Settings
-        </button>
-      </div>
-    </div>
-  );
-
   const renderContent = () => {
     switch (activeSection) {
       case 'overview': return renderOverview();
       case 'content': return renderContentManagement();
       case 'courses': return renderCourseManagement();
-      case 'testimonials': return renderTestimonialManagement();
-      case 'media': return renderMediaLibrary();
-      case 'analytics': return renderAnalytics();
-      case 'settings': return renderSettings();
+      case 'contact': return <ContactInformationSection />;
       default: return renderOverview();
     }
   };
@@ -828,6 +448,233 @@ const AdminDashboard = () => {
           <div className="flex-1">
             {renderContent()}
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Contact Information Component
+const ContactInformationSection = () => {
+  const { siteContent, updateContactInfo } = useContent();
+  const [contactData, setContactData] = useState({
+    phone: siteContent.contactInfo?.phone || '+994 XX XXX XX XX',
+    email: siteContent.contactInfo?.email || 'info@bakinitqmerkezi.az',
+    address: siteContent.contactInfo?.address || 'Bakı, Azərbaycan',
+    hours: siteContent.contactInfo?.hours || 'Mon-Fri: 9:00-18:00',
+    instagram: siteContent.contactInfo?.instagram || 'https://instagram.com/bakinitqmerkezi',
+    facebook: siteContent.contactInfo?.facebook || 'https://facebook.com/bakinitqmerkezi'
+  });
+  const [hasUnsavedContactChanges, setHasUnsavedContactChanges] = useState(false);
+
+  const handleContactChange = (field, value) => {
+    setContactData(prev => ({ ...prev, [field]: value }));
+    setHasUnsavedContactChanges(true);
+  };
+
+  const saveContactInfo = () => {
+    updateContactInfo(contactData);
+    setHasUnsavedContactChanges(false);
+    alert('✅ Contact information updated successfully!');
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h3 className="text-xl font-semibold mb-6">Contact Information Management</h3>
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-800">Basic Information</h4>
+          <input
+            type="text"
+            value={contactData.phone}
+            onChange={(e) => handleContactChange('phone', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md"
+            placeholder="Phone Number"
+          />
+          <input
+            type="email"
+            value={contactData.email}
+            onChange={(e) => handleContactChange('email', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md"
+            placeholder="Email Address"
+          />
+          <input
+            type="text"
+            value={contactData.address}
+            onChange={(e) => handleContactChange('address', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md"
+            placeholder="Address"
+          />
+          <input
+            type="text"
+            value={contactData.hours}
+            onChange={(e) => handleContactChange('hours', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md"
+            placeholder="Working Hours"
+          />
+        </div>
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-800">Social Media</h4>
+          <input
+            type="url"
+            value={contactData.instagram}
+            onChange={(e) => handleContactChange('instagram', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md"
+            placeholder="Instagram URL"
+          />
+          <input
+            type="url"
+            value={contactData.facebook}
+            onChange={(e) => handleContactChange('facebook', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md"
+            placeholder="Facebook URL"
+          />
+        </div>
+      </div>
+      <button
+        onClick={saveContactInfo}
+        className={`mt-6 px-6 py-2 rounded-md font-semibold ${
+          hasUnsavedContactChanges 
+            ? 'bg-red-600 hover:bg-red-700 text-white animate-pulse' 
+            : 'bg-blue-900 hover:bg-blue-800 text-white'
+        }`}
+      >
+        {hasUnsavedContactChanges ? 'Save Changes!' : 'Save Contact Info'}
+      </button>
+    </div>
+  );
+};
+
+// Curriculum Editor Component
+const CurriculumEditor = ({ course, language, onClose, onAddItem, onRemoveItem, onUpdateItem }) => {
+  const [newItem, setNewItem] = useState('');
+  const [editingItems, setEditingItems] = useState({});
+  
+  const curriculum = course.curriculum?.[language] || [];
+  
+  const handleAddItem = () => {
+    if (newItem.trim()) {
+      onAddItem(course.id, language, newItem.trim());
+      setNewItem('');
+      alert('✅ Curriculum item added successfully!');
+    }
+  };
+  
+  const handleUpdateItem = (index, value) => {
+    onUpdateItem(course.id, language, index, value);
+    setEditingItems(prev => ({ ...prev, [index]: false }));
+    alert('✅ Curriculum item updated successfully!');
+  };
+  
+  const handleRemoveItem = (index) => {
+    if (window.confirm('Are you sure you want to remove this curriculum item?')) {
+      onRemoveItem(course.id, language, index);
+      alert('✅ Curriculum item removed successfully!');
+    }
+  };
+  
+  const startEditing = (index) => {
+    setEditingItems(prev => ({ ...prev, [index]: curriculum[index] }));
+  };
+  
+  const cancelEditing = (index) => {
+    setEditingItems(prev => ({ ...prev, [index]: false }));
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500">
+      <div className="flex justify-between items-center mb-4">
+        <h4 className="text-lg font-semibold">
+          Edit Curriculum: {course.name[language]} ({language.toUpperCase()})
+        </h4>
+        <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <X size={20} />
+        </button>
+      </div>
+      
+      <div className="mb-6 p-4 bg-green-50 rounded-lg">
+        <p className="text-green-800 text-sm">
+          💡 <strong>Managing "What You'll Learn":</strong> Add, edit, or remove curriculum items that will appear in the course details modal.
+        </p>
+      </div>
+
+      <div className="space-y-3 mb-6">
+        <h5 className="font-semibold text-gray-700">Current Curriculum Items:</h5>
+        {curriculum.length === 0 ? (
+          <p className="text-gray-500 italic">No curriculum items yet. Add some below!</p>
+        ) : (
+          curriculum.map((item, index) => (
+            <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+              <span className="text-green-600 mt-1">•</span>
+              <div className="flex-1">
+                {editingItems[index] !== false ? (
+                  <div className="space-y-2">
+                    <textarea
+                      value={editingItems[index]}
+                      onChange={(e) => setEditingItems(prev => ({ ...prev, [index]: e.target.value }))}
+                      className="w-full p-2 border border-gray-300 rounded text-sm"
+                      rows={2}
+                    />
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleUpdateItem(index, editingItems[index])}
+                        className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => cancelEditing(index)}
+                        className="bg-gray-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-600"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <span className="text-gray-700">{item}</span>
+                )}
+              </div>
+              {editingItems[index] === false && (
+                <div className="flex space-x-1">
+                  <button
+                    onClick={() => startEditing(index)}
+                    className="text-blue-600 hover:text-blue-800 p-1"
+                    title="Edit item"
+                  >
+                    <Edit size={14} />
+                  </button>
+                  <button
+                    onClick={() => handleRemoveItem(index)}
+                    className="text-red-600 hover:text-red-800 p-1"
+                    title="Remove item"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="border-t pt-4">
+        <h5 className="font-semibold text-gray-700 mb-3">Add New Curriculum Item:</h5>
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={newItem}
+            onChange={(e) => setNewItem(e.target.value)}
+            placeholder="Enter new curriculum item..."
+            className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            onKeyPress={(e) => e.key === 'Enter' && handleAddItem()}
+          />
+          <button
+            onClick={handleAddItem}
+            className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 flex items-center space-x-2"
+          >
+            <Plus size={18} />
+            <span>Add</span>
+          </button>
         </div>
       </div>
     </div>
@@ -926,96 +773,6 @@ const CourseForm = ({ course, onSubmit, onCancel }) => {
           className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-800"
         >
           {course ? 'Update Course' : 'Add Course'}
-        </button>
-        <button
-          onClick={onCancel}
-          className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// Testimonial Form Component
-const TestimonialForm = ({ testimonial, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
-    name: testimonial?.name || '',
-    text: testimonial?.text || { az: '', en: '', ru: '' },
-    approved: testimonial?.approved ?? false
-  });
-
-  const handleSubmit = () => {
-    if (formData.name && formData.text.az && formData.text.en && formData.text.ru) {
-      onSubmit(formData);
-    } else {
-      alert('Please fill in all required fields');
-    }
-  };
-
-  return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h4 className="text-lg font-semibold mb-4">{testimonial ? 'Edit Testimonial' : 'Add New Testimonial'}</h4>
-      
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            placeholder="Enter full name"
-          />
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Testimonial (AZ)</label>
-            <textarea
-              value={formData.text.az}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                text: { ...prev.text, az: e.target.value }
-              }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              rows={4}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Testimonial (EN)</label>
-            <textarea
-              value={formData.text.en}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                text: { ...prev.text, en: e.target.value }
-              }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              rows={4}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Testimonial (RU)</label>
-            <textarea
-              value={formData.text.ru}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                text: { ...prev.text, ru: e.target.value }
-              }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              rows={4}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex space-x-4 mt-6">
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-800"
-        >
-          {testimonial ? 'Update Testimonial' : 'Add Testimonial'}
         </button>
         <button
           onClick={onCancel}

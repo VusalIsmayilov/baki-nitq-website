@@ -128,29 +128,12 @@ const CoursesPage = ({ setCurrentPage }) => {
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-blue-900 mb-2">What You'll Learn</h4>
                   <ul className="list-disc list-inside text-blue-800 space-y-1">
-                    {selectedCourse.id === 1 && (
-                      <>
-                        <li>Proper pronunciation and articulation techniques</li>
-                        <li>Voice modulation and tone control</li>
-                        <li>Professional communication skills</li>
-                        <li>Cultural aspects of speech in Azerbaijani</li>
-                      </>
-                    )}
-                    {selectedCourse.id === 2 && (
-                      <>
-                        <li>Public speaking confidence building</li>
-                        <li>Presentation structure and delivery</li>
-                        <li>Audience engagement techniques</li>
-                        <li>Overcoming stage fright</li>
-                      </>
-                    )}
-                    {selectedCourse.id === 3 && (
-                      <>
-                        <li>Voice projection and breathing techniques</li>
-                        <li>Clear pronunciation exercises</li>
-                        <li>Accent reduction and neutralization</li>
-                        <li>Professional voice training</li>
-                      </>
+                    {selectedCourse.curriculum && selectedCourse.curriculum[language] ? (
+                      selectedCourse.curriculum[language].map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))
+                    ) : (
+                      <li>Course curriculum will be updated soon</li>
                     )}
                   </ul>
                 </div>

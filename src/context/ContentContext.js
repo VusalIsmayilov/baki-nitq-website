@@ -28,7 +28,9 @@ export const ContentProvider = ({ children }) => {
       phone: '+994 XX XXX XX XX',
       email: 'info@bakinitqmerkezi.az',
       address: 'Bakı, Azərbaycan',
-      hours: 'Mon-Fri: 9:00-18:00'
+      hours: 'Mon-Fri: 9:00-18:00',
+      instagram: 'https://instagram.com/bakinitqmerkezi',
+      facebook: 'https://facebook.com/bakinitqmerkezi'
     },
     siteSettings: {
       siteName: 'Bakı Nitq Mərkəzi',
@@ -151,6 +153,26 @@ export const ContentProvider = ({ children }) => {
         en: 'Learn proper and effective speaking techniques',
         ru: 'Изучите правильные и эффективные техники речи'
       },
+      curriculum: {
+        az: [
+          'Düzgün tələffüz və artikulyasiya texnikaları',
+          'Səs modulyasiyası və ton nəzarəti',
+          'Peşəkar ünsiyyət bacarıqları',
+          'Azərbaycan dilində nitqin mədəni aspektləri'
+        ],
+        en: [
+          'Proper pronunciation and articulation techniques',
+          'Voice modulation and tone control',
+          'Professional communication skills',
+          'Cultural aspects of speech in Azerbaijani'
+        ],
+        ru: [
+          'Правильные техники произношения и артикуляции',
+          'Модуляция голоса и контроль тона',
+          'Навыки профессионального общения',
+          'Культурные аспекты речи на азербайджанском языке'
+        ]
+      },
       duration: '3 months',
       price: '200 AZN',
       active: true
@@ -167,6 +189,26 @@ export const ContentProvider = ({ children }) => {
         en: 'Develop your public speaking and presentation skills',
         ru: 'Развивайте навыки публичных выступлений и презентаций'
       },
+      curriculum: {
+        az: [
+          'İctimai çıxış üçün özgüvən artırma',
+          'Təqdimat strukturu və çatdırılması',
+          'Auditoriya ilə əlaqə texnikaları',
+          'Səhnə qorxusunu aradan qaldırma'
+        ],
+        en: [
+          'Public speaking confidence building',
+          'Presentation structure and delivery',
+          'Audience engagement techniques',
+          'Overcoming stage fright'
+        ],
+        ru: [
+          'Повышение уверенности в публичных выступлениях',
+          'Структура и подача презентаций',
+          'Техники взаимодействия с аудиторией',
+          'Преодоление страха сцены'
+        ]
+      },
       duration: '4 months',
       price: '250 AZN',
       active: true
@@ -182,6 +224,26 @@ export const ContentProvider = ({ children }) => {
         az: 'Səs və tələffüz texnikalarını mükəmməlləşdirin',
         en: 'Perfect your voice and pronunciation techniques',
         ru: 'Совершенствуйте техники голоса и произношения'
+      },
+      curriculum: {
+        az: [
+          'Səs proyeksiyası və nəfəs texnikaları',
+          'Aydın tələffüz məşqləri',
+          'Vurğu azaldılması və neytrallaşdırılması',
+          'Peşəkar səs təlimi'
+        ],
+        en: [
+          'Voice projection and breathing techniques',
+          'Clear pronunciation exercises',
+          'Accent reduction and neutralization',
+          'Professional voice training'
+        ],
+        ru: [
+          'Техники голосовой проекции и дыхания',
+          'Упражнения для четкого произношения',
+          'Уменьшение и нейтрализация акцента',
+          'Профессиональная подготовка голоса'
+        ]
       },
       duration: '2 months',
       price: '180 AZN',
@@ -259,6 +321,16 @@ export const ContentProvider = ({ children }) => {
     }));
   };
 
+  const updateContactInfo = (newContactInfo) => {
+    setSiteContent(prev => ({
+      ...prev,
+      contactInfo: {
+        ...prev.contactInfo,
+        ...newContactInfo
+      }
+    }));
+  };
+
   // Media Management Functions
   const addMediaFile = (file) => {
     const newFile = {
@@ -327,6 +399,69 @@ export const ContentProvider = ({ children }) => {
     setCourses(prev => prev.filter(course => course.id !== courseId));
   };
 
+  // Course Curriculum Management
+  const updateCourseCurriculum = (courseId, language, curriculum) => {
+    console.log(`🔄 Updating curriculum for course ${courseId} in ${language}:`, curriculum);
+    setCourses(prev => prev.map(course => 
+      course.id === courseId 
+        ? { 
+            ...course, 
+            curriculum: {
+              ...course.curriculum,
+              [language]: curriculum
+            }
+          } 
+        : course
+    ));
+  };
+
+  const addCurriculumItem = (courseId, language, item) => {
+    console.log(`➕ Adding curriculum item to course ${courseId} in ${language}:`, item);
+    setCourses(prev => prev.map(course => 
+      course.id === courseId 
+        ? { 
+            ...course, 
+            curriculum: {
+              ...course.curriculum,
+              [language]: [...(course.curriculum?.[language] || []), item]
+            }
+          } 
+        : course
+    ));
+  };
+
+  const removeCurriculumItem = (courseId, language, index) => {
+    console.log(`🗑️ Removing curriculum item ${index} from course ${courseId} in ${language}`);
+    setCourses(prev => prev.map(course => 
+      course.id === courseId 
+        ? { 
+            ...course, 
+            curriculum: {
+              ...course.curriculum,
+              [language]: (course.curriculum?.[language] || []).filter((_, i) => i !== index)
+            }
+          } 
+        : course
+    ));
+  };
+
+  const updateCurriculumItem = (courseId, language, index, newItem) => {
+    console.log(`✏️ Updating curriculum item ${index} in course ${courseId} in ${language}:`, newItem);
+    setCourses(prev => prev.map(course => 
+      course.id === courseId 
+        ? { 
+            ...course, 
+            curriculum: {
+              ...course.curriculum,
+              [language]: (course.curriculum?.[language] || []).map((item, i) => 
+                i === index ? newItem : item
+              )
+            }
+          } 
+        : course
+    ));
+  };
+
   // Testimonial Management Functions
   const addTestimonial = (testimonialData) => {
     const newTestimonial = {
@@ -372,6 +507,7 @@ export const ContentProvider = ({ children }) => {
       updateContent,
       updateMultipleContent,
       updateSiteSettings,
+      updateContactInfo,
       
       // Media Management
       addMediaFile,
@@ -384,6 +520,12 @@ export const ContentProvider = ({ children }) => {
       addCourse,
       updateCourse,
       deleteCourse,
+      
+      // Course Curriculum Management
+      updateCourseCurriculum,
+      addCurriculumItem,
+      removeCurriculumItem,
+      updateCurriculumItem,
       
       // Testimonial Management
       addTestimonial,

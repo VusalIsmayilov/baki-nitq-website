@@ -1,8 +1,10 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useContent } from '../context/ContentContext';
 
 const Footer = ({ setCurrentPage }) => {
   const { t } = useLanguage();
+  const { siteContent } = useContent();
   
   return (
     <footer className="bg-gray-900 text-white py-12">
@@ -31,9 +33,9 @@ const Footer = ({ setCurrentPage }) => {
           <div>
             <h4 className="font-semibold mb-4">Contact Info</h4>
             <div className="space-y-2 text-gray-300">
-              <p>Bakı, Azərbaycan</p>
-              <p>+994 XX XXX XX XX</p>
-              <p>info@bakinitqmerkezi.az</p>
+              <p>{siteContent.contactInfo?.address || 'Bakı, Azərbaycan'}</p>
+              <p>{siteContent.contactInfo?.phone || '+994 XX XXX XX XX'}</p>
+              <p>{siteContent.contactInfo?.email || 'info@bakinitqmerkezi.az'}</p>
             </div>
           </div>
           
@@ -41,7 +43,7 @@ const Footer = ({ setCurrentPage }) => {
             <h4 className="font-semibold mb-4">{t('followUs')}</h4>
             <div className="space-y-3">
               <a 
-                href="https://instagram.com/bakinitqmerkezi" 
+                href={siteContent.contactInfo?.instagram || "https://instagram.com/bakinitqmerkezi"} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 text-gray-300 hover:text-pink-400 transition-colors"
@@ -50,7 +52,7 @@ const Footer = ({ setCurrentPage }) => {
                 <span>{t('instagram')}</span>
               </a>
               <a 
-                href="https://facebook.com/bakinitqmerkezi" 
+                href={siteContent.contactInfo?.facebook || "https://facebook.com/bakinitqmerkezi"} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 text-gray-300 hover:text-blue-400 transition-colors"
@@ -78,7 +80,7 @@ const Footer = ({ setCurrentPage }) => {
             </button>
             <span>•</span>
             <a 
-              href="https://instagram.com/bakinitqmerkezi" 
+              href={siteContent.contactInfo?.instagram || "https://instagram.com/bakinitqmerkezi"} 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-pink-400 transition-colors"
@@ -87,7 +89,7 @@ const Footer = ({ setCurrentPage }) => {
             </a>
             <span>•</span>
             <a 
-              href="https://facebook.com/bakinitqmerkezi" 
+              href={siteContent.contactInfo?.facebook || "https://facebook.com/bakinitqmerkezi"} 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-blue-400 transition-colors"
