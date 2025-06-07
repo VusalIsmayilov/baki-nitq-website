@@ -25,16 +25,16 @@ const GalleryPage = () => {
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center mb-4">{t('galleryTitle')}</h1>
         <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Explore our learning environment, student achievements, and special events at Bakı Nitq Mərkəzi through our photo gallery.
+          {t('galleryDesc')}
         </p>
         
         {galleryItems.length === 0 ? (
           <div className="text-center py-16">
             <div className="bg-gray-100 rounded-lg p-12 max-w-md mx-auto">
               <div className="text-6xl mb-4">📸</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No Gallery Images</h3>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('noGalleryImages')}</h3>
               <p className="text-gray-500">
-                Gallery images will appear here once the admin assigns uploaded media to the gallery.
+                {t('noGalleryDesc')}
               </p>
             </div>
           </div>
@@ -74,11 +74,9 @@ const GalleryPage = () => {
             
             <div className="text-center mt-12">
               <div className="bg-blue-50 rounded-lg p-6 max-w-2xl mx-auto">
-                <h3 className="font-semibold text-blue-900 mb-2">About Our Gallery</h3>
+                <h3 className="font-semibold text-blue-900 mb-2">{t('aboutGallery')}</h3>
                 <p className="text-blue-700 text-sm">
-                  Our gallery showcases the vibrant learning environment at Bakı Nitq Mərkəzi. 
-                  From classroom sessions to student presentations, these images capture the 
-                  essence of our speech training programs and the progress of our students.
+                  {t('aboutGalleryDesc')}
                 </p>
               </div>
             </div>

@@ -7,7 +7,7 @@ const Footer = ({ setCurrentPage }) => {
   return (
     <footer className="bg-gray-900 text-white py-12">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-semibold mb-4">Bakı Nitq Mərkəzi</h3>
             <p className="text-gray-300">Professional speech training center in Baku, Azerbaijan</p>
@@ -36,16 +36,65 @@ const Footer = ({ setCurrentPage }) => {
               <p>info@bakinitqmerkezi.az</p>
             </div>
           </div>
+          
+          <div>
+            <h4 className="font-semibold mb-4">{t('followUs')}</h4>
+            <div className="space-y-3">
+              <a 
+                href="https://instagram.com/bakinitqmerkezi" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3 text-gray-300 hover:text-pink-400 transition-colors"
+              >
+                <span className="text-xl">📷</span>
+                <span>{t('instagram')}</span>
+              </a>
+              <a 
+                href="https://facebook.com/bakinitqmerkezi" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3 text-gray-300 hover:text-blue-400 transition-colors"
+              >
+                <span className="text-xl">👥</span>
+                <span>{t('facebook')}</span>
+              </a>
+            </div>
+            <div className="mt-4">
+              <p className="text-sm text-gray-400">
+                {t('socialMedia')}
+              </p>
+            </div>
+          </div>
         </div>
         
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
           <p>&copy; 2025 Bakı Nitq Mərkəzi. All rights reserved.</p>
-          <button 
-            onClick={() => setCurrentPage('privacy')} 
-            className="text-gray-300 hover:text-white ml-4"
-          >
-            {t('privacy')}
-          </button>
+          <div className="flex justify-center items-center space-x-4 mt-2">
+            <button 
+              onClick={() => setCurrentPage('privacy')} 
+              className="text-gray-300 hover:text-white"
+            >
+              {t('privacy')}
+            </button>
+            <span>•</span>
+            <a 
+              href="https://instagram.com/bakinitqmerkezi" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-pink-400 transition-colors"
+            >
+              📷 Instagram
+            </a>
+            <span>•</span>
+            <a 
+              href="https://facebook.com/bakinitqmerkezi" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-blue-400 transition-colors"
+            >
+              👥 Facebook
+            </a>
+          </div>
         </div>
       </div>
     </footer>

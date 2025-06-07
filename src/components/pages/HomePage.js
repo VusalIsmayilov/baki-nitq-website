@@ -2,7 +2,7 @@ import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
 
-const HomePage = () => {
+const HomePage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
   const { siteContent, courses } = useContent();
   
@@ -23,7 +23,10 @@ const HomePage = () => {
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
             {siteContent.homeDesc?.[language] || t('welcomeDesc')}
           </p>
-          <button className="bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+          <button 
+            onClick={() => setCurrentPage('about')}
+            className="bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
             {t('learnMore')}
           </button>
         </div>
@@ -62,7 +65,10 @@ const HomePage = () => {
                       </div>
                     </div>
                     <div className="mt-6 text-center">
-                      <button className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-800 transition-colors font-semibold">
+                      <button 
+                        onClick={() => setCurrentPage('courses')}
+                        className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-800 transition-colors font-semibold"
+                      >
                         {t('learnMore')}
                       </button>
                     </div>

@@ -21,11 +21,11 @@ const App = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage />;
+        return <HomePage setCurrentPage={setCurrentPage} />;
       case 'about':
         return <AboutPage />;
       case 'courses':
-        return <CoursesPage />;
+        return <CoursesPage setCurrentPage={setCurrentPage} />;
       case 'testimonials':
         return <TestimonialsPage />;
       case 'gallery':
@@ -39,7 +39,7 @@ const App = () => {
       case 'privacy':
         return <PrivacyPage />;
       default:
-        return <HomePage />;
+        return <HomePage setCurrentPage={setCurrentPage} />;
     }
   };
   
