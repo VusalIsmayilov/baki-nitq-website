@@ -12,6 +12,7 @@ const AdminDashboard = () => {
     courses,
     testimonials,
     news,
+    teamMembers,
     updateContent,
     updateMultipleContent,
     updateSiteSettings,
@@ -38,7 +39,11 @@ const AdminDashboard = () => {
     publishNews,
     toggleNewsFeatured,
     getPublishedNews,
-    getFeaturedNews
+    getFeaturedNews,
+    addTeamMember,
+    updateTeamMember,
+    deleteTeamMember,
+    getActiveTeamMembers
   } = useContent();
   
   const [activeSection, setActiveSection] = useState('overview');
@@ -48,6 +53,10 @@ const AdminDashboard = () => {
     aboutMission: { ...siteContent.aboutMission },
     aboutVision: { ...siteContent.aboutVision }
   });
+  
+  // Team Management State
+  const [editingTeamMember, setEditingTeamMember] = useState(null);
+  const [showTeamForm, setShowTeamForm] = useState(false);
   const [showCourseForm, setShowCourseForm] = useState(false);
   const [showTestimonialForm, setShowTestimonialForm] = useState(false);
   const [showNewsForm, setShowNewsForm] = useState(false);
@@ -84,6 +93,7 @@ const AdminDashboard = () => {
     { id: 'content', name: 'Content Management', icon: FileText },
     { id: 'courses', name: 'Course Management', icon: BookOpen },
     { id: 'news', name: 'News & Activities', icon: Newspaper },
+    { id: 'team', name: 'Team Management', icon: Users },
     { id: 'testimonials', name: 'Testimonials', icon: Users },
     { id: 'media', name: 'Media & Gallery', icon: Upload },
     { id: 'contact', name: 'Contact Information', icon: Globe },
@@ -567,12 +577,118 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const handleAddTeamMember = (memberData) => {
+    addTeamMember(memberData);
+    setShowTeamForm(false);
+    alert('Team member added successfully!');
+  };
+
+  const handleUpdateTeamMember = (memberData) => {
+    updateTeamMember(editingTeamMember.id, memberData);
+    setEditingTeamMember(null);
+    alert('Team member updated successfully!');
+  };
+
+  const handleDeleteTeamMember = (memberId) => {
+    if (window.confirm('Are you sure you want to delete this team member?')) {
+      deleteTeamMember(memberId);
+      alert('Team member deleted successfully!');
+    }
+  };
+
+  const renderTeamManagement = () => {
+
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Team Management</h2>
+          <button
+            onClick={() => setShowTeamForm(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+          >
+            <Plus size={16} className="mr-2" />
+            Add Team Member
+          </button>
+        </div>
+
+        {/* Team Members List */}
+        <div className="grid gap-6">
+          {teamMembers.map((member) => (
+            <div key={member.id} className="bg-white rounded-lg shadow-lg p-6">
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* Image */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={member.imageUrl}
+                    alt={member.name}
+                    className="w-32 h-32 rounded-lg object-cover"
+                  />
+                </div>
+                
+                {/* Content */}
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{member.name}</h3>
+                  <p className="text-lg text-blue-600 font-medium mb-3">
+                    {member.position[language]}
+                  </p>
+                  <p className="text-gray-600 text-sm line-clamp-3">
+                    {member.story[language]}
+                  </p>
+                  <div className="flex items-center mt-4 space-x-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      member.active 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {member.active ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Actions */}
+                <div className="flex flex-col space-y-2">
+                  <button
+                    onClick={() => setEditingTeamMember(member)}
+                    className="bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center text-sm"
+                  >
+                    <Edit size={14} className="mr-1" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteTeamMember(member.id)}
+                    className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center text-sm"
+                  >
+                    <Trash2 size={14} className="mr-1" />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Add/Edit Form */}
+        {(showTeamForm || editingTeamMember) && (
+          <TeamMemberForm
+            member={editingTeamMember}
+            onSubmit={editingTeamMember ? handleUpdateTeamMember : handleAddTeamMember}
+            onCancel={() => {
+              setShowTeamForm(false);
+              setEditingTeamMember(null);
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case 'overview': return renderOverview();
       case 'content': return renderContentManagement();
       case 'courses': return renderCourseManagement();
       case 'news': return renderNewsManagement();
+      case 'team': return renderTeamManagement();
       case 'contact': return <ContactInformationSection />;
       default: return renderOverview();
     }
@@ -634,6 +750,7 @@ const NewsForm = ({ news, onSubmit, onCancel }) => {
     published: news?.published ?? false,
     featured: news?.featured ?? false
   });
+  const [imageUploadError, setImageUploadError] = useState('');
 
   const handleSubmit = () => {
     if (formData.title.az && formData.title.en && formData.title.ru && 
@@ -833,17 +950,73 @@ const NewsForm = ({ news, onSubmit, onCancel }) => {
           </div>
         </div>
 
-        {/* Image URL and Settings */}
+        {/* Image Upload and Settings */}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{t('imageUrl')}</label>
-            <input
-              type="url"
-              value={formData.imageUrl}
-              onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              placeholder="https://example.com/image.jpg"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-2">News Image</label>
+            
+            {/* File Upload */}
+            <div className="mb-4">
+              <label className="block text-xs text-gray-500 mb-2">Upload from Computer</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setImageUploadError('');
+                  
+                  if (file) {
+                    // Validate file size (5MB max)
+                    if (file.size > 5 * 1024 * 1024) {
+                      setImageUploadError('File size must be less than 5MB');
+                      return;
+                    }
+                    
+                    // Validate file type
+                    if (!file.type.startsWith('image/')) {
+                      setImageUploadError('Please select a valid image file');
+                      return;
+                    }
+                    
+                    // Create a local URL for preview
+                    const imageUrl = URL.createObjectURL(file);
+                    setFormData(prev => ({ ...prev, imageUrl }));
+                  }
+                }}
+                className="w-full p-2 border border-gray-300 rounded-md text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (max 5MB)</p>
+              {imageUploadError && (
+                <p className="text-xs text-red-500 mt-1">{imageUploadError}</p>
+              )}
+            </div>
+            
+            {/* URL Input as alternative */}
+            <div className="mb-4">
+              <label className="block text-xs text-gray-500 mb-2">Or Enter Image URL</label>
+              <input
+                type="url"
+                value={formData.imageUrl?.startsWith('blob:') ? '' : (formData.imageUrl || '')}
+                onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+                className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+            
+            {/* Preview */}
+            {formData.imageUrl && (
+              <div className="mt-2">
+                <label className="block text-xs text-gray-500 mb-2">Preview</label>
+                <img
+                  src={formData.imageUrl}
+                  alt="Preview"
+                  className="w-32 h-24 rounded-lg object-cover border-2 border-gray-200"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
           </div>
           <div className="space-y-3">
             <label className="block text-sm font-medium text-gray-700">{t('newsStatus')}</label>
@@ -893,10 +1066,10 @@ const NewsForm = ({ news, onSubmit, onCancel }) => {
 const ContactInformationSection = () => {
   const { siteContent, updateContactInfo } = useContent();
   const [contactData, setContactData] = useState({
-    phone: siteContent.contactInfo?.phone || '+994 XX XXX XX XX',
+    phone: siteContent.contactInfo?.phone || '+994102271404',
     email: siteContent.contactInfo?.email || 'info@bakinitqmerkezi.az',
-    address: siteContent.contactInfo?.address || 'Bakı, Azərbaycan',
-    hours: siteContent.contactInfo?.hours || 'Mon-Fri: 9:00-18:00',
+    address: siteContent.contactInfo?.address || 'Bakı şəhəri, Nərimanov rayonu, Əhməd Rəcəbli 156, Aynalı Plaza',
+    hours: siteContent.contactInfo?.hours || 'Monday - Friday: 9:00-18:00',
     instagram: siteContent.contactInfo?.instagram || 'https://instagram.com/bakinitqmerkezi',
     facebook: siteContent.contactInfo?.facebook || 'https://facebook.com/bakinitqmerkezi'
   });
@@ -1208,6 +1381,243 @@ const CourseForm = ({ course, onSubmit, onCancel }) => {
           className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-800"
         >
           {course ? 'Update Course' : 'Add Course'}
+        </button>
+        <button
+          onClick={onCancel}
+          className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Team Member Form Component
+const TeamMemberForm = ({ member, onSubmit, onCancel }) => {
+  const { t } = useLanguage();
+  const [formData, setFormData] = useState({
+    name: member?.name || '',
+    position: member?.position || { az: '', en: '', ru: '' },
+    story: member?.story || { az: '', en: '', ru: '' },
+    imageUrl: member?.imageUrl || '',
+    active: member?.active ?? true
+  });
+  const [uploadError, setUploadError] = useState('');
+
+  const handleSubmit = () => {
+    if (formData.name && 
+        formData.position.az && formData.position.en && formData.position.ru &&
+        formData.story.az && formData.story.en && formData.story.ru &&
+        formData.imageUrl) {
+      onSubmit(formData);
+    } else {
+      alert('Please fill in all required fields for all languages');
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h4 className="text-lg font-semibold mb-4">
+        {member ? 'Edit Team Member' : 'Add New Team Member'}
+      </h4>
+      
+      <div className="space-y-6">
+        {/* Name Field */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+          <input
+            type="text"
+            value={formData.name}
+            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            className="w-full p-3 border border-gray-300 rounded-md"
+            placeholder="Full Name"
+          />
+        </div>
+
+        {/* Position Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <input
+                type="text"
+                value={formData.position.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  position: { ...prev.position, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                placeholder="Position in Azerbaijani"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <input
+                type="text"
+                value={formData.position.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  position: { ...prev.position, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                placeholder="Position in English"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <input
+                type="text"
+                value={formData.position.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  position: { ...prev.position, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                placeholder="Position in Russian"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Story Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Story/Biography</label>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <textarea
+                value={formData.story.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  story: { ...prev.story, az: e.target.value }
+                }))}
+                className="w-full p-3 border border-gray-300 rounded-md text-sm"
+                rows="4"
+                placeholder="Biography in Azerbaijani"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <textarea
+                value={formData.story.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  story: { ...prev.story, en: e.target.value }
+                }))}
+                className="w-full p-3 border border-gray-300 rounded-md text-sm"
+                rows="4"
+                placeholder="Biography in English"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <textarea
+                value={formData.story.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  story: { ...prev.story, ru: e.target.value }
+                }))}
+                className="w-full p-3 border border-gray-300 rounded-md text-sm"
+                rows="4"
+                placeholder="Biography in Russian"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Photo Upload */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Team Member Photo</label>
+          
+          {/* File Upload */}
+          <div className="mb-4">
+            <label className="block text-xs text-gray-500 mb-2">Upload from Computer</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                setUploadError('');
+                
+                if (file) {
+                  // Validate file size (5MB max)
+                  if (file.size > 5 * 1024 * 1024) {
+                    setUploadError('File size must be less than 5MB');
+                    return;
+                  }
+                  
+                  // Validate file type
+                  if (!file.type.startsWith('image/')) {
+                    setUploadError('Please select a valid image file');
+                    return;
+                  }
+                  
+                  // Create a local URL for preview
+                  const imageUrl = URL.createObjectURL(file);
+                  setFormData(prev => ({ ...prev, imageUrl }));
+                }
+              }}
+              className="w-full p-2 border border-gray-300 rounded-md text-sm"
+            />
+            <p className="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (max 5MB)</p>
+            {uploadError && (
+              <p className="text-xs text-red-500 mt-1">{uploadError}</p>
+            )}
+          </div>
+          
+          {/* URL Input as alternative */}
+          <div className="mb-4">
+            <label className="block text-xs text-gray-500 mb-2">Or Enter Photo URL</label>
+            <input
+              type="url"
+              value={formData.imageUrl?.startsWith('blob:') ? '' : (formData.imageUrl || '')}
+              onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+              className="w-full p-2 border border-gray-300 rounded-md text-sm"
+              placeholder="https://example.com/photo.jpg"
+            />
+          </div>
+          
+          {/* Preview */}
+          {formData.imageUrl && (
+            <div className="mt-2">
+              <label className="block text-xs text-gray-500 mb-2">Preview</label>
+              <img
+                src={formData.imageUrl}
+                alt="Preview"
+                className="w-32 h-32 rounded-lg object-cover border-2 border-gray-200"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Active Status */}
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="active"
+            checked={formData.active}
+            onChange={(e) => setFormData(prev => ({ ...prev, active: e.target.checked }))}
+            className="mr-2"
+          />
+          <label htmlFor="active" className="text-sm font-medium text-gray-700">
+            Active (Show on website)
+          </label>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex space-x-4 mt-6">
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 flex items-center"
+        >
+          <Save size={16} className="mr-2" />
+          {member ? 'Update' : 'Add'} Team Member
         </button>
         <button
           onClick={onCancel}

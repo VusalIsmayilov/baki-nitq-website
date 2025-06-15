@@ -33,9 +33,9 @@ const Footer = ({ setCurrentPage }) => {
           <div>
             <h4 className="font-semibold mb-4">{t('contactInfo')}</h4>
             <div className="space-y-2 text-gray-300">
-              <p>{siteContent.contactInfo?.address || 'Bakı, Azərbaycan'}</p>
-              <p>{siteContent.contactInfo?.phone || '+994 XX XXX XX XX'}</p>
-              <p>{siteContent.contactInfo?.email || 'info@bakinitqmerkezi.az'}</p>
+              <p>{siteContent.contactInfo?.address || t('addressText')}</p>
+              <p>{siteContent.contactInfo?.phone || t('phoneText')}</p>
+              <p>{siteContent.contactInfo?.email || t('emailText')}</p>
             </div>
           </div>
           

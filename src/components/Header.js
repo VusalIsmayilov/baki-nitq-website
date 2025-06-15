@@ -71,17 +71,17 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
   }, []);
   
   return (
-    <header className="bg-white shadow-lg">
+    <header className="bg-white shadow-lg fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-4">
-            <h1 
-              className="text-2xl font-bold text-blue-900 whitespace-nowrap cursor-pointer select-none"
+            <img 
+              src="/nitg_logo.jpg" 
+              alt="Bakı Nitq Mərkəzi" 
+              className="h-12 w-12 cursor-pointer select-none"
               onClick={handleLogoClick}
               title={process.env.NODE_ENV === 'development' ? 'Click 5 times for admin access' : ''}
-            >
-              Bakı Nitq Mərkəzi
-            </h1>
+            />
           </div>
           
           <nav className="hidden md:flex space-x-6">
@@ -91,8 +91,8 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
                 onClick={() => setCurrentPage(key)}
                 className={`flex items-center space-x-1 px-3 py-2 rounded-md transition-colors whitespace-nowrap ${
                   currentPage === key 
-                    ? 'bg-blue-100 text-blue-900' 
-                    : 'text-gray-700 hover:text-blue-900'
+                    ? (key === 'contact' ? 'bg-blue-800 text-white' : 'bg-blue-100 text-blue-900')
+                    : (key === 'contact' ? 'bg-blue-800 text-white hover:bg-blue-900' : 'text-gray-700 hover:text-blue-900')
                 }`}
               >
                 <Icon size={18} />

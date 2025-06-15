@@ -8,6 +8,7 @@ export const translations = {
     gallery: 'Qalereya',
     contact: 'Əlaqə',
     privacy: 'Məxfilik Siyasəti',
+    quickLinks: 'Sürətli Keçidlər',
     
     // Home Page
     welcome: 'Bakı Nitq Mərkəzinə Xoş Gəlmisiniz',
@@ -24,6 +25,10 @@ export const translations = {
     missionText: 'Bakı Nitq Mərkəzi olaraq, hər yaşda insanlara nitq mədəniyyəti, natiqlik və diksiya sahələrində keyfiyyətli təlim təqdim etməyi hədəfləyirik.',
     vision: 'Görmə',
     visionText: 'Azərbaycanda nitq təlimi sahəsində aparıcı mərkəz olmaq və cəmiyyətdə kommunikasiya mədəniyyətinin inkişafına töhfə vermək.',
+    aboutIntro: 'Uğurlu Nitqin Ünvanı – Bakı Nitq Mərkəzi nitq, ünsiyyət və liderlik bacarıqlarını inkişaf etdirmək istəyən hər kəs üçün ideal məkandır.',
+    aboutDescription: 'Mərkəzimiz bütün yaş qrupundan olan iştirakçılara diksiya, təqdimat və ünsiyyət bacarıqlarını inkişaf etdirmək üçün peşəkar xidmətlər təqdim edir. Missiyamız insanlara öz fikirlərini aydın, inandırıcı şəkildə ifadə etmək, nitq qorxusunu aradan qaldırmaq və şəxsi inkişaf yolunda irəliləməkdə dəstək olmaqdır.',
+    aboutApproach: 'Peşəkar komandamız fərdi yanaşma ilə hər bir iştirakçının ehtiyaclarına uyğun təlim proqramları hazırlayır. Təlimlərimiz praktiki məşqlər və müasir metodlarla zənginləşdirilərək iştirakçılara real həyatda tətbiq edilə bilən bacarıqlar qazandırır.',
+    aboutConclusion: 'Bizimlə diksiya, təqdimat və ünsiyyət bacarıqlarınızı artıracaqsınız!',
     
     // Courses Page
     coursesTitle: 'Kurslar və Xidmətlər',
@@ -61,14 +66,71 @@ export const translations = {
     socialMedia: 'Sosial Media',
     instagram: 'Instagram',
     facebook: 'Facebook',
+    addressText: 'Bakı şəhəri, Nərimanov rayonu, Əhməd Rəcəbli 156, Aynalı Plaza',
+    phoneText: '+994102271404',
+    emailText: 'info@bakinitqmerkezi.az',
+    hoursText: 'Bazar ertəsi - Cümə: 9:00-18:00',
 
     // News & Activities
-    newsTitle: 'Son Xəbərlər və Fəaliyyətlər',
+    newsTitle: 'Bizim Fərqimiz',
     readMore: 'Daha Ətraflı',
     newsDate: 'Tarix',
     category: 'Kateqoriya',
     viewAllNews: 'Bütün Xəbərləri Gör',
     
+    // Our Differences
+    practicalApproach: 'Praktiki yanaşma',
+    practicalApproachDesc: 'Təlimlərimiz real həyat vəziyyətlərinə uyğun praktik məşqlərlə zəngindir.',
+    professionalTrainers: 'Peşəkar təlimçilər',
+    professionalTrainersDesc: 'Sahələrində təcrübəli və yüksək ixtisaslı təlimçilərimiz sizə maksimum dəstək göstərir.',
+    modernMethodology: 'Müasir metodika',
+    modernMethodologyDesc: 'Beynəlxalq standartlara uyğun müasir təlim metodlarından istifadə edirik.',
+    
+    // Course Categories
+    speechCommunicationDev: 'Nitq və Ünsiyyət Bacarıqlarının İnkişafı',
+    speechCommunicationDevDesc: 'Kurslarımız nitq və ünsiyyət bacarıqlarının inkişafına yönəlib. Bu sahədə nitq problemlərinin aşkarlanması və aradan qaldırılması, söz ehtiyatının artırılması, ləhcənin düzəldilməsi, kamera və kütlə qarşısında çıxışa hazırlıq, bədən dili və jestlərin effektiv istifadəsi kimi mövzular əhatə edilir.',
+    personalDevSupport: 'Şəxsi İnkişaf və Psixoloji Dəstək',
+    personalDevSupportDesc: 'Şəxsi inkişaf, psixoloji dəstək çərçivəsində həyəcan və özgüvən əskikliyinin aradan qaldırılması, etiket qaydaları, sosial ünsiyyət bacarıqlarının inkişafı, disiplin, fərdi inkişaf texnikaları, stress, həm də emosiyaların idarə edilməsi, eləcə də psixoloq dəstəyi və terapiya mövzularına toxunulur.',
+    corporateLeadershipSkills: 'Korporativ Bacarıqlar və Liderlik',
+    corporateLeadershipSkillsDesc: 'Eyni zamanda, kurslarımız korporativ bacarıqlar və liderlik sahəsində də inkişafa yönəlib. Bu bölmədə liderlik qabiliyyətlərinin inkişafı, münaqişələrin effektiv idarə edilməsi və komanda idarəetmə texnikaları kimi mövzular yer alır.',
+    
+    // Team Section
+    ourTeam: 'Bizim Komanda',
+    teamTitle: 'Bizim Komanda',
+    
+    // Training Details
+    individualTrainings: 'Fərdi Təlimlər',
+    corporateTrainings: 'Korporativ Təlimlər',
+    speechTraining: 'Nitq təlimləri',
+    speechTrainingDesc: 'İctimai çıxış həyəcanı bir çox insanın qarşılaşdığı problemdir. Təqdimat zamanı ürəyin sürətlə döyünməsi, müsahibələrdə nə deyəcəyini bilməmək və ya toplantılarda arxa planda qalmaq kimi hallar geniş yayılıb. Səsindən narahat olmaq və ya səhv başa düşülmək qorxusu ünsiyyətə mane ola bilər. Bu təlim nitq bacarıqlarını inkişaf etdirməyə, inamı artırmağa və fikirləri aydın şəkildə ifadə etməyə yönəlib. İştirakçılar praktik metodlarla həyəcanı idarə etməyi, auditoriya qarşısında daha rahat danışmağı və öz fikirlərini aydın, inandırıcı şəkildə ifadə etməyi öyrənirlər. Təlim müsahibələrdə, iclaslarda və təqdimatlarda inamlı çıxış etmək üçün lazım olan əsas bacarıqları inkişaf etdirməyə kömək edir.',
+    leadershipCommunication: 'Liderlik və Effektiv Ünsiyyət',
+    leadershipCommunicationDesc: 'Bu təlim liderlik bacarıqlarını inkişaf etdirmək və idarəetmə prosesində effektiv ünsiyyət qurmaq üçün nəzərdə tutulub. İlk olaraq, iştirakçılar öz liderlik üslublarını müəyyənləşdirir və idarəetmənin beş əsas prinsipi ilə tanış olurlar. Bu prinsiplər praktiki çalışmalar vasitəsilə öyrənilir, xüsusilə tapşırıqların düzgün verilməsi və insanların davranışlarını anlamaq üzərində fokuslanılır. Daha sonra liderlik prinsipləri və gözlənilməz hadisələrə hazırlıq mövzuları araşdırılır. Faktlara əsaslanaraq danışmaq, izah etmə qabiliyyətini inkişaf etdirmək və müxtəlif idarəetmə situasiyalarını qiymətləndirmək bacarıqları gücləndirilir. Danışıqlar siyasəti və effektiv danışıqlar aparmaq üsulları öyrədilir, bu da münaqişələrin idarə olunmasına və strateji qərarverməyə töhfə verir. Təlimin son mərhələsində emosional nəzarət, sərhədlərin müəyyənləşdirilməsi və qeyri-müəyyən situasiyalarda rahat hiss etmə bacarıqları üzərində işlənilir.',
+    marketingTraining: 'Marketinq əsasları və Praktiki Marketinq',
+    marketingTrainingDesc: 'Bu kurs yalnız marketinqin əsaslarını deyil, həm də real iş mühitində tətbiq edilə biləcək praktik bacarıqları öyrədir. İştirakçılar marketinq strategiyalarının yaradılması, bazar təhlili, rəqiblərin dəyərləndirilməsi və effektiv marketinq kanallarının istifadəsini mənimsəyirlər. Kursun unikallığı neoromarketinq, inandırma texnikaları və istehlakçı psixologiyası üzərində xüsusi vurğu etməsidir. İştirakçılar real kampaniyalar üzərində işləyərək reklam, brendinq və satış təşviqi sahələrində təsirli strategiyalar qurmağı öyrənirlər. Marketinq sahəsində uğur qazanmaq və praktiki biliklər əldə etmək istəyənlər üçün ideal seçimdir.',
+    etiquetteTraining: 'Etiket Təlimləri',
+    etiquetteTrainingDesc: 'Bu təlim şəxsi və peşəkar həyatda etiket qaydalarına dair bilik və bacarıqların inkişaf etdirilməsinə yönəlib. Uşaqlar gündəlik həyatda nəzakət və davranış qaydalarını öyrənir, o cümlədən salamlaşma, masa arxasında davranış, ictimai yerlərdə ədəbli davranış kimi mövzularla tanış olurlar. Böyüklər üçün işgüzar mühitdə və sosial tədbirlərdə etiket qaydaları, həmçinin təqdimatlar zamanı davranış, rəsmi görüşlərdə ünsiyyət, qonaqpərvərlik kimi mövzular tədris edilir. Təlim zamanı iştirakçılar müxtəlif situasiyalarda düzgün davranış nümunələrini öyrənir və praktiki məşğələlər vasitəsilə bu bacarıqları tətbiq edirlər.',
+    corporateLeadership: 'Liderlik və Effektiv Ünsiyyət (Korporativ)',
+    corporateLeadershipDesc: 'Effektiv liderlik yalnız qərar verməkdən ibarət deyil, eyni zamanda insanlarla güclü ünsiyyət qurmaq bacarığı tələb edir. Bu təlim iştirakçılara liderlik üslublarını təyin etməyi, komandanı motivasiya etməyi və aydın, inandırıcı ünsiyyət qurmağı öyrədir. Rəhbər şəxslər üçün görüşlərdə, danışıqlarda və münaqişələrin həllində effektiv kommunikasiya strategiyalarının inkişaf etdirilməsi əsas diqqət mərkəzindədir. Korporativ mühitdə bu bacarıqlar işçi motivasiyasını artırmağa, komanda daxilində daha güclü əməkdaşlıq yaratmağa və iş yerlərində daha səmərəli ünsiyyət qurmağa kömək edir.',
+    leaderVoice: 'Liderin Səsi və Bədən Dili',
+    leaderVoiceDesc: 'Liderlər təkcə dedikləri sözlərlə deyil, həm də səs tonu, bədən dili və jestləri ilə qarşısındakılara təsir göstərirlər. Bu təlim iştirakçılara nitqin ahəngi, vurğular və düzgün tələffüz kimi səsə aid elementləri inkişaf etdirməyə kömək edir. Eyni zamanda, duruş, göz təması və jestlərin effektiv istifadəsi öyrədilir. Korporativ mühitdə güclü bədən dili, səs tonu liderlərin mesajlarını daha təsirli çatdırmasına, iş görüşmələrində, təqdimatlarda daha inandırıcı çıxış etməsinə və komanda üzvlərində inam yaratmasına imkan yaradır.',
+    speechExpression: 'Nitq və Özünü İfadə Bacarıqları',
+    speechExpressionDesc: 'Öz fikirlərini aydın, məntiqli və inandırıcı şəkildə ifadə etmək peşəkar və sosial həyatda mühüm bacarıqlardan biridir. Bu təlim nitq strukturunun düzgün qurulmasını, auditoriyanı cəlb etməyi və həyəcanı idarə etməyi öyrədir. Praktiki məşğələlər vasitəsilə iştirakçılar ictimai çıxış, təqdimatlar və gündəlik ünsiyyət zamanı daha rahat, həm də inamlı danışmağı mənimsəyirlər. Korporativ mühitdə bu bacarıqlar iclaslarda fikirləri daha aydın çatdırmağa, təqdimatlarda daha təsirli çıxış etməyə, müştərilər, tərəfdaşlar və komanda üzvləri ilə ünsiyyəti gücləndirməyə kömək edir.',
+    
+    // Trainers
+    ourTrainers: 'Bizim Təlimçilər',
+    trainersTitle: 'Peşəkar Təlimçi Heyətimiz',
+    firuzeName: 'Firuzə Aslanova',
+    firuzeTitle: 'Təsisçi, Çıxış və Nitq Bacarıqları Təlimçisi',
+    firuzeDesc: 'Firuzə Aslanova Bakı Nitq Mərkəzinin təsisçisi, çıxış və nitq bacarıqları üzrə təlimçi olmaqla yanaşı, peşəkar pedaqoq və jurnalistdir. Müxtəlif təhsil müəssisələrində pedaqoji fəaliyyət göstərmiş, "Big Group" şirkətində uzun müddət müxbir olaraq çalışmışdır. Azərbaycanda nitq təlimi almış, eyni zamanda Türkiyənin "Badi" etkinlik platformasında iştirak edərək "Təməl işarət dili və bədən dili" üzrə təlim keçmişdir. "Çıxış Bacarıqları" və "Diksiya" mövzularında təlimlər keçərək fərdi şəxslərə və təşkilatlara ünsiyyət bacarıqlarını inkişaf etdirməkdə, səlis, inandırıcı danışmağı öyrətməkdə, kütlə qarşısında inamlı çıxış etməyi formal aşdırmaqda dəstək verir. Onun təlimləri rəhbərlər, menecerlər, müəllimlər, aparıcılar, satış komandaları və ictimai çıxış edən şəxslər üçün nəzərdə tutulmuşdur. Hazırda Firuzə Aslanova uşaqlar və böyüklər üçün nitq, ünsiyyət bacarıqları, diksiya və səhnə danışığı üzrə təlimlər keçir, həm fərdi şəxslərə, həm də korporativ müştərilərə nitq və ifadə texnikaları üzrə dəstək verir.',
+    pervinName: 'Pərvin Pərlan',
+    pervinTitle: 'Çıxış və Korporativ Ünsiyyət Təlimçisi',
+    pervinDesc: 'Pərvin Pərlan çıxış və korporativ ünsiyyət üzrə təlimçi olmaqla yanaşı, peşəkar marketoloqdur. 18 illik korporativ iş təcrübəsinə malikdir. Rusiyanın aparıcılar üçün "Ostankino" Ali Məktəbini bitirmiş, İngiltərədə Marketinq və Kommunikasiya üzrə magistratura təhsili almış, hazırda isə Kommunikasiya üzrə doktorantura təhsili alır. Bundan əlavə, "Tibbiyyə" adlı YouTube kanalının aparıcısı olmuşdur. "Liderlik və Effektiv Ünsiyyət" mövzularında təlimlər keçərək fərdi şəxslərə və təşkilatlara ünsiyyət bacarıqlarını inkişaf etdirməkdə, komanda idarəçiliyini gücləndirməkdə, kütlə qarşısında inamlı danışmağı öyrətməkdə dəstək verir. Onun təlimləri rəhbərlər, menecerlər, satış komandaları və ictimai çıxış edən şəxslər üçün nəzərdə tutulmuşdur. Hazırda İngiltərədə yaşayan Pərvin Pərlan ingilis, Azərbaycan və rus dillərində "Liderlik və Effektiv Ünsiyyət", "Çıxış Bacarıqları və Korporativ Ünsiyyət" üzrə onlayn dərslər təklif edir.',
+    laleName: 'Lalə Mustafayeva',
+    laleTitle: 'Peşəkar Psixoloq',
+    laleDesc: 'Lalə Mustafayeva – peşəkar psixoloqdur. İngiltərənin "University of Essex" universitetində Psixologiya üzrə bakalavr təhsili almışdır və British Psychological Society (BPS) üzvüdür. O, insan psixologiyasının incəliklərini araşdırmağa və fərdlərin psixoloji rifahını yaxşılaşdırmağa yönəlmişdir. Təhsilinin 2-ci ilində "Qadın və Uşaq" sığınacağında psixoloq olaraq çalışmış, ailə və cəmiyyət tərəfindən şiddət görən qadınlara və yeniyetmə qızlara emosional dəstək göstərmiş, onların travmalarla mübarizə aparmasına, həmçinun psixoloji dayanıqlığını gücləndirməsinə kömək etmişdir. Bu təcrübə ona fərqli yaş qrupları və psixoloji problemlərlə işləmək bacarıqlarını qazandırmışdır. O, psixoloji sağlamlıq, stressin idarə olunması, özünü ifadə və şəxsi inkişaf mövzularında müxtəlif konfrans və seminarlarda iştirak etmişdir. İnsan psixikasının dərinliklərini araşdırmaq və effektiv ünsiyyətin psixoloji aspektlərini öyrənmək onun əsas tədqiqat maraqlarından biridir.',
+    aysenName: 'Ayşən Hüseynova',
+    aysenTitle: 'Peşəkar Aparıcı və Diksiya Təlimçisi',
+    aysenDesc: 'Ayşən Hüseynova peşəkar aparıcı və diksiya üzrə təlimçidir. O, nəzəri və praktiki biliklərini paylaşaraq, peşəkar çıxış və ünsiyyət bacarıqlarının inkişafına töhfə verir. Düzgün nitq, səlis ifadə və təsirli danışıq üçün unikal metodikalara sahibdir. Bakı Dövlət Universitetinin Jurnalistika fakültəsinin məzunudur. Daha sonra Türkiyənin Kocaeli Universitetində jurnalistika üzrə magistr dərəcəsi almışdır. Magistr təhsili dövründə tələbələrə elmi iş yazma və araşdırma metodikası üzrə məsləhət xidməti göstərmişdir. Jurnalistika sahəsində geniş təcrübəyə malikdir. Hazırda İctimai Televiziyada "Xəbərlər" proqramının və İctimai Radioda "Xəbər Vaxtı" proqramının aparıcısıdır. Daha əvvəl ARB Televiziya kanalında fəaliyyət göstərir. Peşəkar aparıcılıq təcrübəsinə əsaslanaraq nitq, səs və ünsiyyət bacarıqlarının inkişafı üçün unikal metodikalar hazırlamışdır. Təlimlər auditoriya qarşısında çıxış edən, ictimai danışıqla məşğul olan və ya müxtəlif sahələrdə nitq bacarıqlarını təkmilləşdirmək istəyən hər kəs üçün uyğundur.',
     
     // Admin
     adminLogin: 'Admin Girişi',
@@ -90,7 +152,7 @@ export const translations = {
     published: 'Dərc Edilib',
     draft: 'Qaralama',
     featured: 'Seçilmiş',
-    newsTitle: 'Xəbər Başlığı',
+    newsFormTitle: 'Xəbər Başlığı',
     newsContent: 'Xəbər Məzmunu',
     newsExcerpt: 'Qısa Məzmun',
     newsCategory: 'Xəbər Kateqoriyası',
@@ -113,6 +175,7 @@ export const translations = {
     gallery: 'Gallery',
     contact: 'Contact',
     privacy: 'Privacy Policy',
+    quickLinks: 'Quick Links',
     
     // Home Page
     welcome: 'Welcome to Baku Speech Center',
@@ -129,6 +192,10 @@ export const translations = {
     missionText: 'As Baku Speech Center, we aim to provide quality training in speech culture, oratory, and diction to people of all ages.',
     vision: 'Our Vision',
     visionText: 'To be the leading center in speech training in Azerbaijan and contribute to the development of communication culture in society.',
+    aboutIntro: 'The Address of Successful Speech – Baku Speech Center is the ideal place for everyone who wants to develop speech, communication and leadership skills.',
+    aboutDescription: 'Our center provides professional services to participants of all age groups to develop diction, presentation and communication skills. Our mission is to help people express their thoughts clearly and convincingly, eliminate speech anxiety and support them in their personal development journey.',
+    aboutApproach: 'Our professional team prepares training programs tailored to the needs of each participant with an individual approach. Our trainings are enriched with practical exercises and modern methods, providing participants with skills that can be applied in real life.',
+    aboutConclusion: 'With us, you will improve your diction, presentation and communication skills!',
     
     // Courses Page
     coursesTitle: 'Courses & Services',
@@ -166,13 +233,71 @@ export const translations = {
     socialMedia: 'Social Media',
     instagram: 'Instagram',
     facebook: 'Facebook',
+    addressText: 'Baku city, Narimanov district, Ahmad Rajabli 156, Aynali Plaza',
+    phoneText: '+994102271404',
+    emailText: 'info@bakinitqmerkezi.az',
+    hoursText: 'Monday - Friday: 9:00-18:00',
     
     // News & Activities
-    newsTitle: 'Recent News & Activities',
+    newsTitle: 'Our Difference',
     readMore: 'Read More',
     newsDate: 'Date',
     category: 'Category',
     viewAllNews: 'View All News',
+    
+    // Our Differences
+    practicalApproach: 'Practical Approach',
+    practicalApproachDesc: 'Our trainings are enriched with practical exercises that correspond to real life situations.',
+    professionalTrainers: 'Professional Trainers',
+    professionalTrainersDesc: 'Our experienced and highly qualified trainers in their fields provide you with maximum support.',
+    modernMethodology: 'Modern Methodology',
+    modernMethodologyDesc: 'We use modern training methods that comply with international standards.',
+    
+    // Course Categories
+    speechCommunicationDev: 'Speech and Communication Skills Development',
+    speechCommunicationDevDesc: 'Our courses are aimed at developing speech and communication skills. This field covers topics such as identifying and eliminating speech problems, increasing vocabulary, correcting accent, preparing for camera and public speaking, and effective use of body language and gestures.',
+    personalDevSupport: 'Personal Development and Psychological Support',
+    personalDevSupportDesc: 'Within the framework of personal development and psychological support, topics such as eliminating anxiety and lack of self-confidence, etiquette rules, development of social communication skills, discipline, individual development techniques, stress and emotion management, as well as psychological support and therapy are addressed.',
+    corporateLeadershipSkills: 'Corporate Skills and Leadership',
+    corporateLeadershipSkillsDesc: 'At the same time, our courses are also aimed at development in the field of corporate skills and leadership. This section includes topics such as developing leadership abilities, effective conflict management and team management techniques.',
+    
+    // Team Section
+    ourTeam: 'Our Team',
+    teamTitle: 'Our Team',
+    
+    // Training Details
+    individualTrainings: 'Individual Trainings',
+    corporateTrainings: 'Corporate Trainings',
+    speechTraining: 'Speech Training',
+    speechTrainingDesc: 'Public speaking anxiety is a problem faced by many people. Situations such as rapid heartbeat during presentations, not knowing what to say in interviews, or staying in the background during meetings are widespread. Being uncomfortable with your voice or fear of being misunderstood can hinder communication. This training focuses on developing speech skills, increasing confidence and expressing thoughts clearly. Participants learn to manage anxiety through practical methods, speak more comfortably in front of an audience, and express their thoughts clearly and convincingly. The training helps develop essential skills needed to speak confidently in interviews, meetings and presentations.',
+    leadershipCommunication: 'Leadership and Effective Communication',
+    leadershipCommunicationDesc: 'This training is designed to develop leadership skills and establish effective communication in the management process. First, participants identify their leadership styles and become familiar with the five basic principles of management. These principles are learned through practical exercises, particularly focusing on proper task assignment and understanding people\'s behaviors. Leadership principles and preparation for unexpected events are then explored. Skills in speaking based on facts, developing explanatory ability, and evaluating various management situations are strengthened. Negotiation policies and methods for conducting effective negotiations are taught, contributing to conflict management and strategic decision-making. In the final stage of the training, emotional control, setting boundaries and feeling comfortable in uncertain situations are worked on.',
+    marketingTraining: 'Marketing Fundamentals and Practical Marketing',
+    marketingTrainingDesc: 'This course teaches not only the basics of marketing, but also practical skills that can be applied in a real work environment. Participants master the creation of marketing strategies, market analysis, competitor evaluation and the use of effective marketing channels. The uniqueness of the course is its special emphasis on neuromarketing, persuasion techniques and consumer psychology. Participants work on real campaigns to learn how to build effective strategies in advertising, branding and sales promotion. It is an ideal choice for those who want to succeed in marketing and gain practical knowledge.',
+    etiquetteTraining: 'Etiquette Training',
+    etiquetteTrainingDesc: 'This training is aimed at developing knowledge and skills about etiquette rules in personal and professional life. Children learn courtesy and behavioral rules in daily life, including topics such as greeting, behavior at the table, polite behavior in public places. For adults, etiquette rules in business environment and social events, as well as topics such as behavior during presentations, communication in formal meetings, hospitality are taught. During the training, participants learn correct behavioral patterns in various situations and apply these skills through practical exercises.',
+    corporateLeadership: 'Leadership and Effective Communication (Corporate)',
+    corporateLeadershipDesc: 'Effective leadership is not just about making decisions, it also requires the ability to build strong communication with people. This training teaches participants to define leadership styles, motivate the team and build clear, convincing communication. For managers, the development of effective communication strategies in meetings, negotiations and conflict resolution is the main focus. In the corporate environment, these skills help increase employee motivation, create stronger collaboration within the team and establish more effective communication in the workplace.',
+    leaderVoice: 'Leader\'s Voice and Body Language',
+    leaderVoiceDesc: 'Leaders influence those in front of them not only with the words they say, but also with their tone of voice, body language and gestures. This training helps participants develop voice-related elements such as speech rhythm, emphasis and correct pronunciation. At the same time, effective use of posture, eye contact and gestures is taught. Strong body language and voice tone in the corporate environment allows leaders to deliver their messages more effectively, make more convincing appearances in business meetings and presentations, and create confidence in team members.',
+    speechExpression: 'Speech and Self-Expression Skills',
+    speechExpressionDesc: 'Expressing one\'s thoughts clearly, logically and convincingly is one of the important skills in professional and social life. This training teaches the correct construction of speech structure, engaging the audience and managing excitement. Through practical exercises, participants learn to speak more comfortably and confidently during public speaking, presentations and daily communication. In the corporate environment, these skills help to convey ideas more clearly in meetings, make more effective appearances in presentations, and strengthen communication with customers, partners and team members.',
+
+    // Trainers
+    ourTrainers: 'Our Trainers',
+    trainersTitle: 'Our Professional Training Team',
+    firuzeName: 'Firuzə Aslanova',
+    firuzeTitle: 'Founder, Public Speaking & Speech Skills Trainer',
+    firuzeDesc: 'Firuzə Aslanova is the founder of Baku Speech Center, a trainer in public speaking and speech skills, as well as a professional educator and journalist. She has worked as an educator in various educational institutions and worked as a correspondent for "Big Group" company for a long time. She received speech training in Azerbaijan and also participated in Turkey\'s "Badi" activity platform and received training on "Basic sign language and body language". She conducts trainings on "Public Speaking Skills" and "Diction" topics, helping individuals and organizations develop communication skills, teaching fluent and convincing speaking, and supporting confident public speaking. Her trainings are designed for managers, managers, teachers, presenters, sales teams and public speakers. Currently, Firuzə Aslanova conducts trainings on speech, communication skills, diction and stage speech for children and adults, providing support to both individuals and corporate clients on speech and expression techniques.',
+    pervinName: 'Pərvin Pərlan',
+    pervinTitle: 'Public Speaking & Corporate Communication Trainer',
+    pervinDesc: 'Pərvin Pərlan is a trainer in public speaking and corporate communication, as well as a professional marketer. She has 18 years of corporate work experience. She graduated from Russia\'s "Ostankino" High School for presenters, received a master\'s degree in Marketing and Communication in England, and is currently pursuing a doctoral degree in Communication. In addition, she has been the presenter of the YouTube channel called "Medicine". She conducts trainings on "Leadership and Effective Communication" topics, helping individuals and organizations develop communication skills, strengthen team management, and teach confident speaking in front of crowds. Her trainings are designed for managers, managers, sales teams and public speakers. Currently living in England, Pərvin Pərlan offers online lessons in English, Azerbaijani and Russian on "Leadership and Effective Communication", "Public Speaking Skills and Corporate Communication".',
+    laleName: 'Lalə Mustafayeva',
+    laleTitle: 'Professional Psychologist',
+    laleDesc: 'Lalə Mustafayeva is a professional psychologist. She received her bachelor\'s degree in Psychology from the University of Essex in England and is a member of the British Psychological Society (BPS). She is focused on exploring the intricacies of human psychology and improving the psychological well-being of individuals. In the 2nd year of her education, she worked as a psychologist in "Women and Children" shelter, providing emotional support to women and teenage girls who experienced violence from family and society, helping them fight trauma and strengthen their psychological resilience. This experience gave her the skills to work with different age groups and psychological problems. She has participated in various conferences and seminars on psychological health, stress management, self-expression and personal development. Exploring the depths of human psyche and learning the psychological aspects of effective communication are among her main research interests.',
+    aysenName: 'Ayşən Hüseynova',
+    aysenTitle: 'Professional Presenter & Diction Trainer',
+    aysenDesc: 'Ayşən Hüseynova is a professional presenter and diction trainer. She contributes to the development of professional presentation and communication skills by sharing her theoretical and practical knowledge. She has unique methodologies for correct speech, fluent expression and effective speaking. She is a graduate of the Faculty of Journalism of Baku State University. Later, she received a master\'s degree in journalism at Kocaeli University in Turkey. During her master\'s education, she provided consultancy services to students on scientific writing and research methodology. She has extensive experience in journalism. Currently, she is the presenter of the "News" program on Public Television and the "News Time" program on Public Radio. Previously worked on ARB Television channel. Based on her professional presenting experience, she has developed unique methodologies for the development of speech, voice and communication skills. The trainings are suitable for anyone who performs in front of an audience, engages in public speaking, or wants to improve their speech skills in various fields.',
 
     // Admin
     adminLogin: 'Admin Login',
@@ -194,7 +319,7 @@ export const translations = {
     published: 'Published',
     draft: 'Draft',
     featured: 'Featured',
-    newsTitle: 'News Title',
+    newsFormTitle: 'News Title',
     newsContent: 'News Content',
     newsExcerpt: 'News Excerpt',
     newsCategory: 'News Category',
@@ -217,6 +342,7 @@ export const translations = {
     gallery: 'Галерея',
     contact: 'Контакты',
     privacy: 'Политика конфиденциальности',
+    quickLinks: 'Быстрые Ссылки',
     
     // Home Page
     welcome: 'Добро пожаловать в Центр Речи Баку',
@@ -233,6 +359,10 @@ export const translations = {
     missionText: 'Как Центр Речи Баку, мы стремимся предоставить качественное обучение в области культуры речи, ораторского искусства и дикции людям всех возрастов.',
     vision: 'Наше видение',
     visionText: 'Стать ведущим центром обучения речи в Азербайджане и внести вклад в развитие культуры общения в обществе.',
+    aboutIntro: 'Адрес Успешной Речи – Центр Речи Баку является идеальным местом для всех, кто хочет развивать навыки речи, общения и лидерства.',
+    aboutDescription: 'Наш центр предоставляет профессиональные услуги участникам всех возрастных групп для развития дикции, презентационных и коммуникативных навыков. Наша миссия – помочь людям выражать свои мысли ясно и убедительно, устранить страх речи и поддержать их на пути личностного развития.',
+    aboutApproach: 'Наша профессиональная команда готовит учебные программы, адаптированные к потребностям каждого участника с индивидуальным подходом. Наши тренинги обогащены практическими упражнениями и современными методами, предоставляя участникам навыки, которые можно применить в реальной жизни.',
+    aboutConclusion: 'С нами вы улучшите свои навыки дикции, презентации и общения!',
     
     // Courses Page
     coursesTitle: 'Курсы и услуги',
@@ -270,13 +400,71 @@ export const translations = {
     socialMedia: 'Социальные сети',
     instagram: 'Instagram',
     facebook: 'Facebook',
+    addressText: 'город Баку, Нариманов район, Ахмед Раджабли 156, Айналы Плаза',
+    phoneText: '+994102271404',
+    emailText: 'info@bakinitqmerkezi.az',
+    hoursText: 'Понедельник - Пятница: 9:00-18:00',
 
     // News & Activities
-    newsTitle: 'Последние новости и мероприятия',
+    newsTitle: 'Наше Отличие',
     readMore: 'Читать далее',
     newsDate: 'Дата',
     category: 'Категория',
     viewAllNews: 'Посмотреть все новости',
+    
+    // Our Differences
+    practicalApproach: 'Практический Подход',
+    practicalApproachDesc: 'Наши тренинги обогащены практическими упражнениями, соответствующими реальным жизненным ситуациям.',
+    professionalTrainers: 'Профессиональные Тренеры',
+    professionalTrainersDesc: 'Наши опытные и высококвалифицированные тренеры в своих областях оказывают вам максимальную поддержку.',
+    modernMethodology: 'Современная Методология',
+    modernMethodologyDesc: 'Мы используем современные методы обучения, соответствующие международным стандартам.',
+    
+    // Course Categories
+    speechCommunicationDev: 'Развитие Речи и Коммуникативных Навыков',
+    speechCommunicationDevDesc: 'Наши курсы направлены на развитие речи и коммуникативных навыков. Эта область охватывает такие темы, как выявление и устранение речевых проблем, увеличение словарного запаса, исправление акцента, подготовка к выступлениям перед камерой и публикой, эффективное использование языка тела и жестов.',
+    personalDevSupport: 'Личностное Развитие и Психологическая Поддержка',
+    personalDevSupportDesc: 'В рамках личностного развития и психологической поддержки рассматриваются такие темы, как устранение тревожности и недостатка уверенности в себе, правила этикета, развитие социальных коммуникативных навыков, дисциплина, техники индивидуального развития, управление стрессом и эмоциями, а также психологическая поддержка и терапия.',
+    corporateLeadershipSkills: 'Корпоративные Навыки и Лидерство',
+    corporateLeadershipSkillsDesc: 'В то же время наши курсы также направлены на развитие в области корпоративных навыков и лидерства. Этот раздел включает такие темы, как развитие лидерских способностей, эффективное управление конфликтами и техники управления командой.',
+    
+    // Team Section
+    ourTeam: 'Наша Команда',
+    teamTitle: 'Наша Команда',
+    
+    // Training Details
+    individualTrainings: 'Индивидуальные Тренинги',
+    corporateTrainings: 'Корпоративные Тренинги',
+    speechTraining: 'Речевые Тренинги',
+    speechTrainingDesc: 'Тревога перед публичными выступлениями - проблема, с которой сталкиваются многие люди. Такие ситуации, как учащенное сердцебиение во время презентаций, незнание что сказать на собеседованиях или оставаться на заднем плане во время встреч, широко распространены. Дискомфорт от своего голоса или страх быть неправильно понятым может препятствовать общению. Этот тренинг направлен на развитие речевых навыков, повышение уверенности и четкое выражение мыслей. Участники изучают практические методы управления тревожностью, учатся более комфортно говорить перед аудиторией и четко, убедительно выражать свои мысли. Тренинг помогает развить основные навыки, необходимые для уверенного выступления на собеседованиях, встречах и презентациях.',
+    leadershipCommunication: 'Лидерство и Эффективное Общение',
+    leadershipCommunicationDesc: 'Этот тренинг предназначен для развития лидерских навыков и установления эффективного общения в процессе управления. Сначала участники определяют свои стили лидерства и знакомятся с пятью основными принципами управления. Эти принципы изучаются через практические упражнения, особенно сосредотачиваясь на правильном распределении задач и понимании поведения людей. Затем исследуются принципы лидерства и подготовка к неожиданным событиям. Укрепляются навыки речи на основе фактов, развитие объяснительных способностей и оценка различных управленческих ситуаций. Преподается политика переговоров и методы ведения эффективных переговоров, способствующие управлению конфликтами и стратегическому принятию решений. На заключительном этапе тренинга работают над эмоциональным контролем, установлением границ и комфортным чувством в неопределенных ситуациях.',
+    marketingTraining: 'Основы Маркетинга и Практический Маркетинг',
+    marketingTrainingDesc: 'Этот курс обучает не только основам маркетинга, но и практическим навыкам, которые можно применить в реальной рабочей среде. Участники осваивают создание маркетинговых стратегий, анализ рынка, оценку конкурентов и использование эффективных маркетинговых каналов. Уникальность курса заключается в его особом акценте на нейромаркетинге, техниках убеждения и психологии потребителей. Участники работают над реальными кампаниями, чтобы научиться строить эффективные стратегии в рекламе, брендинге и стимулировании продаж. Это идеальный выбор для тех, кто хочет добиться успеха в маркетинге и получить практические знания.',
+    etiquetteTraining: 'Обучение Этикету',
+    etiquetteTrainingDesc: 'Этот тренинг направлен на развитие знаний и навыков правил этикета в личной и профессиональной жизни. Дети изучают правила вежливости и поведения в повседневной жизни, включая такие темы, как приветствие, поведение за столом, вежливое поведение в общественных местах. Для взрослых преподаются правила этикета в деловой среде и на социальных мероприятиях, а также такие темы, как поведение во время презентаций, общение на официальных встречах, гостеприимство. Во время тренинга участники изучают правильные модели поведения в различных ситуациях и применяют эти навыки через практические упражнения.',
+    corporateLeadership: 'Лидерство и Эффективное Общение (Корпоративное)',
+    corporateLeadershipDesc: 'Эффективное лидерство заключается не только в принятии решений, но и требует способности строить сильное общение с людьми. Этот тренинг учит участников определять стили лидерства, мотивировать команду и строить четкое, убедительное общение. Для руководителей основное внимание уделяется развитию эффективных стратегий общения на встречах, переговорах и разрешении конфликтов. В корпоративной среде эти навыки помогают повысить мотивацию сотрудников, создать более сильное сотрудничество в команде и установить более эффективное общение на рабочем месте.',
+    leaderVoice: 'Голос Лидера и Язык Тела',
+    leaderVoiceDesc: 'Лидеры влияют на окружающих не только словами, которые они говорят, но и тоном голоса, языком тела и жестами. Этот тренинг помогает участникам развить элементы, связанные с голосом, такие как ритм речи, акценты и правильное произношение. В то же время обучается эффективное использование осанки, зрительного контакта и жестов. Сильный язык тела и тон голоса в корпоративной среде позволяют лидерам более эффективно доносить свои сообщения, делать более убедительные выступления на деловых встречах и презентациях, и создавать доверие у членов команды.',
+    speechExpression: 'Навыки Речи и Самовыражения',
+    speechExpressionDesc: 'Выражение своих мыслей ясно, логично и убедительно является одним из важных навыков в профессиональной и социальной жизни. Этот тренинг учит правильному построению структуры речи, привлечению аудитории и управлению волнением. Через практические упражнения участники учатся говорить более комфортно и уверенно во время публичных выступлений, презентаций и ежедневного общения. В корпоративной среде эти навыки помогают более четко передавать идеи на встречах, делать более эффективные выступления на презентациях и укреплять общение с клиентами, партнерами и членами команды.',
+
+    // Trainers
+    ourTrainers: 'Наши Тренеры',
+    trainersTitle: 'Наша Профессиональная Команда Тренеров',
+    firuzeName: 'Фируза Асланова',
+    firuzeTitle: 'Основатель, Тренер по Публичным Выступлениям',
+    firuzeDesc: 'Фируза Асланова является основателем Центра Речи Баку, тренером по публичным выступлениям и речевым навыкам, а также профессиональным педагогом и журналистом. Она работала педагогом в различных образовательных учреждениях и долгое время работала корреспондентом в компании "Big Group". Получила речевое обучение в Азербайджане, а также участвовала в турецкой платформе мероприятий "Badi" и прошла обучение по "Основам языка жестов и языка тела". Проводит тренинги по темам "Навыки Публичных Выступлений" и "Дикция", помогая частным лицам и организациям развивать коммуникативные навыки, обучая беглой и убедительной речи, поддерживая уверенные публичные выступления. Ее тренинги предназначены для руководителей, менеджеров, учителей, ведущих, команд продаж и публичных ораторов. В настоящее время Фируза Асланова проводит тренинги по речи, коммуникативным навыкам, дикции и сценической речи для детей и взрослых, оказывая поддержку как частным лицам, так и корпоративным клиентам по техникам речи и выражения.',
+    pervinName: 'Первин Перлан',
+    pervinTitle: 'Тренер по Публичным Выступлениям и Корпоративному Общению',
+    pervinDesc: 'Первин Перлан является тренером по публичным выступлениям и корпоративному общению, а также профессиональным маркетологом. Имеет 18-летний опыт корпоративной работы. Окончила российскую Высшую школу для ведущих "Останкино", получила степень магистра по маркетингу и коммуникациям в Англии, в настоящее время получает докторскую степень по коммуникациям. Кроме того, была ведущей YouTube-канала под названием "Медицина". Проводит тренинги по темам "Лидерство и Эффективное Общение", помогая частным лицам и организациям развивать коммуникативные навыки, укреплять управление командой и обучать уверенной речи перед толпой. Ее тренинги предназначены для руководителей, менеджеров, команд продаж и публичных ораторов. В настоящее время проживающая в Англии, Первин Перлан предлагает онлайн-уроки на английском, азербайджанском и русском языках по "Лидерству и Эффективному Общению", "Навыкам Публичных Выступлений и Корпоративному Общению".',
+    laleName: 'Лала Мустафаева',
+    laleTitle: 'Профессиональный Психолог',
+    laleDesc: 'Лала Мустафаева - профессиональный психолог. Получила степень бакалавра психологии в Университете Эссекса в Англии и является членом Британского психологического общества (BPS). Она сосредоточена на изучении тонкостей человеческой психологии и улучшении психологического благополучия людей. На 2-м году обучения работала психологом в приюте "Женщины и дети", оказывая эмоциональную поддержку женщинам и девочкам-подросткам, подвергшимся насилию со стороны семьи и общества, помогая им бороться с травмами и укреплять психологическую устойчивость. Этот опыт дал ей навыки работы с различными возрастными группами и психологическими проблемами. Она участвовала в различных конференциях и семинарах по психологическому здоровью, управлению стрессом, самовыражению и личностному развитию. Изучение глубин человеческой психики и изучение психологических аспектов эффективного общения являются одними из ее основных исследовательских интересов.',
+    aysenName: 'Айшен Гусейнова',
+    aysenTitle: 'Профессиональный Ведущий и Тренер по Дикции',
+    aysenDesc: 'Айшен Гусейнова - профессиональный ведущий и тренер по дикции. Она способствует развитию профессиональных навыков презентации и общения, делясь своими теоретическими и практическими знаниями. Обладает уникальными методиками для правильной речи, беглого выражения и эффективной речи. Выпускница факультета журналистики Бакинского государственного университета. Позже получила степень магистра журналистики в университете Коджаэли в Турции. Во время магистратуры оказывала консультационные услуги студентам по научному письму и методологии исследований. Имеет обширный опыт в журналистике. В настоящее время является ведущей программы "Новости" на Общественном телевидении и программы "Время новостей" на Общественном радио. Ранее работала на телеканале ARB. Основываясь на своем опыте профессионального ведения, разработала уникальные методики для развития речи, голоса и коммуникативных навыков. Тренинги подходят для всех, кто выступает перед аудиторией, занимается публичными выступлениями или хочет улучшить свои речевые навыки в различных областях.',
 
     // Admin
     adminLogin: 'Вход админа',
@@ -298,7 +486,7 @@ export const translations = {
     published: 'Опубликовано',
     draft: 'Черновик',
     featured: 'Рекомендуемое',
-    newsTitle: 'Заголовок новости',
+    newsFormTitle: 'Заголовок новости',
     newsContent: 'Содержание новости',
     newsExcerpt: 'Краткое содержание',
     newsCategory: 'Категория новости',

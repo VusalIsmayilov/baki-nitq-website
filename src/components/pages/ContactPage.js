@@ -42,19 +42,19 @@ const ContactPage = () => {
             <div className="space-y-4">
               <div>
                 <h4 className="font-semibold text-blue-500">{t('address')}</h4>
-                <p className="text-gray-600">{siteContent.contactInfo?.address || 'Bakı, Azərbaycan'}</p>
+                <p className="text-gray-600">{siteContent.contactInfo?.address || t('addressText')}</p>
               </div>
               <div>
                 <h4 className="font-semibold text-blue-500">{t('phone')}</h4>
-                <p className="text-gray-600">{siteContent.contactInfo?.phone || '+994 XX XXX XX XX'}</p>
+                <p className="text-gray-600">{siteContent.contactInfo?.phone || t('phoneText')}</p>
               </div>
               <div>
                 <h4 className="font-semibold text-blue-500">{t('email')}</h4>
-                <p className="text-gray-600">{siteContent.contactInfo?.email || 'info@bakinitqmerkezi.az'}</p>
+                <p className="text-gray-600">{siteContent.contactInfo?.email || t('emailText')}</p>
               </div>
               <div>
                 <h4 className="font-semibold text-blue-500">{t('hours')}</h4>
-                <p className="text-gray-600">{siteContent.contactInfo?.hours || 'Mon-Fri: 9:00-18:00'}</p>
+                <p className="text-gray-600">{siteContent.contactInfo?.hours || t('hoursText')}</p>
               </div>
               <div>
                 <h4 className="font-semibold text-blue-500">{t('followUs')}</h4>

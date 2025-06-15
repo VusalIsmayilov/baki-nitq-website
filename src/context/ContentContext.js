@@ -25,10 +25,10 @@ export const ContentProvider = ({ children }) => {
       ru: 'Стать ведущим центром обучения речи в Азербайджане и внести вклад в развитие культуры общения в обществе.'
     },
     contactInfo: {
-      phone: '+994 XX XXX XX XX',
+      phone: '+994102271404',
       email: 'info@bakinitqmerkezi.az',
-      address: 'Bakı, Azərbaycan',
-      hours: 'Mon-Fri: 9:00-18:00',
+      address: 'Bakı şəhəri, Nərimanov rayonu, Əhməd Rəcəbli 156, Aynalı Plaza',
+      hours: 'Monday - Friday: 9:00-18:00',
       instagram: 'https://instagram.com/bakinitqmerkezi',
       facebook: 'https://facebook.com/bakinitqmerkezi'
     },
@@ -358,6 +358,41 @@ export const ContentProvider = ({ children }) => {
     }
   ]);
 
+  const [teamMembers, setTeamMembers] = useState([
+    {
+      id: 1,
+      name: 'Dr. Leyla Əhmədova',
+      position: {
+        az: 'Baş Müəllim və Mərkəz Direktoru',
+        en: 'Head Teacher and Center Director',
+        ru: 'Главный преподаватель и директор центра'
+      },
+      story: {
+        az: 'Dr. Leyla Əhmədova 15 illik təcrübəsi olan nitq mütəxəssisidir. Azərbaycan Dillər Universitetində dilçilik üzrə doktorluq dərəcəsi alıb. Mərkəzimizin təsisçisi olaraq, minlərlə tələbəyə nitq mədəniyyəti sahəsində dərin bilik və bacarıqlar öyrədib.',
+        en: 'Dr. Leyla Ahmadova is a speech specialist with 15 years of experience. She holds a doctorate in linguistics from Azerbaijan University of Languages. As the founder of our center, she has taught thousands of students deep knowledge and skills in speech culture.',
+        ru: 'Доктор Лейла Ахмедова - специалист по речи с 15-летним опытом. Она имеет докторскую степень по лингвистике Азербайджанского университета языков. Как основатель нашего центра, она обучила тысячи студентов глубоким знаниям и навыкам в области культуры речи.'
+      },
+      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+      active: true
+    },
+    {
+      id: 2,
+      name: 'Elnur Qasımov',
+      position: {
+        az: 'Natiqlik və İctimai Çıxış Mütəxəssisi',
+        en: 'Oratory and Public Speaking Specialist',
+        ru: 'Специалист по ораторскому искусству и публичным выступлениям'
+      },
+      story: {
+        az: 'Elnur Qasımov teatr aktyoru və natiqlik müəllimidir. 12 il ərzində müxtəlif yaş qruplarında natiqlik dərsləri keçirib. Onun metodları sayəsində çoxlu tələbə səhnə qorxusunu udub və özgüvənli natiq olub.',
+        en: 'Elnur Gasimov is a theater actor and oratory teacher. For 12 years, he has conducted oratory lessons for various age groups. Thanks to his methods, many students have overcome stage fright and become confident speakers.',
+        ru: 'Эльнур Касымов - театральный актер и преподаватель ораторского искусства. В течение 12 лет он проводил уроки ораторского искусства для различных возрастных групп. Благодаря его методам многие студенты преодолели страх сцены и стали уверенными ораторами.'
+      },
+      imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+      active: true
+    }
+  ]);
+
   // Content Management Functions
   const updateContent = (section, language, value) => {
     console.log(`🔄 Updating content: ${section}.${language} = "${value}"`);
@@ -615,6 +650,31 @@ export const ContentProvider = ({ children }) => {
     ));
   };
 
+  // Team Management Functions
+  const addTeamMember = (teamData) => {
+    const newMember = {
+      id: teamMembers.length + 1,
+      ...teamData,
+      active: true
+    };
+    setTeamMembers(prev => [...prev, newMember]);
+    return newMember;
+  };
+
+  const updateTeamMember = (memberId, teamData) => {
+    setTeamMembers(prev => prev.map(member => 
+      member.id === memberId ? { ...member, ...teamData } : member
+    ));
+  };
+
+  const deleteTeamMember = (memberId) => {
+    setTeamMembers(prev => prev.filter(member => member.id !== memberId));
+  };
+
+  const getActiveTeamMembers = () => {
+    return teamMembers.filter(member => member.active);
+  };
+
   // Analytics Functions
   const updateStats = (newStats) => {
     setSiteStats(prev => ({ ...prev, ...newStats }));
@@ -629,6 +689,7 @@ export const ContentProvider = ({ children }) => {
       courses,
       testimonials,
       news,
+      teamMembers,
       
       // Content Management
       updateContent,
@@ -669,6 +730,12 @@ export const ContentProvider = ({ children }) => {
       deleteTestimonial,
       approveTestimonial,
       
+      // Team Management
+      addTeamMember,
+      updateTeamMember,
+      deleteTeamMember,
+      getActiveTeamMembers,
+      
       // Analytics
       updateStats,
       
@@ -677,7 +744,8 @@ export const ContentProvider = ({ children }) => {
       setCourses,
       setTestimonials,
       setMediaLibrary,
-      setNews
+      setNews,
+      setTeamMembers
     }}>
       {children}
     </ContentContext.Provider>
