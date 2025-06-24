@@ -13,7 +13,7 @@ export const translations = {
     // Home Page
     welcome: 'Bakı Nitq Mərkəzinə Xoş Gəlmisiniz',
     welcomeDesc: 'Nitq mədəniyyəti, natiqlik və diksiya sahəsində peşəkar təlim mərkəzi',
-    ourServices: 'Bizim Xidmətlərimiz',
+    ourServices: 'Peşəkar və şəxsi inkişafı sürətləndirən kurs proqramlarımız',
     speechCulture: 'Nitq Mədəniyyəti',
     oratory: 'Natiqlik',
     diction: 'Diksiya',
@@ -40,7 +40,7 @@ export const translations = {
     schedule: 'Cədvəl',
     
     // Testimonials
-    testimonialsTitle: 'Tələbə Rəyləri',
+    testimonialsTitle: 'Tələbələrimizin uğur hekayələri və rəyləri',
     
     // Gallery
     galleryTitle: 'Qalereya',
@@ -72,19 +72,19 @@ export const translations = {
     hoursText: 'Bazar ertəsi - Cümə: 9:00-18:00',
 
     // News & Activities
-    newsTitle: 'Bizim Fərqimiz',
+    newsTitle: 'Müştərilərimizin inamını qazandıran güclü tərəflərimiz',
     readMore: 'Daha Ətraflı',
     newsDate: 'Tarix',
     category: 'Kateqoriya',
     viewAllNews: 'Bütün Xəbərləri Gör',
     
     // Our Differences
-    practicalApproach: 'Praktiki yanaşma',
-    practicalApproachDesc: 'Təlimlərimiz real həyat vəziyyətlərinə uyğun praktik məşqlərlə zəngindir.',
-    professionalTrainers: 'Peşəkar təlimçilər',
-    professionalTrainersDesc: 'Sahələrində təcrübəli və yüksək ixtisaslı təlimçilərimiz sizə maksimum dəstək göstərir.',
-    modernMethodology: 'Müasir metodika',
-    modernMethodologyDesc: 'Beynəlxalq standartlara uyğun müasir təlim metodlarından istifadə edirik.',
+    practicalApproach: 'Real iş ssenarilərini simulyasiya edən praktiki yanaşmamız',
+    practicalApproachDesc: 'Təlim modullarımız case study-lər, rol oyunları və layihə-əsaslı tapşırıqlarla zəngindir; iştirakçılar öyrəndiklərini dərhal tətbiq edir və bacarıqlarını iş mühitində hazır şəkildə möhkəmləndirirlər.',
+    professionalTrainers: 'Beynəlxalq təcrübəli ustad-təlimçilərlə peşəkar bələdçilik',
+    professionalTrainersDesc: 'Komandamız 10+ illik sahə təcrübəsi və nüfuzlu sertifikasiyalarla hər iştirakçıya fərdi mentorluq, dərhal tətbiq oluna bilən rəy və real nümunələrlə zəngin dəstək göstərir.',
+    modernMethodology: 'Qlobal trendlərə uyğun qabaqcıl öyrənmə metodikası',
+    modernMethodologyDesc: 'ISO və ATD standartlarını birləşdirən çevik, mikroöyrənmə və blended formatları; interaktiv platformalar və data-əsaslı geribildirimlə öyrənmə prosesini daima optimallaşdırırıq.',
     
     // Course Categories
     speechCommunicationDev: 'Nitq və Ünsiyyət Bacarıqlarının İnkişafı',

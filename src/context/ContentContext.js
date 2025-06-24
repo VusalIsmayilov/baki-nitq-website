@@ -355,6 +355,36 @@ export const ContentProvider = ({ children }) => {
         ru: 'Курсы ораторского искусства были очень полезны для меня. Теперь я не боюсь публичных выступлений.'
       },
       approved: true
+    },
+    {
+      id: 3,
+      name: 'Leyla Həsənova',
+      text: {
+        az: 'Diksiya təlimləri mənim tələffüzümü kökündən dəyişdi. Təlimçilərimizin peşəkarlığından çox məmnunam.',
+        en: 'Diction training fundamentally changed my pronunciation. I am very satisfied with the professionalism of our trainers.',
+        ru: 'Обучение дикции кардинально изменило мое произношение. Я очень доволен профессионализмом наших тренеров.'
+      },
+      approved: true
+    },
+    {
+      id: 4,
+      name: 'Elnur Qədirov',
+      text: {
+        az: 'Korporativ təlimlər komandamızın ünsiyyət səviyyəsini əhəmiyyətli dərəcədə yüksəltdi. Hər kəsə tövsiyə edirəm.',
+        en: 'Corporate training significantly improved our team\'s communication level. I recommend it to everyone.',
+        ru: 'Корпоративное обучение значительно повысило уровень коммуникации нашей команды. Рекомендую всем.'
+      },
+      approved: true
+    },
+    {
+      id: 5,
+      name: 'Səbinə Rəhimova',
+      text: {
+        az: 'Özünü ifadə etmə kursları həyatımda dönüş nöqtəsi oldu. Artıq fikirlərimi aydın şəkildə çatdıra bilirəm.',
+        en: 'Self-expression courses were a turning point in my life. Now I can convey my thoughts clearly.',
+        ru: 'Курсы самовыражения стали поворотным моментом в моей жизни. Теперь я могу ясно выражать свои мысли.'
+      },
+      approved: true
     }
   ]);
 

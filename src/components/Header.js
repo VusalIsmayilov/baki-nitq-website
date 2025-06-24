@@ -6,6 +6,7 @@ import LanguageSelector from './LanguageSelector';
 const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAdminTrigger, setShowAdminTrigger] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { t } = useLanguage();
   
   const navigation = [
@@ -69,11 +70,23 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // Track scroll position for shadow effect
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   
   return (
-    <header className="bg-white shadow-lg fixed top-0 left-0 right-0 z-50">
+    <header className={`bg-white fixed top-0 left-0 right-0 z-50 transition-shadow duration-200 ${
+      isScrolled ? 'shadow-md' : 'shadow-none'
+    }`}>
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-2">
           <div className="flex items-center space-x-4">
             <img 
               src="/nitg_logo.jpg" 
@@ -96,7 +109,14 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
                 }`}
               >
                 <Icon size={18} />
-                <span>{t(key)}</span>
+                <span style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: key === 'contact' ? 600 : 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: key === 'contact' ? '0.6px' : '0.5px',
+                  fontSize: key === 'contact' ? '0.9rem' : '0.95rem',
+                  lineHeight: key === 'contact' ? 1.35 : 1.4
+                }}>{t(key)}</span>
               </button>
             ))}
           </nav>
@@ -213,15 +233,6 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
         )}
       </div>
       
-      {/* Development Helper - Only show in development mode */}
-      {process.env.NODE_ENV === 'development' && !showAdminTrigger && !isAdmin && (
-        <div className="bg-yellow-50 border-b border-yellow-200 px-4 py-2 text-center">
-          <p className="text-yellow-800 text-sm">
-            <strong>Dev Mode:</strong> Admin access methods: 
-            Click logo 5 times | Press Ctrl+Shift+A | Add ?admin=true to URL | Set localStorage 'showAdminLogin' = 'true'
-          </p>
-        </div>
-      )}
     </header>
   );
 };

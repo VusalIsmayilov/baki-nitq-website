@@ -2,63 +2,273 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* Montserrat Font Family */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Static font fallbacks for better browser support */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat/static/Montserrat-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat/static/Montserrat-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat/static/Montserrat-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat/static/Montserrat-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Custom Variables */
 :root {
   --color-background: #faf9f7;
-  --color-primary: #aed9e0;
+  --color-primary: #2166FF; /* Brand blue */
   --color-secondary: #f3d5b5;
-  --color-accent: #d8c3a5;
-  --text-dark: #333333;
-  --text-light: #555555;
+  --color-accent: #FB923C; /* Soft coral for highlights */
+  --text-dark: #1E1E1E; /* Darker for better contrast */
+  --text-light: #4A4A4A; /* Slightly darker than before */
   --border-light: #e2e1df;
+  --section-bg-1: #F9FAFC;
+  --section-bg-2: #FFFFFF;
+  --section-bg-3: #F4F6FA;
 }
 
 /* Base Styles */
 body {
   background-color: var(--color-background);
-  color: var(--text-dark);
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #1E1E1E; /* Darker body text for better contrast */
+  font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
   padding-top: 80px; /* Account for fixed header */
+}
+
+/* Typography Polish - Playfair Display Headings */
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+  font-variation-settings: "opsz" 36; /* Sharper forms for headings */
+}
+
+/* All-caps headings letter spacing */
+.uppercase-heading,
+[style*="text-transform: uppercase"],
+[style*="font-variant: small-caps"] {
+  letter-spacing: -0.04em;
 }
 
 /* Container */
 .container {
-  max-width: 1200px;
+  max-width: 1240px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(to bottom, #c5c5f5, #1e40af);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 4rem 0;
+  padding: 4rem 0 0 0;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   min-height: 85vh;
   display: flex;
   align-items: center;
   position: relative;
+  overflow: hidden;
+  clip-path: none;
+  padding-bottom: 160px;
+}
+
+/* Hero fade-out gradient at bottom */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(transparent, #F7F9FC);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* CSS Variables */
+:root {
+  --brand-blue: #3B82F6;
+}
+
+/* Wave divider */
+.wave {
+  display: block;
+  width: 100%;
+  height: 30px;
+  margin-top: -1px;
+}
+
+/* Overlapping section card */
+.overlapping-section-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  margin-top: -40px;
+  position: relative;
+  z-index: 10;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Dust particles overlay */
+.dust-particles-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.15;
+  will-change: transform;
+}
+
+/* Animated Background Effect */
+.hero-background-animation {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.06) 0%, transparent 50%),
+    linear-gradient(45deg, rgba(102,126,234,0.4), rgba(118,75,162,0.4));
+  animation: heroFloat 8s ease-in-out infinite;
+  z-index: 0;
+  will-change: transform;
+}
+
+@keyframes heroFloat {
+  0%, 100% {
+    transform: translateX(-2%) translateY(-2%) rotate(0deg);
+  }
+  33% {
+    transform: translateX(2%) translateY(-3%) rotate(1deg);
+  }
+  66% {
+    transform: translateX(-1%) translateY(2%) rotate(-1deg);
+  }
 }
 
 .hero-section::before {
   content: '';
   position: absolute;
   top: 0;
-  right: 0;
-  width: 60%;
+  left: 0;
+  width: 100%;
   height: 100%;
   background-image: url('./short_logo.jpg');
-  background-size: contain;
-  background-position: center right;
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.15;
-  mix-blend-mode: screen;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
   z-index: 1;
+  animation: subtleZoom 12s ease-in-out infinite alternate;
+  /* Performance optimization */
+  will-change: transform;
+  content-visibility: auto;
+}
+
+@keyframes subtleZoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
 }
 
 .hero-section > * {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
+
+/* Hero CTA Button Enhancement */
+.hero-cta-button {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.hero-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Accordion Content Slide-in Animation */
+.accordion-content-slide {
+  animation: slideInFromRight 200ms ease-out forwards;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Partner Logo Marquee Animation */
+.partner-marquee {
+  animation: marqueeScroll 40s linear infinite;
+  width: fit-content;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.partner-marquee:hover {
+  animation-play-state: paused;
+}
+
 
 /* Courses Section */
 .courses-section {
@@ -130,14 +340,64 @@ body {
   background-color: var(--color-primary);
   color: white;
   padding: 0.75rem 1.5rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 600;
+  border: none;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.15);
   transition: all 0.3s ease;
+  font-family: 'Manrope', sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  background-color: #2563EB;
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.25);
   transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--color-primary);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-family: 'Manrope', sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-tertiary {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  font-family: 'Manrope', sans-serif;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.btn-tertiary:hover {
+  color: #2563EB;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
 }
 
 /* Form Styles */
@@ -156,6 +416,35 @@ body {
   box-shadow: 0 0 0 2px rgba(174, 217, 224, 0.2);
 }
 
+/* Font Weight Utilities */
+.font-light {
+  font-weight: 300;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
 /* Smooth transitions */
 * {
   transition: all 0.3s ease;
@@ -171,6 +460,27 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Lottie Animation Optimizations */
+.lottie-container {
+  will-change: transform;
+  contain: layout style paint;
+}
+
+/* Performance Optimizations */
+.differences-card {
+  contain: layout style paint;
+  content-visibility: auto;
+}
+
+.testimonials-container {
+  contain: layout style;
+}
+
+.partner-marquee {
+  contain: layout style;
+  will-change: transform;
 }
 
 /* Responsive adjustments */
