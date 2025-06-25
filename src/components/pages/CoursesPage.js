@@ -1,34 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { Mic, Users, TrendingUp, UserCog, Volume2, MessageSquare, UserCheck, Search, Filter, ChevronDown } from 'lucide-react';
+import ConversionCTA from '../ConversionCTA';
 
 const CoursesPage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
   const [selectedTraining, setSelectedTraining] = useState(null);
+  const [activeTab, setActiveTab] = useState('individual');
+  const [isTabsSticky, setIsTabsSticky] = useState(false);
+  const [expandedCards, setExpandedCards] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({
+    topic: '',
+    duration: '',
+    price: ''
+  });
+  const tabsRef = useRef(null);
+  const individualRef = useRef(null);
+  const corporateRef = useRef(null);
   
   const individualTrainings = [
     {
       id: 'speech',
       title: t('speechTraining'),
       description: t('speechTrainingDesc'),
-      category: 'individual'
+      category: 'individual',
+      icon: Mic
     },
     {
       id: 'leadership',
       title: t('leadershipCommunication'),
       description: t('leadershipCommunicationDesc'),
-      category: 'individual'
+      category: 'individual',
+      icon: Users
     },
     {
       id: 'marketing',
       title: t('marketingTraining'),
       description: t('marketingTrainingDesc'),
-      category: 'individual'
+      category: 'individual',
+      icon: TrendingUp
     },
     {
       id: 'etiquette',
       title: t('etiquetteTraining'),
       description: t('etiquetteTrainingDesc'),
-      category: 'individual'
+      category: 'individual',
+      icon: UserCheck
     }
   ];
 
@@ -37,19 +55,22 @@ const CoursesPage = ({ setCurrentPage }) => {
       id: 'corporate-leadership',
       title: t('corporateLeadership'),
       description: t('corporateLeadershipDesc'),
-      category: 'corporate'
+      category: 'corporate',
+      icon: UserCog
     },
     {
       id: 'leader-voice',
       title: t('leaderVoice'),
       description: t('leaderVoiceDesc'),
-      category: 'corporate'
+      category: 'corporate',
+      icon: Volume2
     },
     {
       id: 'speech-expression',
       title: t('speechExpression'),
       description: t('speechExpressionDesc'),
-      category: 'corporate'
+      category: 'corporate',
+      icon: MessageSquare
     }
   ];
 
@@ -61,125 +82,612 @@ const CoursesPage = ({ setCurrentPage }) => {
     setSelectedTraining(null);
   };
 
-  const TrainingCard = ({ training, colorScheme }) => (
-    <div className={`bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}>
-      <div className="text-center mb-4">
-        <div className={`w-16 h-16 ${colorScheme.bg} rounded-full flex items-center justify-center mb-4 mx-auto`}>
-          <span className={`text-2xl ${colorScheme.text}`}>
-            {training.category === 'individual' ? '👤' : '🏢'}
-          </span>
+  // Sticky tabs and scroll handling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (tabsRef.current) {
+        const tabsTop = tabsRef.current.offsetTop;
+        const scrollTop = window.scrollY;
+        setIsTabsSticky(scrollTop > tabsTop - 100);
+      }
+
+      // Update active tab based on scroll position
+      if (individualRef.current && corporateRef.current) {
+        const individualTop = individualRef.current.offsetTop - 200;
+        const corporateTop = corporateRef.current.offsetTop - 200;
+        const scrollTop = window.scrollY;
+
+        if (scrollTop >= corporateTop) {
+          setActiveTab('corporate');
+        } else if (scrollTop >= individualTop) {
+          setActiveTab('individual');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (sectionRef, tabName) => {
+    setActiveTab(tabName);
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start',
+        inline: 'nearest'
+      });
+    }
+  };
+
+  const toggleCardExpansion = (cardId) => {
+    setExpandedCards(prev => ({
+      ...prev,
+      [cardId]: !prev[cardId]
+    }));
+  };
+
+  const truncateText = (text, maxLines = 5) => {
+    const words = text.split(' ');
+    const wordsPerLine = 12; // Approximate words per line for card width
+    const maxWords = maxLines * wordsPerLine;
+    
+    if (words.length <= maxWords) return text;
+    return words.slice(0, maxWords).join(' ');
+  };
+
+  // Filter data
+  const filterOptions = {
+    topic: [
+      { value: '', label: language === 'az' ? 'Bütün mövzular' : language === 'en' ? 'All Topics' : 'Все темы' },
+      { value: 'speech', label: language === 'az' ? 'Nitq və Diksiya' : language === 'en' ? 'Speech & Diction' : 'Речь и дикция' },
+      { value: 'leadership', label: language === 'az' ? 'Liderlik' : language === 'en' ? 'Leadership' : 'Лидерство' },
+      { value: 'communication', label: language === 'az' ? 'Ünsiyyət' : language === 'en' ? 'Communication' : 'Коммуникация' },
+      { value: 'marketing', label: language === 'az' ? 'Marketinq' : language === 'en' ? 'Marketing' : 'Маркетинг' },
+      { value: 'etiquette', label: language === 'az' ? 'Etiket' : language === 'en' ? 'Etiquette' : 'Этикет' }
+    ],
+    duration: [
+      { value: '', label: language === 'az' ? 'Bütün müddətlər' : language === 'en' ? 'All Durations' : 'Все продолжительности' },
+      { value: 'short', label: language === 'az' ? '1-2 həftə' : language === 'en' ? '1-2 weeks' : '1-2 недели' },
+      { value: 'medium', label: language === 'az' ? '1 ay' : language === 'en' ? '1 month' : '1 месяц' },
+      { value: 'long', label: language === 'az' ? '2-3 ay' : language === 'en' ? '2-3 months' : '2-3 месяца' }
+    ],
+    price: [
+      { value: '', label: language === 'az' ? 'Bütün qiymətlər' : language === 'en' ? 'All Prices' : 'Все цены' },
+      { value: 'low', label: language === 'az' ? '0-100 AZN' : language === 'en' ? '0-100 AZN' : '0-100 AZN' },
+      { value: 'medium', label: language === 'az' ? '100-200 AZN' : language === 'en' ? '100-200 AZN' : '100-200 AZN' },
+      { value: 'high', label: language === 'az' ? '200+ AZN' : language === 'en' ? '200+ AZN' : '200+ AZN' }
+    ]
+  };
+
+  // Filter and search logic
+  const filterTrainings = (trainings) => {
+    return trainings.filter(training => {
+      const matchesSearch = training.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           training.description.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesTopic = !filters.topic || 
+                          training.title.toLowerCase().includes(filters.topic) ||
+                          training.id.includes(filters.topic);
+      
+      // For demo purposes, all trainings match duration and price filters
+      const matchesDuration = !filters.duration;
+      const matchesPrice = !filters.price;
+      
+      return matchesSearch && matchesTopic && matchesDuration && matchesPrice;
+    });
+  };
+
+  const filteredIndividualTrainings = filterTrainings(individualTrainings);
+  const filteredCorporateTrainings = filterTrainings(corporateTrainings);
+
+  const TrainingCard = ({ training, colorScheme }) => {
+    const IconComponent = training.icon;
+    const isExpanded = expandedCards[training.id];
+    const fullDescription = training.description;
+    const truncatedDescription = truncateText(fullDescription, 5);
+    const needsTruncation = fullDescription.split(' ').length > 60; // ~5 lines worth
+    
+    return (
+      <div className="bg-white transition-all duration-300 ease-out transform flex flex-col h-full" 
+           style={{
+             borderRadius: '12px',
+             boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
+             padding: '3rem'
+           }}
+           onMouseEnter={(e) => {
+             e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.15)';
+             e.currentTarget.style.transform = 'translateY(-4px)';
+           }}
+           onMouseLeave={(e) => {
+             e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)';
+             e.currentTarget.style.transform = 'translateY(0)';
+           }}>
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 flex items-center justify-center mb-6 mx-auto">
+            <IconComponent 
+              className="w-8 h-8" 
+              style={{color: colorScheme.iconColor}} 
+              strokeWidth={1.5} 
+            />
+          </div>
+          <h3 className="mb-4 leading-tight" style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.5rem',
+            lineHeight: 1.35,
+            color: '#1E1E1E'
+          }}>
+            {training.title}
+          </h3>
         </div>
-        <h3 className="text-xl font-bold text-gray-800 mb-3 leading-tight">
-          {training.title}
-        </h3>
+        <div className="flex-1 mb-6">
+          <p className="leading-relaxed" style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 400,
+            fontSize: '0.9rem',
+            lineHeight: 1.55,
+            color: '#666666'
+          }}>
+            {isExpanded ? fullDescription : (needsTruncation ? truncatedDescription + '...' : fullDescription)}
+          </p>
+          {needsTruncation && (
+            <button
+              onClick={() => toggleCardExpansion(training.id)}
+              className="mt-2 transition-colors duration-200"
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 600,
+                fontSize: '0.875rem',
+                color: colorScheme.buttonColor,
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.color = colorScheme.buttonHoverColor;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.color = colorScheme.buttonColor;
+              }}
+            >
+              {isExpanded 
+                ? (language === 'az' ? 'Daha az' : language === 'en' ? 'Show less' : 'Показать меньше')
+                : (language === 'az' ? '...davamı' : language === 'en' ? '...read more' : '...читать далее')
+              }
+            </button>
+          )}
+        </div>
+        <div className="flex space-x-3">
+          <button 
+            onClick={() => openTrainingModal(training)}
+            className="flex-1 text-white py-3 rounded-lg font-semibold"
+            style={{
+              backgroundColor: colorScheme.buttonColor,
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: '0.9rem',
+              transition: 'all 150ms ease-out',
+              transform: 'scale(1)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = colorScheme.buttonHoverColor;
+              e.target.style.transform = 'scale(1.03)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = colorScheme.buttonColor;
+              e.target.style.transform = 'scale(1)';
+            }}
+          >
+            {language === 'az' ? 'Ətraflı' : language === 'en' ? 'Learn More' : 'Подробнее'}
+          </button>
+          <button 
+            onClick={() => setCurrentPage('contact')}
+            className="flex-1 py-3 rounded-lg font-semibold"
+            style={{
+              backgroundColor: 'transparent',
+              border: `2px solid ${colorScheme.buttonColor}`,
+              color: colorScheme.buttonColor,
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: '0.9rem',
+              transition: 'all 150ms ease-out',
+              transform: 'scale(1)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = colorScheme.buttonColor;
+              e.target.style.color = 'white';
+              e.target.style.transform = 'scale(1.03)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'transparent';
+              e.target.style.color = colorScheme.buttonColor;
+              e.target.style.transform = 'scale(1)';
+            }}
+          >
+            {language === 'az' ? 'Əlaqə' : language === 'en' ? 'Contact' : 'Контакт'}
+          </button>
+        </div>
       </div>
-      <p className="text-gray-600 mb-6 leading-relaxed text-sm line-clamp-3">
-        {training.description.substring(0, 150)}...
-      </p>
-      <div className="flex space-x-2">
-        <button 
-          onClick={() => openTrainingModal(training)}
-          className={`flex-1 ${colorScheme.button} text-white py-3 rounded-lg hover:opacity-90 transition-all duration-300 font-semibold`}
-        >
-          {t('learnMore')}
-        </button>
-        <button 
-          onClick={() => setCurrentPage('contact')}
-          className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold"
-        >
-          {t('contact')}
-        </button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
-    <div className="py-16">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-4">{t('coursesTitle')}</h1>
-        <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
-          {language === 'az' ? 'Nitq mədəniyyəti, liderlik və ünsiyyət bacarıqlarınızı inkişaf etdirmək üçün peşəkar təlim proqramlarımız' :
-           language === 'en' ? 'Professional training programs to develop your speech culture, leadership and communication skills' :
-           'Профессиональные учебные программы для развития вашей культуры речи, лидерских и коммуникативных навыков'}
-        </p>
+    <div>
+      {/* Hero Banner */}
+      <section style={{backgroundColor: '#F5F7FA', paddingTop: '4rem', paddingBottom: '4rem'}}>
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="mb-6" style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 700,
+            fontSize: 'clamp(2.6rem, 6vw, 4.2rem)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            color: '#1E1E1E'
+          }}>{t('coursesTitle')}</h1>
+          <p className="mb-8 max-w-3xl mx-auto" style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 400,
+            fontSize: '1.125rem',
+            lineHeight: 1.6,
+            color: '#1E1E1E'
+          }}>
+            {language === 'az' ? 'Nitq mədəniyyəti, liderlik və ünsiyyət bacarıqlarınızı inkişaf etdirmək üçün peşəkar təlim proqramlarımız' :
+             language === 'en' ? 'Professional training programs to develop your speech culture, leadership and communication skills' :
+             'Профессиональные учебные программы для развития вашей культуры речи, лидерских и коммуникативных навыков'}
+          </p>
+          <button 
+            onClick={() => {/* Add catalog navigation logic */}}
+            className="hero-cta-button" 
+            style={{
+              display: 'inline-block',
+              padding: '1rem 2.5rem',
+              borderRadius: '8px',
+              backgroundColor: '#2166FF',
+              color: 'white',
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 600,
+              fontSize: '1rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.6px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(33, 102, 255, 0.2)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#1d5def';
+              e.target.style.transform = 'translateY(-2px) scale(1.03)';
+              e.target.style.boxShadow = '0 8px 20px rgba(33, 102, 255, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#2166FF';
+              e.target.style.transform = 'translateY(0) scale(1)';
+              e.target.style.boxShadow = '0 4px 12px rgba(33, 102, 255, 0.2)';
+            }}
+          >
+            Kurs kataloquna bax
+          </button>
+        </div>
+      </section>
+
+      {/* Discovery Tools - Filter Bar */}
+      <section className="py-8 bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+            {/* Search Input */}
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder={language === 'az' ? 'Kurs axtarın...' : language === 'en' ? 'Search courses...' : 'Поиск курсов...'}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '0.95rem'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.boxShadow = '0 0 0 2px rgba(33, 102, 255, 0.2)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.boxShadow = 'none';
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Filter Dropdowns */}
+            <div className="flex gap-3 flex-wrap">
+              <div className="relative">
+                <select
+                  value={filters.topic}
+                  onChange={(e) => setFilters(prev => ({ ...prev, topic: e.target.value }))}
+                  className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:border-transparent"
+                  onFocus={(e) => {
+                    e.target.style.boxShadow = '0 0 0 2px rgba(33, 102, 255, 0.2)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.boxShadow = 'none';
+                  }}
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '0.95rem',
+                    minWidth: '140px'
+                  }}
+                >
+                  {filterOptions.topic.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+
+              <div className="relative">
+                <select
+                  value={filters.duration}
+                  onChange={(e) => setFilters(prev => ({ ...prev, duration: e.target.value }))}
+                  className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:border-transparent"
+                  onFocus={(e) => {
+                    e.target.style.boxShadow = '0 0 0 2px rgba(33, 102, 255, 0.2)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.boxShadow = 'none';
+                  }}
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '0.95rem',
+                    minWidth: '140px'
+                  }}
+                >
+                  {filterOptions.duration.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+
+              <div className="relative">
+                <select
+                  value={filters.price}
+                  onChange={(e) => setFilters(prev => ({ ...prev, price: e.target.value }))}
+                  className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-3 pr-10 focus:ring-2 focus:border-transparent"
+                  onFocus={(e) => {
+                    e.target.style.boxShadow = '0 0 0 2px rgba(33, 102, 255, 0.2)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.boxShadow = 'none';
+                  }}
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '0.95rem',
+                    minWidth: '140px'
+                  }}
+                >
+                  {filterOptions.price.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+
+              {/* Clear Filters Button */}
+              {(searchTerm || filters.topic || filters.duration || filters.price) && (
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setFilters({ topic: '', duration: '', price: '' });
+                  }}
+                  className="px-4 py-3 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '0.95rem',
+                    transition: 'all 150ms ease-out',
+                    transform: 'scale(1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = 'scale(1.03)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                >
+                  {language === 'az' ? 'Təmizlə' : language === 'en' ? 'Clear' : 'Очистить'}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Results Count */}
+          <div className="mt-4">
+            <span style={{ 
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 400,
+              fontSize: '0.875rem',
+              color: '#666666'
+            }}>
+              {language === 'az' 
+                ? `${filteredIndividualTrainings.length + filteredCorporateTrainings.length} nəticə tapıldı`
+                : language === 'en' 
+                ? `${filteredIndividualTrainings.length + filteredCorporateTrainings.length} results found`
+                : `Найдено ${filteredIndividualTrainings.length + filteredCorporateTrainings.length} результатов`
+              }
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* Sticky Tabs */}
+      <div ref={tabsRef} className={`${isTabsSticky ? 'fixed top-20 left-0 right-0 z-40' : 'relative'} bg-white border-b border-gray-200 transition-all duration-300`}>
+        <div className="container mx-auto px-4">
+          <div className="flex justify-center space-x-1 py-4">
+            <button
+              onClick={() => scrollToSection(individualRef, 'individual')}
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                activeTab === 'individual' 
+                  ? 'bg-blue-100 text-blue-700 shadow-lg' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '0.95rem',
+                fontWeight: 600
+              }}
+            >
+              {language === 'az' ? 'Fərdi Təlimlər' :
+               language === 'en' ? 'Individual Trainings' :
+               'Индивидуальные тренинги'}
+            </button>
+            <button
+              onClick={() => scrollToSection(corporateRef, 'corporate')}
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                activeTab === 'corporate' 
+                  ? 'shadow-lg' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+              style={{
+                backgroundColor: activeTab === 'corporate' ? '#E8F5E8' : undefined,
+                color: activeTab === 'corporate' ? '#02A44E' : undefined,
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '0.95rem',
+                fontWeight: 600
+              }}
+            >
+              {language === 'az' ? 'Korporativ Təlimlər' :
+               language === 'en' ? 'Corporate Trainings' :
+               'Корпоративные тренинги'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className={`${isTabsSticky ? 'pt-20' : ''} py-16`}>
+        <div className="container mx-auto px-4">
         
         {/* Individual Trainings Section */}
-        <section className="mb-16">
+        <section ref={individualRef} className="mb-16">
           <div className="text-center mb-12">
-            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-              <span className="text-3xl text-blue-600">👤</span>
-            </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">{t('individualTrainings')}</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {language === 'az' ? 'Şəxsi inkişafınız üçün fərdi yanaşma ilə hazırlanmış təlim proqramları' :
-               language === 'en' ? 'Training programs designed with individual approach for your personal development' :
-               'Учебные программы, разработанные с индивидуальным подходом для вашего личного развития'}
+            <h2 className="text-3xl font-bold text-gray-800 mb-4" style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 700,
+              fontSize: '2rem',
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em',
+              color: '#1E1E1E'
+            }}>{t('individualTrainings')}</h2>
+            <p className="max-w-xl mx-auto" style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 400,
+              fontSize: '1.125rem',
+              lineHeight: 1.45,
+              color: '#4A4A4A',
+              maxWidth: '24ch',
+              margin: '0 auto'
+            }}>
+              {language === 'az' ? 'Fərdi yanaşma ilə hazırlanmış təlim proqramları' :
+               language === 'en' ? 'Individual approach training programs' :
+               'Индивидуальные программы'}
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {individualTrainings.map((training) => (
-              <TrainingCard 
-                key={training.id} 
-                training={training} 
-                colorScheme={{
-                  bg: 'bg-blue-100',
-                  text: 'text-blue-600',
-                  button: 'bg-blue-600'
-                }}
-              />
-            ))}
-          </div>
+          {filteredIndividualTrainings.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredIndividualTrainings.map((training) => (
+                <TrainingCard 
+                  key={training.id} 
+                  training={training} 
+                  colorScheme={{
+                    iconColor: '#2166FF',
+                    buttonColor: '#2166FF',
+                    buttonHoverColor: '#1d5def'
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '1rem',
+                color: '#666666'
+              }}>
+                {language === 'az' ? 'Fərdi təlimlər üçün nəticə tapılmadı' :
+                 language === 'en' ? 'No individual trainings found' :
+                 'Индивидуальные тренинги не найдены'}
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Corporate Trainings Section */}
-        <section className="mb-16">
+        <section ref={corporateRef} className="mb-16">
           <div className="text-center mb-12">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-              <span className="text-3xl text-green-600">🏢</span>
-            </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">{t('corporateTrainings')}</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {language === 'az' ? 'Komanda və idarəetmə bacarıqlarını gücləndirib işgüzar mühitdə liderlik keyfiyyətlərini inkişaf etdirmək üçün korporativ təlimlər' :
-               language === 'en' ? 'Corporate trainings to strengthen team and management skills and develop leadership qualities in business environment' :
-               'Корпоративные тренинги для укрепления командных и управленческих навыков и развития лидерских качеств в деловой среде'}
+            <h2 className="text-3xl font-bold text-gray-800 mb-4" style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 700,
+              fontSize: '2rem',
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em',
+              color: '#1E1E1E'
+            }}>{t('corporateTrainings')}</h2>
+            <p className="max-w-xl mx-auto" style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 400,
+              fontSize: '1.125rem',
+              lineHeight: 1.45,
+              color: '#4A4A4A',
+              maxWidth: '24ch',
+              margin: '0 auto'
+            }}>
+              {language === 'az' ? 'İşgüzar mühitdə liderlik keyfiyyətlərini inkişaf etdirmək' :
+               language === 'en' ? 'Develop leadership in business environment' :
+               'Развитие лидерских качеств'}
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {corporateTrainings.map((training) => (
-              <TrainingCard 
-                key={training.id} 
-                training={training} 
-                colorScheme={{
-                  bg: 'bg-green-100',
-                  text: 'text-green-600',
-                  button: 'bg-green-600'
-                }}
-              />
-            ))}
-          </div>
+          {filteredCorporateTrainings.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCorporateTrainings.map((training) => (
+                <TrainingCard 
+                  key={training.id} 
+                  training={training} 
+                  colorScheme={{
+                    iconColor: '#02A44E',
+                    buttonColor: '#02A44E',
+                    buttonHoverColor: '#028A42'
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '1rem',
+                color: '#666666'
+              }}>
+                {language === 'az' ? 'Korporativ təlimlər üçün nəticə tapılmadı' :
+                 language === 'en' ? 'No corporate trainings found' :
+                 'Корпоративные тренинги не найдены'}
+              </p>
+            </div>
+          )}
         </section>
 
-        {/* Contact Section */}
-        <section className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-100 text-center">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">
-            {language === 'az' ? 'Təlimlərimiz haqqında daha ətraflı məlumat almaq istəyirsiniz?' :
-             language === 'en' ? 'Want to learn more about our trainings?' :
-             'Хотите узнать больше о наших тренингах?'}
-          </h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            {language === 'az' ? 'Peşəkar komandamız sizə uyğun təlim proqramını seçməkdə köməklik edəcək' :
-             language === 'en' ? 'Our professional team will help you choose the right training program for you' :
-             'Наша профессиональная команда поможет вам выбрать подходящую учебную программу'}
-          </p>
-          <button 
-            onClick={() => setCurrentPage('contact')}
-            className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
-          >
-            {t('contact')}
-          </button>
+        {/* Contact CTA Section */}
+        <section style={{backgroundColor: '#F5F7FA', paddingTop: '6rem', paddingBottom: '5rem', marginBottom: '4rem'}}>
+          <div className="container mx-auto px-4">
+            <ConversionCTA setCurrentPage={setCurrentPage} />
+          </div>
         </section>
+        </div>
       </div>
       
       {/* Training Detail Modal */}
@@ -189,8 +697,12 @@ const CoursesPage = ({ setCurrentPage }) => {
             <div className="p-8">
               <div className="flex justify-between items-start mb-6">
                 <div className="flex items-center">
-                  <div className={`w-12 h-12 ${selectedTraining.category === 'individual' ? 'bg-blue-100' : 'bg-green-100'} rounded-full flex items-center justify-center mr-4`}>
-                    <span className={`text-xl ${selectedTraining.category === 'individual' ? 'text-blue-600' : 'text-green-600'}`}>
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4`} style={{
+                    backgroundColor: selectedTraining.category === 'individual' ? '#EFF6FF' : '#E8F5E8'
+                  }}>
+                    <span className="text-xl" style={{
+                      color: selectedTraining.category === 'individual' ? '#2166FF' : '#02A44E'
+                    }}>
                       {selectedTraining.category === 'individual' ? '👤' : '🏢'}
                     </span>
                   </div>
@@ -205,7 +717,11 @@ const CoursesPage = ({ setCurrentPage }) => {
               </div>
               
               <div className="space-y-6">
-                <div className={`h-48 bg-gradient-to-r ${selectedTraining.category === 'individual' ? 'from-blue-500 to-blue-600' : 'from-green-500 to-green-600'} rounded-lg flex items-center justify-center`}>
+                <div className="h-48 rounded-lg flex items-center justify-center" style={{
+                  background: selectedTraining.category === 'individual' 
+                    ? 'linear-gradient(to right, #2166FF, #1d5def)' 
+                    : 'linear-gradient(to right, #02A44E, #028A42)'
+                }}>
                   <h3 className="text-white text-2xl font-bold text-center px-6">{selectedTraining.title}</h3>
                 </div>
                 
@@ -220,13 +736,19 @@ const CoursesPage = ({ setCurrentPage }) => {
                   </p>
                 </div>
                 
-                <div className={`${selectedTraining.category === 'individual' ? 'bg-blue-50' : 'bg-green-50'} p-6 rounded-lg`}>
-                  <h4 className={`font-semibold ${selectedTraining.category === 'individual' ? 'text-blue-900' : 'text-green-900'} mb-3`}>
+                <div className="p-6 rounded-lg" style={{
+                  backgroundColor: selectedTraining.category === 'individual' ? '#EFF6FF' : '#E8F5E8'
+                }}>
+                  <h4 className="font-semibold mb-3" style={{
+                    color: selectedTraining.category === 'individual' ? '#1E3A8A' : '#14532D'
+                  }}>
                     {language === 'az' ? 'Əlaqə' :
                      language === 'en' ? 'Contact Us' :
                      'Свяжитесь с нами'}
                   </h4>
-                  <p className={`${selectedTraining.category === 'individual' ? 'text-blue-800' : 'text-green-800'} mb-4`}>
+                  <p className="mb-4" style={{
+                    color: selectedTraining.category === 'individual' ? '#1E40AF' : '#166534'
+                  }}>
                     {language === 'az' ? 'Bu təlim haqqında daha ətraflı məlumat almaq və qeydiyyatdan keçmək üçün bizimlə əlaqə saxlayın.' :
                      language === 'en' ? 'Contact us to get more detailed information about this training and to register.' :
                      'Свяжитесь с нами, чтобы получить более подробную информацию об этом тренинге и зарегистрироваться.'}
@@ -240,7 +762,20 @@ const CoursesPage = ({ setCurrentPage }) => {
                         closeTrainingModal();
                         setCurrentPage('contact');
                       }}
-                      className={`flex-1 ${selectedTraining.category === 'individual' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'} text-white py-3 rounded-md transition-colors font-semibold`}
+                      className="flex-1 text-white py-3 rounded-md transition-colors font-semibold"
+                      style={{
+                        backgroundColor: selectedTraining.category === 'individual' ? '#2166FF' : '#02A44E',
+                        transition: 'all 150ms ease-out',
+                        transform: 'scale(1)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = selectedTraining.category === 'individual' ? '#1d5def' : '#028A42';
+                        e.target.style.transform = 'scale(1.03)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = selectedTraining.category === 'individual' ? '#2166FF' : '#02A44E';
+                        e.target.style.transform = 'scale(1)';
+                      }}
                     >
                       {language === 'az' ? 'Qeydiyyatdan keç' :
                        language === 'en' ? 'Enroll Now' :
@@ -248,7 +783,19 @@ const CoursesPage = ({ setCurrentPage }) => {
                     </button>
                     <button 
                       onClick={closeTrainingModal}
-                      className="flex-1 bg-gray-500 text-white py-3 rounded-md hover:bg-gray-600 transition-colors font-semibold"
+                      className="flex-1 bg-gray-500 text-white py-3 rounded-md font-semibold"
+                      style={{
+                        transition: 'all 150ms ease-out',
+                        transform: 'scale(1)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = '#374151';
+                        e.target.style.transform = 'scale(1.03)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = '#6B7280';
+                        e.target.style.transform = 'scale(1)';
+                      }}
                     >
                       {language === 'az' ? 'Bağla' :
                        language === 'en' ? 'Close' :

@@ -23,7 +23,7 @@ const App = () => {
       case 'home':
         return <HomePage setCurrentPage={setCurrentPage} />;
       case 'about':
-        return <AboutPage />;
+        return <AboutPage setCurrentPage={setCurrentPage} />;
       case 'courses':
         return <CoursesPage setCurrentPage={setCurrentPage} />;
       case 'testimonials':

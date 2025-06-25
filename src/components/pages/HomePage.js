@@ -217,7 +217,7 @@ const HomePage = ({ setCurrentPage }) => {
           />
         </div>
         
-        <div className="container mx-auto px-4 text-left">
+        <div className="container mx-auto px-4 text-left flex justify-start items-center h-full">
           <div className="max-w-md">
             <h1 
               className="mb-6"

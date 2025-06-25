@@ -13,7 +13,7 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
     { key: 'home', icon: Home },
     { key: 'about', icon: Users },
     { key: 'courses', icon: BookOpen },
-    { key: 'testimonials', icon: MessageCircle },
+    // { key: 'testimonials', icon: MessageCircle }, // Temporarily deactivated
     { key: 'gallery', icon: Image },
     { key: 'contact', icon: Phone }
   ];
