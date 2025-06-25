@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { Mic, Users, TrendingUp, UserCog, Volume2, MessageSquare, UserCheck, Search, Filter, ChevronDown } from 'lucide-react';
+import { Mic, Users, TrendingUp, UserCog, Volume2, MessageSquare, UserCheck, Search, Filter, ChevronDown, Target, Zap, BarChart, Building2, PieChart, BookOpen } from 'lucide-react';
 import ConversionCTA from '../ConversionCTA';
 
 const CoursesPage = ({ setCurrentPage }) => {
@@ -366,6 +366,329 @@ const CoursesPage = ({ setCurrentPage }) => {
           >
             Kurs kataloquna bax
           </button>
+        </div>
+      </section>
+
+      {/* Training Solutions Subsection */}
+      <section className="py-16" style={{backgroundColor: '#F5F7FA'}}>
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h3 
+              className="text-gray-800 mb-4"
+              style={{
+                fontFamily: "'Lora', serif",
+                fontWeight: 700,
+                fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
+                lineHeight: 1.15,
+                letterSpacing: '-0.02em',
+                color: '#1E1E1E'
+              }}
+            >
+              Şəxsi hədəflərdən korporativ məqsədlərə qədər uzanan təlim həllərimiz
+            </h3>
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Individual Training */}
+            <div className="bg-white p-8" style={{
+              borderRadius: '12px',
+              boxShadow: '0 6px 18px rgba(0,0,0,0.06)'
+            }}>
+              <div className="mb-6">
+                <h4 style={{
+                  fontFamily: "'Lora', serif",
+                  fontWeight: 600,
+                  fontSize: '1.25rem',
+                  lineHeight: 1.35,
+                  color: '#1E1E1E',
+                  marginBottom: '1rem'
+                }}>
+                  Fərdi Yönümlü Təlimlər
+                </h4>
+              </div>
+              
+              <div className="space-y-6 mb-6">
+                <div className="flex items-start">
+                  <Target className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>Şəxsi məqsədlərə tam uyğunlaşma:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Tədris planı əvvəlcədən sizin hədəflərinizi, mövcud bacarıqlarınızı və öyrənmə tərzinizi analiz edərək qurulur.</p>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200"></div>
+                
+                <div className="flex items-start">
+                  <UserCheck className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>1-nə-1 mentorluq və fasilətsiz geribildirim:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Hər moduldan sonra fasiləsiz rəy, fərdi məşq tapşırıqları və inkişaf izləyici plan təqdim olunur.</p>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200"></div>
+                
+                <div className="flex items-start">
+                  <Zap className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>Maksimum çeviklik:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Onlayn, hibrid və canlı sessiya seçimləri ilə təlimi iş qrafikinə rahat uyğunlaşdırmaq imkanı.</p>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200"></div>
+                
+                <div className="flex items-start">
+                  <TrendingUp className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>Özünəinamın güclənməsi:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Praktiki rol-oyunları və real life ssenariləri üzərində işləməklə çıxış, ünsiyyət və qərarvermə bacarıqlarında hiss olunan irəliləyiş.</p>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200"></div>
+                
+                <div className="flex items-start">
+                  <BarChart className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>Ölçülə bilən nəticələr:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Ön-test və son-testlərlə bacarıq artımını kəmiyyətcə dəyərləndirən hesabatlar.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <button 
+                  onClick={() => setActiveTab('individual')}
+                  className="px-6 py-3 rounded-md font-semibold transition-all duration-200"
+                  style={{
+                    backgroundColor: '#2166FF',
+                    color: 'white',
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    letterSpacing: '0.6px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = '#1d5def';
+                    e.target.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = '#2166FF';
+                    e.target.style.transform = 'translateY(0)';
+                  }}
+                >
+                  Fərdi Təlimləri Kəşf Et
+                </button>
+              </div>
+            </div>
+
+            {/* Corporate Training */}
+            <div className="bg-white p-8" style={{
+              borderRadius: '12px',
+              boxShadow: '0 6px 18px rgba(0,0,0,0.06)'
+            }}>
+              <div className="mb-6">
+                <h4 style={{
+                  fontFamily: "'Lora', serif",
+                  fontWeight: 600,
+                  fontSize: '1.25rem',
+                  lineHeight: 1.35,
+                  color: '#1E1E1E',
+                  marginBottom: '1rem'
+                }}>
+                  Korporativ Yönümlü Təlimlər
+                </h4>
+              </div>
+              
+              <div className="space-y-6 mb-6">
+                <div className="flex items-start">
+                  <Users className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>Komanda sinerjisi və əməkdaşlıq:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Interaktiv qrup layihələri vasitəsilə kollektiv problem-həll etmə və koordinasiya bacarıqları inkişaf etdirilir.</p>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200"></div>
+                
+                <div className="flex items-start">
+                  <UserCog className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>Liderlik və idarəetmə kompetensiyaları:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Situasiya-əsaslı məşqlər, konflikt menecmenti simulyasiyaları və strateji düşüncə modulları ilə gələcək liderlər formalaşdırılır.</p>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200"></div>
+                
+                <div className="flex items-start">
+                  <Building2 className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>Şirkət hədəflərinə inteqrasiya:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Təlim məzmunu müəssisənin biznes strategiyası, KPI və korporativ dəyərləri ilə uzlaşdırılır.</p>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200"></div>
+                
+                <div className="flex items-start">
+                  <PieChart className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>ROI-yönümlü nəticə ölçümü:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Performans indikatorları, işçi məmnuniyyəti sorğuları və satış/istehsal metrikləri üzərindən təlimin biznesə təsiri izlənir.</p>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200"></div>
+                
+                <div className="flex items-start">
+                  <BookOpen className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
+                  <div>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.875rem',
+                      color: '#1E1E1E',
+                      marginBottom: '0.25rem'
+                    }}>Davamedici post-təlim dəstək:</p>
+                    <p style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '0.875rem',
+                      lineHeight: 1.5,
+                      color: '#5B5B5B'
+                    }}>Mentor sessiyaları, resurs kitabxanası və on-demand vebinarlar ilə öyrənilənlərin iş mühitində tətbiqi davamlı olaraq gücləndirilir.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <button 
+                  onClick={() => setActiveTab('corporate')}
+                  className="px-6 py-3 rounded-md font-semibold transition-all duration-200"
+                  style={{
+                    backgroundColor: '#16A34A',
+                    color: 'white',
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    letterSpacing: '0.6px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = '#15803d';
+                    e.target.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = '#16A34A';
+                    e.target.style.transform = 'translateY(0)';
+                  }}
+                >
+                  Korporativ Təlimləri Öyrən
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

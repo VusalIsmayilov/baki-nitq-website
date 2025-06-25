@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
-import { ChevronRight, ChevronDown, Target, Users, User, UserCheck, Zap, TrendingUp, BarChart, Building2, UserCog, PieChart, BookOpen, Star } from 'lucide-react';
+import { ChevronRight, ChevronDown, User, Star, ArrowUpRight } from 'lucide-react';
 import Lottie from 'lottie-react';
 import targetIconAnimation from '../../animations/targetIcon.json';
 import usersIconAnimation from '../../animations/usersIcon.json';
@@ -217,7 +217,7 @@ const HomePage = ({ setCurrentPage }) => {
           />
         </div>
         
-        <div className="container mx-auto px-4 text-left flex justify-start items-center h-full">
+        <div className="container mx-auto px-4 text-left flex justify-start items-center h-full relative">
           <div className="max-w-md">
             <h1 
               className="mb-6"
@@ -259,7 +259,74 @@ const HomePage = ({ setCurrentPage }) => {
             >
               {t('learnMore')}
             </button>
+          </div>
+          
+          {/* Bottom Left Action Buttons */}
+          <div className="absolute bottom-8 left-4 flex gap-4">
+            <button 
+              onClick={() => setCurrentPage('courses')}
+              className="flex items-center gap-2 transition-all duration-300 group"
+              style={{
+                backgroundColor: '#2166FF',
+                color: 'white',
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 600,
+                fontSize: '0.875rem',
+                letterSpacing: '0.5px',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(33, 102, 255, 0.3)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.backgroundColor = '#1d5def';
+                e.target.style.boxShadow = '0 6px 16px rgba(33, 102, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.backgroundColor = '#2166FF';
+                e.target.style.boxShadow = '0 4px 12px rgba(33, 102, 255, 0.3)';
+              }}
+            >
+              <span>Təlim tap</span>
+              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+            </button>
             
+            <button 
+              onClick={() => setCurrentPage('contact')}
+              className="flex items-center gap-2 transition-all duration-300 group"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                color: '#2166FF',
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 600,
+                fontSize: '0.875rem',
+                letterSpacing: '0.5px',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                border: '2px solid #2166FF',
+                cursor: 'pointer',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.backgroundColor = '#2166FF';
+                e.target.style.color = 'white';
+                e.target.style.boxShadow = '0 6px 16px rgba(33, 102, 255, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                e.target.style.color = '#2166FF';
+                e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+              }}
+            >
+              <span>Qrafik təyin et</span>
+              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+            </button>
           </div>
         </div>
       </section>
@@ -268,7 +335,7 @@ const HomePage = ({ setCurrentPage }) => {
       <WaveDivider />
 
       {/* Our Differences Section */}
-      <section className="py-20 relative" style={{backgroundColor: '#F9FAFC'}}>
+      <section className="py-20 relative" style={{backgroundColor: '#F7FAFF'}}>
         <div className="container mx-auto px-4">
           {/* Section Heading */}
           <div className="text-center max-w-4xl mx-auto mb-16">
@@ -449,7 +516,7 @@ const HomePage = ({ setCurrentPage }) => {
       </section>
       
       {/* Services Section */}
-      <section className="py-20" style={{backgroundColor: '#FFFFFF'}}>
+      <section className="py-20" style={{backgroundColor: '#EDF4FF'}}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 pt-8">
             <h2 
@@ -552,161 +619,12 @@ const HomePage = ({ setCurrentPage }) => {
             </div>
           </div>
           
-          {/* Training Solutions Subsection */}
-          <div className="mt-16">
-            <div className="text-center mb-12">
-              <h3 
-                className="text-gray-800 mb-4"
-                style={{
-                  fontFamily: "'Manrope', sans-serif",
-                  fontWeight: 600,
-                  fontSize: 'clamp(1.3rem, 3vw, 1.6rem)',
-                  lineHeight: 1.4,
-                  letterSpacing: '1px',
-                  fontVariant: 'small-caps',
-                  textTransform: 'uppercase'
-                }}
-              >
-                Şəxsi hədəflərdən korporativ məqsədlərə qədər uzanan təlim həllərimiz
-              </h3>
-            </div>
-            
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* Individual Training */}
-              <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-8">
-                <div className="mb-6">
-                  <h4 className="text-xl font-bold text-gray-800 mb-4">
-                    Fərdi Yönümlü Təlimlər
-                  </h4>
-                </div>
-                
-                <div className="space-y-6 mb-6">
-                  <div className="flex items-start">
-                    <Target className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">Şəxsi məqsədlərə tam uyğunlaşma:</p>
-                      <p className="text-gray-600 text-sm">Tədris planı əvvəlcədən sizin hədəflərinizi, mövcud bacarıqlarınızı və öyrənmə tərzinizi analiz edərək qurulur.</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-gray-200"></div>
-                  
-                  <div className="flex items-start">
-                    <UserCheck className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">1-nə-1 mentorluq və fasilətsiz geribildirim:</p>
-                      <p className="text-gray-600 text-sm">Hər moduldan sonra fasiləsiz rəy, fərdi məşq tapşırıqları və inkişaf izləyici plan təqdim olunur.</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-gray-200"></div>
-                  
-                  <div className="flex items-start">
-                    <Zap className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">Maksimum çeviklik:</p>
-                      <p className="text-gray-600 text-sm">Onlayn, hibrid və canlı sessiya seçimləri ilə təlimi iş qrafikinə rahat uyğunlaşdırmaq imkanı.</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-gray-200"></div>
-                  
-                  <div className="flex items-start">
-                    <TrendingUp className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">Özünəinamın güclənməsi:</p>
-                      <p className="text-gray-600 text-sm">Praktiki rol-oyunları və real life ssenariləri üzərində işləməklə çıxış, ünsiyyət və qərarvermə bacarıqlarında hiss olunan irəliləyiş.</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-gray-200"></div>
-                  
-                  <div className="flex items-start">
-                    <BarChart className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">Ölçülə bilən nəticələr:</p>
-                      <p className="text-gray-600 text-sm">Ön-test və son-testlərlə bacarıq artımını kəmiyyətcə dəyərləndirən hesabatlar.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="text-center">
-                  <button 
-                    onClick={() => setCurrentPage('courses')}
-                    className="btn-secondary px-6 py-2 text-sm"
-                  >
-                    Fərdi Təlimləri Kəşf Et
-                  </button>
-                </div>
-              </div>
-
-              {/* Corporate Training */}
-              <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-8">
-                <div className="mb-6">
-                  <h4 className="text-xl font-bold text-gray-800 mb-4">
-                    Korporativ Yönümlü Təlimlər
-                  </h4>
-                </div>
-                
-                <div className="space-y-6 mb-6">
-                  <div className="flex items-start">
-                    <Users className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">Komanda sinerjisi və əməkdaşlıq:</p>
-                      <p className="text-gray-600 text-sm">Interaktiv qrup layihələri vasitəsilə kollektiv problem-həll etmə və koordinasiya bacarıqları inkişaf etdirilir.</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-gray-200"></div>
-                  
-                  <div className="flex items-start">
-                    <UserCog className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">Liderlik və idarəetmə kompetensiyaları:</p>
-                      <p className="text-gray-600 text-sm">Situasiya-əsaslı məşqlər, konflikt menecmenti simulyasiyaları və strateji düşüncə modulları ilə gələcək liderlər formalaşdırılır.</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-gray-200"></div>
-                  
-                  <div className="flex items-start">
-                    <Building2 className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">Şirkət hədəflərinə inteqrasiya:</p>
-                      <p className="text-gray-600 text-sm">Təlim məzmunu müəssisənin biznes strategiyası, KPI və korporativ dəyərləri ilə uzlaşdırılır.</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-gray-200"></div>
-                  
-                  <div className="flex items-start">
-                    <PieChart className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">ROI-yönümlü nəticə ölçümü:</p>
-                      <p className="text-gray-600 text-sm">Performans indikatorları, işçi məmnuniyyəti sorğuları və satış/istehsal metrikləri üzərindən təlimin biznesə təsiri izlənir.</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-gray-200"></div>
-                  
-                  <div className="flex items-start">
-                    <BookOpen className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0 stroke-1" />
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm mb-1">Davamedici post-təlim dəstək:</p>
-                      <p className="text-gray-600 text-sm">Mentor sessiyaları, resurs kitabxanası və on-demand vebinarlar ilə öyrənilənlərin iş mühitində tətbiqi davamlı olaraq gücləndirilir.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="text-center">
-                  <button 
-                    onClick={() => setCurrentPage('courses')}
-                    className="btn-secondary px-6 py-2 text-sm"
-                  >
-                    Korporativ Təlimləri Öyrən
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
           
         </div>
       </section>
       
       {/* Events and Seminars Section */}
-      <section className="py-20" style={{backgroundColor: '#F4F6FA'}}>
+      <section className="py-20" style={{backgroundColor: '#E6F0FF'}}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 pt-8">
             <h2 
@@ -1183,155 +1101,6 @@ const HomePage = ({ setCurrentPage }) => {
         </div>
       </section>
 
-      {/* Career Development CTA Section */}
-      <section style={{backgroundColor: '#F5F7FA', paddingTop: '6rem', paddingBottom: '5rem', marginBottom: '4rem'}}>
-        <div className="container mx-auto px-4">
-          <h2 
-            className="mb-12"
-            style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 700,
-              fontSize: 'clamp(2.25rem, 4vw, 3rem)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
-              color: '#1E1E1E',
-              textAlign: 'center',
-              maxWidth: '24ch',
-              margin: '0 auto 3rem auto'
-            }}
-          >
-            Karyeranızı inkişaf etdirmək üçün təlimə və ya konsultasiyaya hazırsınız?
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Training Card */}
-            <div 
-              className="bg-white flex flex-col justify-between hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
-              style={{
-                borderRadius: '12px',
-                boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
-                padding: '3.5rem 3rem',
-                transitionTimingFunction: 'cubic-bezier(.25,.8,.42,1)'
-              }}
-            >
-              <div>
-                <h3 
-                  className="mb-6"
-                  style={{
-                    fontFamily: "'Lora', serif",
-                    fontWeight: 600,
-                    fontSize: '1.5rem',
-                    lineHeight: 1.3,
-                    color: '#1E1E1E'
-                  }}
-                >
-                  Sizə uyğun təlimi tapın
-                </h3>
-                <p 
-                  className="mb-8"
-                  style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: 400,
-                    fontSize: '0.95rem',
-                    lineHeight: 1.6,
-                    color: '#5B5B5B'
-                  }}
-                >
-                  Ehtiyaclarınıza və karyera hədəflərinizə uyğun təlimləri seçin
-                </p>
-              </div>
-              <button 
-                onClick={() => setCurrentPage('courses')}
-                className="btn-primary transition-all duration-300"
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 600,
-                  fontSize: '0.875rem',
-                  textTransform: 'none',
-                  letterSpacing: '0.5px',
-                  minHeight: '48px',
-                  borderRadius: '4px',
-                  alignSelf: 'flex-start',
-                  padding: '0 1rem'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.backgroundColor = '#1d5def';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.backgroundColor = '#2166FF';
-                }}
-              >
-                Təlim tap
-              </button>
-            </div>
-
-            {/* Consultation Card */}
-            <div 
-              className="bg-white flex flex-col justify-between hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
-              style={{
-                borderRadius: '12px',
-                boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
-                padding: '3.5rem 3rem',
-                transitionTimingFunction: 'cubic-bezier(.25,.8,.42,1)'
-              }}
-            >
-              <div>
-                <h3 
-                  className="mb-6"
-                  style={{
-                    fontFamily: "'Lora', serif",
-                    fontWeight: 600,
-                    fontSize: '1.5rem',
-                    lineHeight: 1.3,
-                    color: '#1E1E1E'
-                  }}
-                >
-                  Peşəkar konsultasiya sifariş edin
-                </h3>
-                <p 
-                  className="mb-8"
-                  style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: 400,
-                    fontSize: '0.95rem',
-                    lineHeight: 1.6,
-                    color: '#5B5B5B'
-                  }}
-                >
-                  Dəyərli tövsiyələr və uğura aparan fərdi yol xəritəsi əldə edin
-                </p>
-              </div>
-              <button 
-                onClick={() => setCurrentPage('contact')}
-                className="btn-primary transition-all duration-300"
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 600,
-                  fontSize: '0.875rem',
-                  textTransform: 'none',
-                  letterSpacing: '0.5px',
-                  minHeight: '48px',
-                  borderRadius: '4px',
-                  alignSelf: 'flex-start',
-                  padding: '0 1rem'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.backgroundColor = '#1d5def';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.backgroundColor = '#2166FF';
-                }}
-              >
-                Qrafik təyin et
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Client / Partner Logos Strip */}
       <section className="py-16 bg-gray-50 border-t border-gray-200">
