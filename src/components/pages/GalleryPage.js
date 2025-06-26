@@ -19,6 +19,8 @@ const GalleryPage = ({ setCurrentPage }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [visibleEventsCount, setVisibleEventsCount] = useState(9);
   const [visibleArticlesCount, setVisibleArticlesCount] = useState(9);
+  const [visibleBlogCount, setVisibleBlogCount] = useState(9);
+  const [visibleDownloadsCount, setVisibleDownloadsCount] = useState(9);
   
   // Sample events data
   const sampleEvents = [
