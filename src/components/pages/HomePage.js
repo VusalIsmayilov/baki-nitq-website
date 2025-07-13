@@ -25,7 +25,7 @@ const WaveDivider = () => (
 
 const HomePage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
-  const { siteContent, testimonials } = useContent();
+  const { siteContent, testimonials, news } = useContent();
   const [activeService, setActiveService] = useState('speechCommunicationDev');
   const [visibleCards, setVisibleCards] = useState([]);
   const [contentKey, setContentKey] = useState(0);
@@ -93,6 +93,9 @@ const HomePage = ({ setCurrentPage }) => {
       slug: 'speech-expression'
     }
   ];
+
+  // Get published news limited to 3 articles for blog section
+  const publishedNews = news.filter(item => item.published).slice(0, 3);
 
   // Load Google Fonts
   useEffect(() => {
@@ -455,24 +458,25 @@ const HomePage = ({ setCurrentPage }) => {
             gap: 24px !important;
           }
         }
+        
+        /* Override hero section backgrounds */
+        .hero-section {
+          background: white !important;
+          background-image: none !important;
+        }
+        
+        .hero-section::before {
+          display: none !important;
+        }
+        
+        .hero-section::after {
+          display: none !important;
+        }
       `}</style>
       {/* Hero Section */}
-      <section className="hero-section">
-        {/* Animated Background */}
-        <div className="hero-background-animation"></div>
-        
-        {/* Dust Particles Overlay */}
-        <div className="dust-particles-overlay">
-          <Lottie 
-            animationData={dustParticlesAnimation} 
-            loop={true}
-            autoplay={true}
-            style={{ width: '100%', height: '100%' }}
-          />
-        </div>
-        
+      <section className="hero-section" style={{ backgroundColor: 'white', color: '#1E1E1E' }}>
         <div className="container mx-auto px-4 text-left flex justify-start items-center h-full relative">
-          <div className="max-w-md">
+          <div className="max-w-2xl">
             <h1 
               className="mb-6"
               style={{
@@ -480,10 +484,17 @@ const HomePage = ({ setCurrentPage }) => {
                 fontWeight: 700,
                 fontSize: 'clamp(2.6rem, 6vw, 4.2rem)',
                 lineHeight: 1.1,
-                textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                color: '#1E1E1E'
               }}
             >
-              {siteContent.homeHero?.[language] || t('welcome')}
+              {language === 'az' ? (
+                <>
+                  Bakı Nitq Mərkəzinə<br />
+                  Xoş Gəlmisiniz
+                </>
+              ) : (
+                siteContent.homeHero?.[language] || t('welcome')
+              )}
             </h1>
             <p 
               className="mb-8"
@@ -498,25 +509,9 @@ const HomePage = ({ setCurrentPage }) => {
             >
               {siteContent.homeDesc?.[language] || t('welcomeDesc')}
             </p>
-            <button 
-              onClick={() => setCurrentPage('about')}
-              className="btn-primary hero-cta-button px-10 py-4 mb-8"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 600,
-                fontSize: '1rem',
-                lineHeight: 1.4,
-                letterSpacing: '0.6px',
-                textTransform: 'uppercase',
-                minHeight: '52px'
-              }}
-            >
-              {t('learnMore')}
-            </button>
-          </div>
-          
-          {/* Bottom Left Action Buttons */}
-          <div className="absolute bottom-8 left-4 flex gap-4">
+            
+            {/* Action Buttons Below Text */}
+            <div className="flex gap-4 flex-wrap">
             <button 
               onClick={() => setCurrentPage('courses')}
               className="flex items-center gap-2 transition-all duration-300 group"
@@ -581,15 +576,13 @@ const HomePage = ({ setCurrentPage }) => {
               <span>Qrafik təyin et</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
             </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Wave Divider */}
-      <WaveDivider />
-
       {/* Our Differences Section */}
-      <section className="relative" style={{backgroundColor: '#FFFFFF', paddingTop: '96px', paddingBottom: '80px'}}>
+      <section className="relative" style={{backgroundColor: '#FFFFFF', paddingTop: '48px', paddingBottom: '80px'}}>
         <div className="container mx-auto px-4">
           {/* Section Heading */}
           <div className="text-left max-w-4xl mb-16">
@@ -1297,96 +1290,272 @@ const HomePage = ({ setCurrentPage }) => {
             ))}
           </div>
           
-          {/* Course Grid - Responsive Layout */}
+          {/* Training Cards - Separated by Type */}
           <div className="mt-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
-              {trainingCards
-                .sort((a, b) => a.type === 'individual' ? -1 : 1)
-                .map((course) => (
-                <div
-                  key={course.id}
-                  onClick={() => window.location.href = `/courses/${course.slug}`}
-                  className="course-card group relative block cursor-pointer"
-                  style={{
-                    aspectRatio: '1',
-                    borderRadius: '12px',
-                    boxShadow: '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF',
-                    overflow: 'hidden',
-                    transform: 'translateY(0px)',
-                    transition: 'all 300ms cubic-bezier(0.25, 0.8, 0.42, 1)',
-                    backgroundColor: '#E7E7EE',
-                    backgroundImage: `url(${course.image})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.10), inset 0 0 0 3px #2166FF';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0px)';
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF';
-                  }}
-                  aria-label={`${course.title} - ${course.excerpt}`}
-                  role="button"
-                  tabIndex={0}
-                >
-                  {/* Overlay Info Bar with hover opacity change */}
-                  <div 
-                    className="absolute bottom-0 left-0 w-full flex flex-col justify-between px-4 py-3 group-hover:bg-opacity-92 transition-all duration-300"
-                    style={{
-                      backgroundColor: '#204BFF', // Darker blue for better contrast
-                      height: '30%',
-                      minHeight: '80px',
-                      borderTopLeftRadius: '4px',
-                      borderTopRightRadius: '4px'
+            {/* Individual Trainings */}
+            <div className="mb-12">
+              <h3 
+                className="mb-6"
+                style={{
+                  fontFamily: "'Lora', serif",
+                  fontWeight: 600,
+                  fontSize: '1.5rem',
+                  lineHeight: 1.3,
+                  color: '#1E1E1E'
+                }}
+              >
+                Fərdi Təlimlər
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
+                {trainingCards
+                  .filter(course => course.type === 'individual')
+                  .slice(0, 3)
+                  .map((course) => (
+                  <div
+                    key={course.id}
+                    onClick={() => {
+                      setCurrentPage('courses');
+                      setTimeout(() => {
+                        const individualSection = document.getElementById('individual-trainings');
+                        if (individualSection) {
+                          individualSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }, 200);
                     }}
+                    className="course-card group relative block cursor-pointer"
+                    style={{
+                      aspectRatio: '1',
+                      borderRadius: '12px',
+                      boxShadow: '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF',
+                      overflow: 'hidden',
+                      transform: 'translateY(0px)',
+                      transition: 'all 300ms cubic-bezier(0.25, 0.8, 0.42, 1)',
+                      backgroundColor: '#E7E7EE',
+                      backgroundImage: `url(${course.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.10), inset 0 0 0 3px #2166FF';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0px)';
+                      e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF';
+                    }}
+                    aria-label={`${course.title} - ${course.excerpt}`}
+                    role="button"
+                    tabIndex={0}
                   >
-                    <div>
-                      {/* Course Title */}
-                      <h4 
-                        className="mb-2"
-                        style={{
-                          fontFamily: "'Lora', serif",
-                          fontWeight: 600,
-                          fontSize: '1.125rem',
-                          lineHeight: 1.3,
-                          color: '#FFFFFF',
-                          margin: '0 0 8px 0'
-                        }}
-                      >
-                        {course.title}
-                      </h4>
-                      
-                      {/* Course Excerpt */}
-                      <p 
-                        className="line-clamp-2"
-                        style={{
-                          fontFamily: "'Poppins', sans-serif",
-                          fontWeight: 400,
-                          fontSize: '14px',
-                          lineHeight: 1.4,
-                          color: 'rgba(255, 255, 255, 0.9)',
-                          margin: '0',
-                          overflow: 'hidden',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical'
-                        }}
-                      >
-                        {course.excerpt}
-                      </p>
-                    </div>
-                    
-                    {/* Hover Arrow - appears on hover */}
-                    <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <ArrowRight 
-                        className="w-4 h-4 text-white transform translate-x-1 group-hover:translate-x-0 transition-transform duration-200" 
-                      />
+                    <div 
+                      className="absolute bottom-0 left-0 w-full flex flex-col justify-between px-4 py-3 group-hover:bg-opacity-92 transition-all duration-300"
+                      style={{
+                        backgroundColor: '#204BFF',
+                        height: '30%',
+                        minHeight: '80px',
+                        borderTopLeftRadius: '4px',
+                        borderTopRightRadius: '4px'
+                      }}
+                    >
+                      <div>
+                        <h4 
+                          className="mb-2"
+                          style={{
+                            fontFamily: "'Lora', serif",
+                            fontWeight: 600,
+                            fontSize: '1.125rem',
+                            lineHeight: 1.3,
+                            color: '#FFFFFF',
+                            margin: '0 0 8px 0'
+                          }}
+                        >
+                          {course.title}
+                        </h4>
+                        <p 
+                          className="line-clamp-2"
+                          style={{
+                            fontFamily: "'Poppins', sans-serif",
+                            fontWeight: 400,
+                            fontSize: '14px',
+                            lineHeight: 1.4,
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            margin: '0',
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical'
+                          }}
+                        >
+                          {course.excerpt}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <ArrowRight 
+                          className="w-4 h-4 text-white transform translate-x-1 group-hover:translate-x-0 transition-transform duration-200" 
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              {/* More Individual Trainings Link */}
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => {
+                    setCurrentPage('courses');
+                    setTimeout(() => {
+                      const individualSection = document.getElementById('individual-trainings');
+                      if (individualSection) {
+                        individualSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }, 200);
+                  }}
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 600,
+                    textDecoration: 'none'
+                  }}
+                >
+                  Daha çox fərdi təlim
+                  <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Corporate Trainings */}
+            <div className="mb-12">
+              <h3 
+                className="mb-6"
+                style={{
+                  fontFamily: "'Lora', serif",
+                  fontWeight: 600,
+                  fontSize: '1.5rem',
+                  lineHeight: 1.3,
+                  color: '#1E1E1E'
+                }}
+              >
+                Korporativ Təlimlər
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
+                {trainingCards
+                  .filter(course => course.type === 'corporate')
+                  .slice(0, 3)
+                  .map((course) => (
+                  <div
+                    key={course.id}
+                    onClick={() => {
+                      setCurrentPage('courses');
+                      setTimeout(() => {
+                        const corporateSection = document.getElementById('corporate-trainings');
+                        if (corporateSection) {
+                          corporateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }, 200);
+                    }}
+                    className="course-card group relative block cursor-pointer"
+                    style={{
+                      aspectRatio: '1',
+                      borderRadius: '12px',
+                      boxShadow: '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF',
+                      overflow: 'hidden',
+                      transform: 'translateY(0px)',
+                      transition: 'all 300ms cubic-bezier(0.25, 0.8, 0.42, 1)',
+                      backgroundColor: '#E7E7EE',
+                      backgroundImage: `url(${course.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.10), inset 0 0 0 3px #2166FF';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0px)';
+                      e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF';
+                    }}
+                    aria-label={`${course.title} - ${course.excerpt}`}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div 
+                      className="absolute bottom-0 left-0 w-full flex flex-col justify-between px-4 py-3 group-hover:bg-opacity-92 transition-all duration-300"
+                      style={{
+                        backgroundColor: '#204BFF',
+                        height: '30%',
+                        minHeight: '80px',
+                        borderTopLeftRadius: '4px',
+                        borderTopRightRadius: '4px'
+                      }}
+                    >
+                      <div>
+                        <h4 
+                          className="mb-2"
+                          style={{
+                            fontFamily: "'Lora', serif",
+                            fontWeight: 600,
+                            fontSize: '1.125rem',
+                            lineHeight: 1.3,
+                            color: '#FFFFFF',
+                            margin: '0 0 8px 0'
+                          }}
+                        >
+                          {course.title}
+                        </h4>
+                        <p 
+                          className="line-clamp-2"
+                          style={{
+                            fontFamily: "'Poppins', sans-serif",
+                            fontWeight: 400,
+                            fontSize: '14px',
+                            lineHeight: 1.4,
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            margin: '0',
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical'
+                          }}
+                        >
+                          {course.excerpt}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <ArrowRight 
+                          className="w-4 h-4 text-white transform translate-x-1 group-hover:translate-x-0 transition-transform duration-200" 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* More Corporate Trainings Link */}
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => {
+                    setCurrentPage('courses');
+                    setTimeout(() => {
+                      const corporateSection = document.getElementById('corporate-trainings');
+                      if (corporateSection) {
+                        corporateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }, 200);
+                  }}
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 600,
+                    textDecoration: 'none'
+                  }}
+                >
+                  Daha çox korporativ təlim
+                  <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
           
@@ -1404,8 +1573,9 @@ const HomePage = ({ setCurrentPage }) => {
                 style={{
                   fontFamily: "'Lora', serif",
                   fontWeight: 700,
-                  fontSize: 'clamp(32px, 4vw, 36px)',
-                  lineHeight: 1.2,
+                  fontSize: 'clamp(2rem, 4vw, 3rem)',
+                  lineHeight: 1.15,
+                  letterSpacing: '-0.02em',
                   color: '#1E293B',
                   margin: '0 0 8px 0'
                 }}
@@ -1566,7 +1736,7 @@ const HomePage = ({ setCurrentPage }) => {
                 margin: '0 0 1rem 0'
               }}
             >
-              Tədbir və seminarlarımız
+              Tədbirlərımız
             </h2>
           </div>
           
@@ -1773,139 +1943,24 @@ const HomePage = ({ setCurrentPage }) => {
               </div>
             </div>
 
-            {/* Event 4 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 relative overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-              {/* Early-bird ribbon */}
-              {isEarlyBird(eventData[3].date) && (
-                <div className="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full transform rotate-12 shadow-lg">
-                  Early Bird
-                </div>
-              )}
-              
-              <div className="flex items-start mb-6">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded">Konferans</span>
-                    <span className="text-sm text-gray-500">15 Fevral 2025</span>
-                  </div>
-                  <h3 className="text-gray-800 mb-3" style={{
-                    fontFamily: "'Lora', serif",
-                    fontWeight: 600,
-                    fontSize: '1.25rem',
-                    lineHeight: 1.35
-                  }}>
-                    "Gələcəyin Ünsiyyət Texnologiyaları" Konferansı
-                  </h3>
-                </div>
-              </div>
-              
-              <p className="text-gray-600 mb-4" style={{
+          </div>
+          
+          {/* More Activities Link */}
+          <div className="flex justify-center mt-8">
+            <a 
+              href="/resources-activities?tab=activities" 
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
+              style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontWeight: 400,
-                fontSize: '0.9rem',
-                lineHeight: 1.55
-              }}>
-                AI və rəqəmsal texnologiyaların ünsiyyət sahəsinə təsiri mövzusunda beynəlxalq ekspertlərlə konferans. Networking və panel müzakirələr daxil olmaqla.
-              </p>
-              
-              {/* Seats availability */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between text-sm mb-2">
-                  <span className="text-gray-600">Qalan yerlər</span>
-                  <span className="font-semibold text-gray-800">
-                    {eventData[3].totalSeats - eventData[3].bookedSeats} / {eventData[3].totalSeats} yer qalıb
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(eventData[3].bookedSeats / eventData[3].totalSeats) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm text-gray-500">
-                  <span className="mr-4">09:00-17:00</span>
-                  <span>Online</span>
-                </div>
-                <button className="btn-primary px-4 py-2" style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 600,
-                  fontSize: '0.9rem',
-                  lineHeight: 1.4
-                }}>
-                  Qeydiyyat
-                </button>
-              </div>
-            </div>
-
-            {/* Event 5 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 relative overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-              {/* Early-bird ribbon */}
-              {isEarlyBird(eventData[4].date) && (
-                <div className="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full transform rotate-12 shadow-lg">
-                  Early Bird
-                </div>
-              )}
-              
-              <div className="flex items-start mb-6">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded">İntensiv</span>
-                    <span className="text-sm text-gray-500">28 Yanvar 2025</span>
-                  </div>
-                  <h3 className="text-gray-800 mb-3" style={{
-                    fontFamily: "'Lora', serif",
-                    fontWeight: 600,
-                    fontSize: '1.25rem',
-                    lineHeight: 1.35
-                  }}>
-                    "Biznes Nitqi və Neqosasiya" İntensiv Kursu
-                  </h3>
-                </div>
-              </div>
-              
-              <p className="text-gray-600 mb-4" style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 400,
-                fontSize: '0.9rem',
-                lineHeight: 1.55
-              }}>
-                Biznes mühitində effektiv ünsiyyət və neqosasiya bacarıqları üzrə intensiv təlim. Rol oyunları, simulyasiya və real case study-lər.
-              </p>
-              
-              {/* Seats availability */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between text-sm mb-2">
-                  <span className="text-gray-600">Qalan yerlər</span>
-                  <span className="font-semibold text-gray-800">
-                    {eventData[4].totalSeats - eventData[4].bookedSeats} / {eventData[4].totalSeats} yer qalıb
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(eventData[4].bookedSeats / eventData[4].totalSeats) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm text-gray-500">
-                  <span className="mr-4">13:00-17:00</span>
-                  <span>Mərkəz</span>
-                </div>
-                <button className="btn-primary px-4 py-2" style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 600,
-                  fontSize: '0.9rem',
-                  lineHeight: 1.4
-                }}>
-                  Qeydiyyat
-                </button>
-              </div>
-            </div>
+                fontWeight: 600,
+                textDecoration: 'none'
+              }}
+            >
+              Bütün tədbirləri görün
+              <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </a>
           </div>
         </div>
       </section>
@@ -2413,6 +2468,24 @@ const HomePage = ({ setCurrentPage }) => {
                 </div>
               </div>
             </div>
+          </div>
+          
+          {/* More Blog Articles Link */}
+          <div className="flex justify-center mt-8">
+            <a 
+              href="/resources-activities?tab=articles" 
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 600,
+                textDecoration: 'none'
+              }}
+            >
+              Daha çox məqalələr
+              <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </a>
           </div>
         </div>
       </section>

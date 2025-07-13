@@ -895,7 +895,7 @@ const CoursesPage = ({ setCurrentPage }) => {
         <div className="container mx-auto px-4">
         
         {/* Individual Trainings Section */}
-        <section ref={individualRef} className="mb-16">
+        <section ref={individualRef} id="individual-trainings" className="mb-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-4" style={{
               fontFamily: "'Lora', serif",
@@ -950,7 +950,7 @@ const CoursesPage = ({ setCurrentPage }) => {
         </section>
 
         {/* Corporate Trainings Section */}
-        <section ref={corporateRef} className="mb-16">
+        <section ref={corporateRef} id="corporate-trainings" className="mb-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-4" style={{
               fontFamily: "'Lora', serif",

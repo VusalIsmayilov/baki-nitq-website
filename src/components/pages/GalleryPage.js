@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useContent } from '../../context/ContentContext';
 import { Calendar, MapPin, Filter, ChevronDown, Search, Download, Clock, FileText, X } from 'lucide-react';
 import ConversionCTA from '../ConversionCTA';
 
 const GalleryPage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
+  const { activities, news } = useContent();
   const [selectedImage, setSelectedImage] = useState(null);
   const [activeTab, setActiveTab] = useState('events');
   const [isTabsSticky, setIsTabsSticky] = useState(false);
@@ -22,8 +24,8 @@ const GalleryPage = ({ setCurrentPage }) => {
   const [visibleBlogCount, setVisibleBlogCount] = useState(9);
   const [visibleDownloadsCount, setVisibleDownloadsCount] = useState(9);
   
-  // Sample events data
-  const sampleEvents = [
+  // Remove hardcoded sample events - using activities from ContentContext
+  const removedSampleEvents = [
     {
       id: 1,
       category: language === 'az' ? 'Seminar' : language === 'en' ? 'Seminar' : 'Семинар',
@@ -288,8 +290,19 @@ const GalleryPage = ({ setCurrentPage }) => {
     setSelectedImage(null);
   };
 
-  // Filter articles based on search and tags
-  const filteredArticles = sampleArticles.filter(article => {
+  // Convert news to article format and filter based on search and tags
+  const convertedArticles = news.filter(item => item.published).map(item => ({
+    id: item.id,
+    title: item.title[language] || item.title.az,
+    type: 'article',
+    coverImage: item.imageUrl,
+    tags: [item.category[language]?.toLowerCase() || item.category.az?.toLowerCase() || 'article'],
+    readTime: language === 'az' ? '5 dəq oxu' : language === 'en' ? '5 min read' : '5 мин чтения',
+    date: item.date,
+    excerpt: item.excerpt[language] || item.excerpt.az
+  }));
+
+  const filteredArticles = convertedArticles.filter(article => {
     const matchesSearch = article.title.toLowerCase().includes(articleSearch.toLowerCase()) ||
                          article.excerpt.toLowerCase().includes(articleSearch.toLowerCase());
     
@@ -389,8 +402,22 @@ const GalleryPage = ({ setCurrentPage }) => {
     };
   };
 
-  // Filter events based on selected filters
-  const filteredEvents = sampleEvents.filter(event => {
+  // Convert activities to events format and filter based on selected filters
+  const convertedEvents = activities.filter(activity => activity.active).map(activity => ({
+    id: activity.id,
+    category: activity.category,
+    title: activity.title[language] || activity.title.az,
+    description: activity.description[language] || activity.description.az,
+    date: activity.date,
+    time: activity.time,
+    format: 'offline', // Default format, could be enhanced later
+    topic: activity.category,
+    spotsTotal: 30, // Default values, could be enhanced later
+    spotsLeft: 15,
+    categoryColor: '#2166FF'
+  }));
+
+  const filteredEvents = convertedEvents.filter(event => {
     // Date range filter
     if (eventFilters.dateRange) {
       const eventDate = new Date(event.date);

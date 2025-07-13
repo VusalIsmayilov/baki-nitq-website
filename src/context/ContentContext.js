@@ -388,6 +388,81 @@ export const ContentProvider = ({ children }) => {
     }
   ]);
 
+  const [activities, setActivities] = useState([
+    {
+      id: 1,
+      title: {
+        az: 'Effektiv Nitq Texnikaları Seminarı',
+        en: 'Effective Speech Techniques Seminar',
+        ru: 'Семинар по эффективным техникам речи'
+      },
+      description: {
+        az: 'Peşəkar nitq bacarıqlarınızı inkişaf etdirmək üçün praktiki seminar',
+        en: 'Practical seminar to develop your professional speech skills',
+        ru: 'Практический семинар для развития профессиональных навыков речи'
+      },
+      location: {
+        az: 'Bakı Nitq Mərkəzi',
+        en: 'Baku Speech Center',
+        ru: 'Центр Речи Баку'
+      },
+      date: '2024-03-15',
+      time: '10:00',
+      category: 'seminar',
+      image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=600&fit=crop',
+      active: true,
+      showOnHomepage: true
+    },
+    {
+      id: 2,
+      title: {
+        az: 'Liderlik və Ünsiyyət Təlimi',
+        en: 'Leadership and Communication Training',
+        ru: 'Тренинг по лидерству и коммуникации'
+      },
+      description: {
+        az: 'Liderlik bacarıqları və effektiv ünsiyyət texnikalarını öyrənin',
+        en: 'Learn leadership skills and effective communication techniques',
+        ru: 'Изучайте навыки лидерства и эффективные техники общения'
+      },
+      location: {
+        az: 'Onlayn',
+        en: 'Online',
+        ru: 'Онлайн'
+      },
+      date: '2024-03-20',
+      time: '14:00',
+      category: 'training',
+      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop',
+      active: true,
+      showOnHomepage: true
+    },
+    {
+      id: 3,
+      title: {
+        az: 'Özgüvən Artırma Workshop-u',
+        en: 'Confidence Building Workshop',
+        ru: 'Воркшоп по повышению уверенности'
+      },
+      description: {
+        az: 'Özgüvəninizi artırmaq və public speaking qorxusunu aradan qaldırmaq',
+        en: 'Boost your confidence and overcome public speaking anxiety',
+        ru: 'Повысьте уверенность и преодолейте страх публичных выступлений'
+      },
+      location: {
+        az: 'Bakı Nitq Mərkəzi',
+        en: 'Baku Speech Center',
+        ru: 'Центр Речи Баку'
+      },
+      date: '2024-03-25',
+      time: '16:00',
+      category: 'workshop',
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
+      active: true,
+      showOnHomepage: true
+    }
+  ]);
+
   const [teamMembers, setTeamMembers] = useState([
     {
       id: 1,
@@ -705,6 +780,27 @@ export const ContentProvider = ({ children }) => {
     return teamMembers.filter(member => member.active);
   };
 
+  // Activity Management Functions
+  const addActivity = (activityData) => {
+    const newActivity = {
+      id: activities.length + 1,
+      ...activityData,
+      active: true
+    };
+    setActivities(prev => [...prev, newActivity]);
+    return newActivity;
+  };
+
+  const updateActivity = (activityId, activityData) => {
+    setActivities(prev => prev.map(activity => 
+      activity.id === activityId ? { ...activity, ...activityData } : activity
+    ));
+  };
+
+  const deleteActivity = (activityId) => {
+    setActivities(prev => prev.filter(activity => activity.id !== activityId));
+  };
+
   // Analytics Functions
   const updateStats = (newStats) => {
     setSiteStats(prev => ({ ...prev, ...newStats }));
@@ -717,6 +813,7 @@ export const ContentProvider = ({ children }) => {
       mediaLibrary,
       siteStats,
       courses,
+      activities,
       testimonials,
       news,
       teamMembers,
@@ -765,6 +862,11 @@ export const ContentProvider = ({ children }) => {
       updateTeamMember,
       deleteTeamMember,
       getActiveTeamMembers,
+      
+      // Activity Management
+      addActivity,
+      updateActivity,
+      deleteActivity,
       
       // Analytics
       updateStats,
