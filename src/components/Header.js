@@ -101,7 +101,12 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
             {navigation.map(({ key, icon: Icon }) => (
               <button
                 key={key}
-                onClick={() => setCurrentPage(key)}
+                onClick={() => {
+                  setCurrentPage(key);
+                  setTimeout(() => {
+                    window.scrollTo(0, 0);
+                  }, 100);
+                }}
                 className={`flex items-center space-x-1 px-3 py-2 rounded-md transition-colors whitespace-nowrap ${
                   currentPage === key 
                     ? (key === 'contact' ? 'bg-blue-800 text-white' : 'bg-blue-100 text-blue-900')
@@ -176,6 +181,9 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
                 onClick={() => {
                   setCurrentPage(key);
                   setIsMenuOpen(false);
+                  setTimeout(() => {
+                    window.scrollTo(0, 0);
+                  }, 100);
                 }}
                 className={`flex items-center space-x-2 w-full px-3 py-2 rounded-md transition-colors ${
                   currentPage === key 

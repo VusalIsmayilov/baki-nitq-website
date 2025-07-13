@@ -313,7 +313,7 @@ const CoursesPage = ({ setCurrentPage }) => {
   return (
     <div>
       {/* Hero Banner */}
-      <section style={{backgroundColor: '#F5F7FA', paddingTop: '4rem', paddingBottom: '4rem'}}>
+      <section style={{backgroundColor: '#FFFFFF', paddingTop: '4rem', paddingBottom: '4rem'}}>
         <div className="container mx-auto px-4 text-center">
           <h1 className="mb-6" style={{
             fontFamily: "'Lora', serif",
@@ -370,7 +370,7 @@ const CoursesPage = ({ setCurrentPage }) => {
       </section>
 
       {/* Training Solutions Subsection */}
-      <section className="py-16" style={{backgroundColor: '#F5F7FA'}}>
+      <section className="py-16" style={{backgroundColor: '#FFFFFF'}}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h3 
@@ -1005,7 +1005,7 @@ const CoursesPage = ({ setCurrentPage }) => {
         </section>
 
         {/* Contact CTA Section */}
-        <section style={{backgroundColor: '#F5F7FA', paddingTop: '6rem', paddingBottom: '5rem', marginBottom: '4rem'}}>
+        <section style={{backgroundColor: '#FFFFFF', paddingTop: '6rem', paddingBottom: '5rem', marginBottom: '4rem'}}>
           <div className="container mx-auto px-4">
             <ConversionCTA setCurrentPage={setCurrentPage} />
           </div>

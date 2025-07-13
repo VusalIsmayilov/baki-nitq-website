@@ -553,7 +553,7 @@ const GalleryPage = ({ setCurrentPage }) => {
       />
       
       {/* Hero/Intro Band */}
-      <section style={{backgroundColor: '#F5F7FA', paddingTop: '96px', paddingBottom: '80px'}}>
+      <section style={{backgroundColor: '#FFFFFF', paddingTop: '96px', paddingBottom: '80px'}}>
         <div className="container mx-auto px-4 text-center">
           <h1 className="mb-6" style={{
             fontFamily: "'Lora', serif",

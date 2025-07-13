@@ -35,7 +35,7 @@ const AboutPage = ({ setCurrentPage }) => {
   };
   
   return (
-    <div className="about-section" style={{backgroundColor: '#F9FAFB'}}>
+    <div className="about-section" style={{backgroundColor: '#FFFFFF'}}>
       {/* Combined Hero and Main Content Section */}
       <section className="about-intro" style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '2rem', paddingBottom: '160px', minHeight: '85vh', display: 'flex', alignItems: 'center'}}>
         <div className="container mx-auto px-4">
@@ -133,7 +133,7 @@ const AboutPage = ({ setCurrentPage }) => {
       </section>
 
       {/* Our Trainers Section */}
-      <section style={{backgroundColor: '#F5F7FA', position: 'relative', paddingTop: '6rem', paddingBottom: '5rem'}}>
+      <section style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '6rem', paddingBottom: '5rem'}}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="w-20 h-20 flex items-center justify-center mb-6 mx-auto">
@@ -385,7 +385,7 @@ const AboutPage = ({ setCurrentPage }) => {
       </section>
 
       {/* Client / Partner Logos Strip */}
-      <section className="pt-16 bg-gray-50 border-t border-gray-200">
+      <section className="pt-16 bg-white border-t border-gray-200">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8 pt-4">
             <h3 
