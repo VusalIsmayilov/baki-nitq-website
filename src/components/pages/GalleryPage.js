@@ -588,7 +588,7 @@ const GalleryPage = ({ setCurrentPage }) => {
               }`}
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '0.95rem',
+                fontSize: '1rem',
                 fontWeight: 600
               }}
             >
@@ -614,7 +614,7 @@ const GalleryPage = ({ setCurrentPage }) => {
               }`}
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '0.95rem',
+                fontSize: '1rem',
                 fontWeight: 600
               }}
             >
@@ -664,7 +664,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:border-transparent"
                       style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.95rem',
+                        fontSize: '1rem',
                         minWidth: '140px'
                       }}
                       onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(33, 102, 255, 0.2)'}
@@ -686,7 +686,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:border-transparent"
                       style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.95rem',
+                        fontSize: '1rem',
                         minWidth: '140px'
                       }}
                       onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(33, 102, 255, 0.2)'}
@@ -703,34 +703,34 @@ const GalleryPage = ({ setCurrentPage }) => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setEventFilters(prev => ({ ...prev, topic: prev.topic === 'communication' ? '' : 'communication' }))}
-                      className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-3 py-2 rounded-full font-medium transition-all duration-200 ${
                         eventFilters.topic === 'communication'
                           ? 'bg-blue-100 text-blue-700 border border-blue-200'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
-                      style={{ fontFamily: "'Poppins', sans-serif" }}
+                      style={{ fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem' }}
                     >
                       {t('communication')}
                     </button>
                     <button
                       onClick={() => setEventFilters(prev => ({ ...prev, topic: prev.topic === 'leadership' ? '' : 'leadership' }))}
-                      className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-3 py-2 rounded-full font-medium transition-all duration-200 ${
                         eventFilters.topic === 'leadership'
                           ? 'bg-blue-100 text-blue-700 border border-blue-200'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
-                      style={{ fontFamily: "'Poppins', sans-serif" }}
+                      style={{ fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem' }}
                     >
                       {t('leadership')}
                     </button>
                     <button
                       onClick={() => setEventFilters(prev => ({ ...prev, topic: prev.topic === 'speech' ? '' : 'speech' }))}
-                      className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-3 py-2 rounded-full font-medium transition-all duration-200 ${
                         eventFilters.topic === 'speech'
                           ? 'bg-blue-100 text-blue-700 border border-blue-200'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
-                      style={{ fontFamily: "'Poppins', sans-serif" }}
+                      style={{ fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem' }}
                     >
                       {t('speech')}
                     </button>
@@ -770,14 +770,19 @@ const GalleryPage = ({ setCurrentPage }) => {
                     style={{
                       fontFamily: "'Lora', serif",
                       fontWeight: 600,
-                      fontSize: '1.25rem',
+                      fontSize: '1.5rem',
                       lineHeight: 1.35,
                       color: '#374151'
                     }}
                   >
                     {language === 'az' ? 'Tədbir tapılmadı' : language === 'en' ? 'No Events Found' : 'События не найдены'}
                   </h3>
-                  <p className="text-gray-500">
+                  <p className="text-gray-500" style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 400,
+                    fontSize: '1rem',
+                    lineHeight: 1.6
+                  }}>
                     {language === 'az' ? 'Seçilmiş filtrlərə uyğun tədbir tapılmadı' : language === 'en' ? 'No events found matching your filters' : 'События не найдены по выбранным фильтрам'}
                   </p>
                 </div>
@@ -811,11 +816,12 @@ const GalleryPage = ({ setCurrentPage }) => {
                   {/* Category Chip */}
                   <div className="mb-4">
                     <span
-                      className="px-3 py-1 text-xs font-semibold rounded-full"
+                      className="px-3 py-1 font-semibold rounded-full"
                       style={{
                         backgroundColor: `${event.categoryColor}15`,
                         color: event.categoryColor,
-                        fontFamily: "'Poppins', sans-serif"
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: '0.75rem'
                       }}
                     >
                       {event.category}
@@ -826,7 +832,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                   <h3 className="mb-3" style={{
                     fontFamily: "'Lora', serif",
                     fontWeight: 600,
-                    fontSize: '1.25rem',
+                    fontSize: '1.5rem',
                     lineHeight: 1.35,
                     color: '#1E1E1E',
                     display: '-webkit-box',
@@ -841,7 +847,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                   <p className="mb-4" style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 400,
-                    fontSize: '0.95rem',
+                    fontSize: '1rem',
                     lineHeight: 1.6,
                     color: '#1E1E1E',
                     display: '-webkit-box',
@@ -858,7 +864,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       <Calendar className="w-4 h-4 text-gray-500" />
                       <span style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.875rem',
+                        fontSize: '0.75rem',
                         color: '#666666',
                         fontWeight: 500
                       }}>
@@ -869,7 +875,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       <MapPin className="w-4 h-4 text-gray-500" />
                       <span style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.875rem',
+                        fontSize: '0.75rem',
                         color: '#666666',
                         fontWeight: 500
                       }}>
@@ -883,7 +889,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                     <div className="flex items-center justify-between mb-2">
                       <span style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.875rem',
+                        fontSize: '0.75rem',
                         color: '#666666',
                         fontWeight: 500
                       }}>
@@ -891,7 +897,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       </span>
                       <span style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.875rem',
+                        fontSize: '0.75rem',
                         color: '#666666',
                         fontWeight: 500
                       }}>
@@ -943,6 +949,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
                       style={{
                         fontFamily: "'Poppins', sans-serif",
+                        fontWeight: 600,
                         fontSize: '1rem'
                       }}
                     >
@@ -997,12 +1004,12 @@ const GalleryPage = ({ setCurrentPage }) => {
                       <button
                         key={tag.key}
                         onClick={() => toggleTag(tag.key)}
-                        className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                        className={`px-3 py-2 rounded-full font-medium transition-all duration-200 ${
                           selectedTags.includes(tag.key)
                             ? 'bg-blue-100 text-blue-700 border border-blue-200'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                         }`}
-                        style={{ fontFamily: "'Poppins', sans-serif" }}
+                        style={{ fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem' }}
                       >
                         {tag.label}
                       </button>
@@ -1028,14 +1035,19 @@ const GalleryPage = ({ setCurrentPage }) => {
                     style={{
                       fontFamily: "'Lora', serif",
                       fontWeight: 600,
-                      fontSize: '1.25rem',
+                      fontSize: '1.5rem',
                       lineHeight: 1.35,
                       color: '#374151'
                     }}
                   >
                     {language === 'az' ? 'Məqalə tapılmadı' : language === 'en' ? 'No Articles Found' : 'Статьи не найдены'}
                   </h3>
-                  <p className="text-gray-500">
+                  <p className="text-gray-500" style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 400,
+                    fontSize: '1rem',
+                    lineHeight: 1.6
+                  }}>
                     {language === 'az' ? 'Axtarış şərtlərinizə uyğun məqalə tapılmadı' : language === 'en' ? 'No articles found matching your search criteria' : 'Статьи не найдены по вашим критериям поиска'}
                   </p>
                 </div>
@@ -1077,8 +1089,8 @@ const GalleryPage = ({ setCurrentPage }) => {
                       {/* PDF Badge & Download Icon for PDF files */}
                       {article.type === 'pdf' && (
                         <div className="absolute top-3 right-3 flex items-center gap-2">
-                          <span className="px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded"
-                                style={{ fontFamily: "'Poppins', sans-serif" }}>
+                          <span className="px-2 py-1 bg-red-500 text-white font-semibold rounded"
+                                style={{ fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem' }}>
                             PDF
                           </span>
                           <div className="w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
@@ -1094,7 +1106,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       <h3 className="mb-3" style={{
                         fontFamily: "'Lora', serif",
                         fontWeight: 600,
-                        fontSize: '1.125rem',
+                        fontSize: '1.5rem',
                         lineHeight: 1.35,
                         color: '#1E1E1E',
                         display: '-webkit-box',
@@ -1109,7 +1121,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       <p className="mb-4" style={{
                         fontFamily: "'Poppins', sans-serif",
                         fontWeight: 400,
-                        fontSize: '0.95rem',
+                        fontSize: '1rem',
                         lineHeight: 1.6,
                         color: '#1E1E1E',
                         display: '-webkit-box',
@@ -1126,7 +1138,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                           <Clock className="w-4 h-4 text-gray-400" />
                           <span style={{
                             fontFamily: "'Poppins', sans-serif",
-                            fontSize: '0.875rem',
+                            fontSize: '0.75rem',
                             color: '#666666',
                             fontWeight: 500
                           }}>
@@ -1147,8 +1159,8 @@ const GalleryPage = ({ setCurrentPage }) => {
                         {article.tags.slice(0, 2).map(tag => (
                           <span
                             key={tag}
-                            className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full"
-                            style={{ fontFamily: "'Poppins', sans-serif" }}
+                            className="px-2 py-1 font-medium bg-gray-100 text-gray-600 rounded-full"
+                            style={{ fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem' }}
                           >
                             {availableTags.find(t => t.key === tag)?.label || tag}
                           </span>
@@ -1201,6 +1213,7 @@ const GalleryPage = ({ setCurrentPage }) => {
                       className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
                       style={{
                         fontFamily: "'Poppins', sans-serif",
+                        fontWeight: 600,
                         fontSize: '1rem'
                       }}
                     >
@@ -1239,7 +1252,13 @@ const GalleryPage = ({ setCurrentPage }) => {
               onClick={(e) => e.stopPropagation()}
             />
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-4">
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="mb-2" style={{
+                fontFamily: "'Lora', serif",
+                fontWeight: 600,
+                fontSize: '1.5rem',
+                lineHeight: 1.35,
+                color: '#FFFFFF'
+              }}>
                 {selectedImage.title[language] || selectedImage.name}
               </h3>
               {selectedImage.description[language] && (
