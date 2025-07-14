@@ -197,29 +197,60 @@ const AdminDashboard = () => {
     <div className="space-y-6">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-blue-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-blue-900">Total Visitors</h3>
+          <h3 style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.25rem',
+            lineHeight: 1.35,
+            color: '#1E3A8A'
+          }}>Total Visitors</h3>
           <p className="text-3xl font-bold text-blue-700">{siteStats.totalVisitors}</p>
           <p className="text-sm text-blue-600">+12% from last month</p>
         </div>
         <div className="bg-green-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-green-900">Active Courses</h3>
+          <h3 style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.25rem',
+            lineHeight: 1.35,
+            color: '#14532D'
+          }}>Active Courses</h3>
           <p className="text-3xl font-bold text-green-700">{courses.filter(c => c.active).length}</p>
           <p className="text-sm text-green-600">All courses active</p>
         </div>
         <div className="bg-yellow-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-yellow-900">Published News</h3>
+          <h3 style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.25rem',
+            lineHeight: 1.35,
+            color: '#78350F'
+          }}>Published News</h3>
           <p className="text-3xl font-bold text-yellow-700">{getPublishedNews().length}</p>
           <p className="text-sm text-yellow-600">{getFeaturedNews().length} featured</p>
         </div>
         <div className="bg-purple-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-purple-900">Testimonials</h3>
+          <h3 style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.25rem',
+            lineHeight: 1.35,
+            color: '#581C87'
+          }}>Testimonials</h3>
           <p className="text-3xl font-bold text-purple-700">{testimonials.filter(t => t.approved).length}</p>
           <p className="text-sm text-purple-600">{testimonials.filter(t => !t.approved).length} pending</p>
         </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
+        <h3 style={{
+          fontFamily: "'Lora', serif",
+          fontWeight: 600,
+          fontSize: '1.25rem',
+          lineHeight: 1.35,
+          color: '#1E1E1E',
+          marginBottom: '1rem'
+        }}>Quick Actions</h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           <button 
             onClick={() => setActiveSection('content')}
@@ -265,7 +296,13 @@ const AdminDashboard = () => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-lg p-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold">Edit Website Content</h3>
+          <h3 style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.25rem',
+            lineHeight: 1.35,
+            color: '#1E1E1E'
+          }}>Edit Website Content</h3>
           <div className="flex items-center space-x-2">
             {hasUnsavedChanges ? (
               <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
@@ -601,7 +638,17 @@ const AdminDashboard = () => {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Team Management</h2>
+          <h2 
+            style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em'
+            }}
+          >
+            Team Management
+          </h2>
           <button
             onClick={() => setShowTeamForm(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
@@ -698,7 +745,17 @@ const AdminDashboard = () => {
     <div className="py-8 min-h-screen bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">{t('dashboard')}</h1>
+          <h1 
+            style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 700,
+              fontSize: 'clamp(2.6rem, 6vw, 4.2rem)',
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em'
+            }}
+          >
+            {t('dashboard')}
+          </h1>
           <div className="text-sm text-gray-600">
             Welcome back, <strong>admin</strong> • {new Date().toLocaleDateString()}
           </div>

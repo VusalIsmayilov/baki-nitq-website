@@ -9,7 +9,18 @@ const TestimonialsPage = () => {
   return (
     <div className="py-16 bg-white min-h-screen">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-12">{t('testimonialsTitle')}</h1>
+        <h1 
+        className="text-center mb-12"
+        style={{
+          fontFamily: "'Lora', serif",
+          fontWeight: 700,
+          fontSize: 'clamp(2.6rem, 6vw, 4.2rem)',
+          lineHeight: 1.1,
+          letterSpacing: '-0.02em'
+        }}
+      >
+        {t('testimonialsTitle')}
+      </h1>
         
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">

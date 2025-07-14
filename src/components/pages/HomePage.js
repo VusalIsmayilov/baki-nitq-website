@@ -2508,7 +2508,7 @@ const HomePage = ({ setCurrentPage }) => {
             </h3>
             <p 
               style={{
-                fontFamily: "'Manrope', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontWeight: 400,
                 fontSize: 'clamp(0.75rem, 2vw, 0.813rem)',
                 lineHeight: 1.45,

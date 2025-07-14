@@ -225,8 +225,8 @@ const CoursesPage = ({ setCurrentPage }) => {
           <p className="leading-relaxed" style={{
             fontFamily: "'Poppins', sans-serif",
             fontWeight: 400,
-            fontSize: '0.9rem',
-            lineHeight: 1.55,
+            fontSize: '1rem',
+            lineHeight: 1.6,
             color: '#666666'
           }}>
             {isExpanded ? fullDescription : (needsTruncation ? truncatedDescription + '...' : fullDescription)}
@@ -238,7 +238,7 @@ const CoursesPage = ({ setCurrentPage }) => {
               style={{
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 600,
-                fontSize: '0.875rem',
+                fontSize: '1rem',
                 color: colorScheme.buttonColor,
                 background: 'none',
                 border: 'none',
@@ -265,7 +265,8 @@ const CoursesPage = ({ setCurrentPage }) => {
             style={{
               backgroundColor: colorScheme.buttonColor,
               fontFamily: "'Poppins', sans-serif",
-              fontSize: '0.9rem',
+              fontWeight: 600,
+              fontSize: '1rem',
               transition: 'all 150ms ease-out',
               transform: 'scale(1)'
             }}
@@ -288,7 +289,8 @@ const CoursesPage = ({ setCurrentPage }) => {
               border: `2px solid ${colorScheme.buttonColor}`,
               color: colorScheme.buttonColor,
               fontFamily: "'Poppins', sans-serif",
-              fontSize: '0.9rem',
+              fontWeight: 600,
+              fontSize: '1rem',
               transition: 'all 150ms ease-out',
               transform: 'scale(1)'
             }}
@@ -334,38 +336,6 @@ const CoursesPage = ({ setCurrentPage }) => {
              language === 'en' ? 'Professional training programs to develop your speech culture, leadership and communication skills' :
              'Профессиональные учебные программы для развития вашей культуры речи, лидерских и коммуникативных навыков'}
           </p>
-          <button 
-            onClick={() => {/* Add catalog navigation logic */}}
-            className="hero-cta-button" 
-            style={{
-              display: 'inline-block',
-              padding: '1rem 2.5rem',
-              borderRadius: '8px',
-              backgroundColor: '#2166FF',
-              color: 'white',
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: 600,
-              fontSize: '1rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.6px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 12px rgba(33, 102, 255, 0.2)'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#1d5def';
-              e.target.style.transform = 'translateY(-2px) scale(1.03)';
-              e.target.style.boxShadow = '0 8px 20px rgba(33, 102, 255, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = '#2166FF';
-              e.target.style.transform = 'translateY(0) scale(1)';
-              e.target.style.boxShadow = '0 4px 12px rgba(33, 102, 255, 0.2)';
-            }}
-          >
-            Kurs kataloquna bax
-          </button>
         </div>
       </section>
 
@@ -377,9 +347,9 @@ const CoursesPage = ({ setCurrentPage }) => {
               className="text-gray-800 mb-4"
               style={{
                 fontFamily: "'Lora', serif",
-                fontWeight: 700,
-                fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
-                lineHeight: 1.15,
+                fontWeight: 600,
+                fontSize: '1.5rem',
+                lineHeight: 1.35,
                 letterSpacing: '-0.02em',
                 color: '#1E1E1E'
               }}
@@ -414,15 +384,16 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>Şəxsi məqsədlərə tam uyğunlaşma:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Tədris planı əvvəlcədən sizin hədəflərinizi, mövcud bacarıqlarınızı və öyrənmə tərzinizi analiz edərək qurulur.</p>
                   </div>
@@ -435,15 +406,16 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>1-nə-1 mentorluq və fasilətsiz geribildirim:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Hər moduldan sonra fasiləsiz rəy, fərdi məşq tapşırıqları və inkişaf izləyici plan təqdim olunur.</p>
                   </div>
@@ -456,15 +428,16 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>Maksimum çeviklik:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Onlayn, hibrid və canlı sessiya seçimləri ilə təlimi iş qrafikinə rahat uyğunlaşdırmaq imkanı.</p>
                   </div>
@@ -477,15 +450,16 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>Özünəinamın güclənməsi:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Praktiki rol-oyunları və real life ssenariləri üzərində işləməklə çıxış, ünsiyyət və qərarvermə bacarıqlarında hiss olunan irəliləyiş.</p>
                   </div>
@@ -498,44 +472,20 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>Ölçülə bilən nəticələr:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Ön-test və son-testlərlə bacarıq artımını kəmiyyətcə dəyərləndirən hesabatlar.</p>
                   </div>
                 </div>
-              </div>
-              
-              <div className="text-center">
-                <button 
-                  onClick={() => setActiveTab('individual')}
-                  className="px-6 py-3 rounded-md font-semibold transition-all duration-200"
-                  style={{
-                    backgroundColor: '#2166FF',
-                    color: 'white',
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.875rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.6px'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = '#1d5def';
-                    e.target.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = '#2166FF';
-                    e.target.style.transform = 'translateY(0)';
-                  }}
-                >
-                  Fərdi Təlimləri Kəşf Et
-                </button>
               </div>
             </div>
 
@@ -564,15 +514,16 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>Komanda sinerjisi və əməkdaşlıq:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Interaktiv qrup layihələri vasitəsilə kollektiv problem-həll etmə və koordinasiya bacarıqları inkişaf etdirilir.</p>
                   </div>
@@ -585,15 +536,16 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>Liderlik və idarəetmə kompetensiyaları:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Situasiya-əsaslı məşqlər, konflikt menecmenti simulyasiyaları və strateji düşüncə modulları ilə gələcək liderlər formalaşdırılır.</p>
                   </div>
@@ -606,15 +558,16 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>Şirkət hədəflərinə inteqrasiya:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Təlim məzmunu müəssisənin biznes strategiyası, KPI və korporativ dəyərləri ilə uzlaşdırılır.</p>
                   </div>
@@ -627,15 +580,16 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>ROI-yönümlü nəticə ölçümü:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Performans indikatorları, işçi məmnuniyyəti sorğuları və satış/istehsal metrikləri üzərindən təlimin biznesə təsiri izlənir.</p>
                   </div>
@@ -648,44 +602,20 @@ const CoursesPage = ({ setCurrentPage }) => {
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 600,
-                      fontSize: '0.875rem',
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4,
                       color: '#1E1E1E',
                       marginBottom: '0.25rem'
                     }}>Davamedici post-təlim dəstək:</p>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#5B5B5B'
                     }}>Mentor sessiyaları, resurs kitabxanası və on-demand vebinarlar ilə öyrənilənlərin iş mühitində tətbiqi davamlı olaraq gücləndirilir.</p>
                   </div>
                 </div>
-              </div>
-              
-              <div className="text-center">
-                <button 
-                  onClick={() => setActiveTab('corporate')}
-                  className="px-6 py-3 rounded-md font-semibold transition-all duration-200"
-                  style={{
-                    backgroundColor: '#16A34A',
-                    color: 'white',
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.875rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.6px'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = '#15803d';
-                    e.target.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = '#16A34A';
-                    e.target.style.transform = 'translateY(0)';
-                  }}
-                >
-                  Korporativ Təlimləri Öyrən
-                </button>
               </div>
             </div>
           </div>
@@ -810,7 +740,8 @@ const CoursesPage = ({ setCurrentPage }) => {
                   className="px-4 py-3 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50"
                   style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.95rem',
+                    fontWeight: 600,
+                    fontSize: '1rem',
                     transition: 'all 150ms ease-out',
                     transform: 'scale(1)'
                   }}
@@ -832,7 +763,8 @@ const CoursesPage = ({ setCurrentPage }) => {
             <span style={{ 
               fontFamily: "'Poppins', sans-serif",
               fontWeight: 400,
-              fontSize: '0.875rem',
+              fontSize: '1rem',
+              lineHeight: 1.6,
               color: '#666666'
             }}>
               {language === 'az' 
@@ -859,7 +791,7 @@ const CoursesPage = ({ setCurrentPage }) => {
               }`}
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '0.95rem',
+                fontSize: '1rem',
                 fontWeight: 600
               }}
             >
@@ -878,7 +810,7 @@ const CoursesPage = ({ setCurrentPage }) => {
                 backgroundColor: activeTab === 'corporate' ? '#E8F5E8' : undefined,
                 color: activeTab === 'corporate' ? '#02A44E' : undefined,
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '0.95rem',
+                fontSize: '1rem',
                 fontWeight: 600
               }}
             >
@@ -895,114 +827,122 @@ const CoursesPage = ({ setCurrentPage }) => {
         <div className="container mx-auto px-4">
         
         {/* Individual Trainings Section */}
-        <section ref={individualRef} id="individual-trainings" className="mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4" style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 700,
-              fontSize: '2rem',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
-              color: '#1E1E1E'
-            }}>{t('individualTrainings')}</h2>
-            <p className="max-w-xl mx-auto" style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: 400,
-              fontSize: '1.125rem',
-              lineHeight: 1.45,
-              color: '#4A4A4A',
-              maxWidth: '24ch',
-              margin: '0 auto'
-            }}>
-              {language === 'az' ? 'Fərdi yanaşma ilə hazırlanmış təlim proqramları' :
-               language === 'en' ? 'Individual approach training programs' :
-               'Индивидуальные программы'}
-            </p>
-          </div>
-          
-          {filteredIndividualTrainings.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredIndividualTrainings.map((training) => (
-                <TrainingCard 
-                  key={training.id} 
-                  training={training} 
-                  colorScheme={{
-                    iconColor: '#2166FF',
-                    buttonColor: '#2166FF',
-                    buttonHoverColor: '#1d5def'
-                  }}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <p style={{
+        {activeTab === 'individual' && (
+          <section ref={individualRef} id="individual-trainings" className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="mb-4" style={{
+                fontFamily: "'Lora', serif",
+                fontWeight: 700,
+                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                lineHeight: 1.15,
+                letterSpacing: '-0.02em',
+                color: '#1E1E1E'
+              }}>{t('individualTrainings')}</h2>
+              <p className="max-w-xl mx-auto" style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '1rem',
-                color: '#666666'
+                fontWeight: 400,
+                fontSize: '1.125rem',
+                lineHeight: 1.45,
+                color: '#4A4A4A',
+                maxWidth: '24ch',
+                margin: '0 auto'
               }}>
-                {language === 'az' ? 'Fərdi təlimlər üçün nəticə tapılmadı' :
-                 language === 'en' ? 'No individual trainings found' :
-                 'Индивидуальные тренинги не найдены'}
+                {language === 'az' ? 'Fərdi yanaşma ilə hazırlanmış təlim proqramları' :
+                 language === 'en' ? 'Individual approach training programs' :
+                 'Индивидуальные программы'}
               </p>
             </div>
-          )}
-        </section>
+            
+            {filteredIndividualTrainings.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredIndividualTrainings.map((training) => (
+                  <TrainingCard 
+                    key={training.id} 
+                    training={training} 
+                    colorScheme={{
+                      iconColor: '#2166FF',
+                      buttonColor: '#2166FF',
+                      buttonHoverColor: '#1d5def'
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 400,
+                  fontSize: '1rem',
+                  lineHeight: 1.6,
+                  color: '#666666'
+                }}>
+                  {language === 'az' ? 'Fərdi təlimlər üçün nəticə tapılmadı' :
+                   language === 'en' ? 'No individual trainings found' :
+                   'Индивидуальные тренинги не найдены'}
+                </p>
+              </div>
+            )}
+          </section>
+        )}
 
         {/* Corporate Trainings Section */}
-        <section ref={corporateRef} id="corporate-trainings" className="mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4" style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 700,
-              fontSize: '2rem',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
-              color: '#1E1E1E'
-            }}>{t('corporateTrainings')}</h2>
-            <p className="max-w-xl mx-auto" style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: 400,
-              fontSize: '1.125rem',
-              lineHeight: 1.45,
-              color: '#4A4A4A',
-              maxWidth: '24ch',
-              margin: '0 auto'
-            }}>
-              {language === 'az' ? 'İşgüzar mühitdə liderlik keyfiyyətlərini inkişaf etdirmək' :
-               language === 'en' ? 'Develop leadership in business environment' :
-               'Развитие лидерских качеств'}
-            </p>
-          </div>
-          
-          {filteredCorporateTrainings.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCorporateTrainings.map((training) => (
-                <TrainingCard 
-                  key={training.id} 
-                  training={training} 
-                  colorScheme={{
-                    iconColor: '#02A44E',
-                    buttonColor: '#02A44E',
-                    buttonHoverColor: '#028A42'
-                  }}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <p style={{
+        {activeTab === 'corporate' && (
+          <section ref={corporateRef} id="corporate-trainings" className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="mb-4" style={{
+                fontFamily: "'Lora', serif",
+                fontWeight: 700,
+                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                lineHeight: 1.15,
+                letterSpacing: '-0.02em',
+                color: '#1E1E1E'
+              }}>{t('corporateTrainings')}</h2>
+              <p className="max-w-xl mx-auto" style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '1rem',
-                color: '#666666'
+                fontWeight: 400,
+                fontSize: '1.125rem',
+                lineHeight: 1.45,
+                color: '#4A4A4A',
+                maxWidth: '24ch',
+                margin: '0 auto'
               }}>
-                {language === 'az' ? 'Korporativ təlimlər üçün nəticə tapılmadı' :
-                 language === 'en' ? 'No corporate trainings found' :
-                 'Корпоративные тренинги не найдены'}
+                {language === 'az' ? 'İşgüzar mühitdə liderlik keyfiyyətlərini inkişaf etdirmək' :
+                 language === 'en' ? 'Develop leadership in business environment' :
+                 'Развитие лидерских качеств'}
               </p>
             </div>
-          )}
-        </section>
+            
+            {filteredCorporateTrainings.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredCorporateTrainings.map((training) => (
+                  <TrainingCard 
+                    key={training.id} 
+                    training={training} 
+                    colorScheme={{
+                      iconColor: '#02A44E',
+                      buttonColor: '#02A44E',
+                      buttonHoverColor: '#028A42'
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 400,
+                  fontSize: '1rem',
+                  lineHeight: 1.6,
+                  color: '#666666'
+                }}>
+                  {language === 'az' ? 'Korporativ təlimlər üçün nəticə tapılmadı' :
+                   language === 'en' ? 'No corporate trainings found' :
+                   'Корпоративные тренинги не найдены'}
+                </p>
+              </div>
+            )}
+          </section>
+        )}
 
         {/* Contact CTA Section */}
         <section style={{backgroundColor: '#FFFFFF', paddingTop: '6rem', paddingBottom: '5rem', marginBottom: '4rem'}}>
@@ -1045,7 +985,12 @@ const CoursesPage = ({ setCurrentPage }) => {
                     ? 'linear-gradient(to right, #2166FF, #1d5def)' 
                     : 'linear-gradient(to right, #02A44E, #028A42)'
                 }}>
-                  <h3 className="text-white text-2xl font-bold text-center px-6">{selectedTraining.title}</h3>
+                  <h3 className="text-white text-center px-6" style={{
+                    fontFamily: "'Lora', serif",
+                    fontWeight: 600,
+                    fontSize: '1.5rem',
+                    lineHeight: 1.35
+                  }}>{selectedTraining.title}</h3>
                 </div>
                 
                 <div className="prose max-w-none">
@@ -1054,7 +999,13 @@ const CoursesPage = ({ setCurrentPage }) => {
                      language === 'en' ? 'About the Training' :
                      'О тренинге'}
                   </h4>
-                  <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-line">
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line" style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 400,
+                    fontSize: '1rem',
+                    lineHeight: 1.6,
+                    color: '#1E1E1E'
+                  }}>
                     {selectedTraining.description}
                   </p>
                 </div>
@@ -1063,6 +1014,10 @@ const CoursesPage = ({ setCurrentPage }) => {
                   backgroundColor: selectedTraining.category === 'individual' ? '#EFF6FF' : '#E8F5E8'
                 }}>
                   <h4 className="font-semibold mb-3" style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 600,
+                    fontSize: '0.875rem',
+                    lineHeight: 1.4,
                     color: selectedTraining.category === 'individual' ? '#1E3A8A' : '#14532D'
                   }}>
                     {language === 'az' ? 'Əlaqə' :
@@ -1070,6 +1025,10 @@ const CoursesPage = ({ setCurrentPage }) => {
                      'Свяжитесь с нами'}
                   </h4>
                   <p className="mb-4" style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 400,
+                    fontSize: '1rem',
+                    lineHeight: 1.6,
                     color: selectedTraining.category === 'individual' ? '#1E40AF' : '#166534'
                   }}>
                     {language === 'az' ? 'Bu təlim haqqında daha ətraflı məlumat almaq və qeydiyyatdan keçmək üçün bizimlə əlaqə saxlayın.' :
@@ -1088,6 +1047,9 @@ const CoursesPage = ({ setCurrentPage }) => {
                       className="flex-1 text-white py-3 rounded-md transition-colors font-semibold"
                       style={{
                         backgroundColor: selectedTraining.category === 'individual' ? '#2166FF' : '#02A44E',
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: 600,
+                        fontSize: '1rem',
                         transition: 'all 150ms ease-out',
                         transform: 'scale(1)'
                       }}
@@ -1108,6 +1070,9 @@ const CoursesPage = ({ setCurrentPage }) => {
                       onClick={closeTrainingModal}
                       className="flex-1 bg-gray-500 text-white py-3 rounded-md font-semibold"
                       style={{
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: 600,
+                        fontSize: '1rem',
                         transition: 'all 150ms ease-out',
                         transform: 'scale(1)'
                       }}

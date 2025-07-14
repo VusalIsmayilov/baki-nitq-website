@@ -765,7 +765,16 @@ const GalleryPage = ({ setCurrentPage }) => {
               <div className="text-center py-16">
                 <div className="bg-gray-100 rounded-lg p-12 max-w-md mx-auto">
                   <div className="text-6xl mb-4">📅</div>
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  <h3 
+                    className="mb-2"
+                    style={{
+                      fontFamily: "'Lora', serif",
+                      fontWeight: 600,
+                      fontSize: '1.25rem',
+                      lineHeight: 1.35,
+                      color: '#374151'
+                    }}
+                  >
                     {language === 'az' ? 'Tədbir tapılmadı' : language === 'en' ? 'No Events Found' : 'События не найдены'}
                   </h3>
                   <p className="text-gray-500">
@@ -1014,7 +1023,16 @@ const GalleryPage = ({ setCurrentPage }) => {
               <div className="text-center py-16">
                 <div className="bg-gray-100 rounded-lg p-12 max-w-md mx-auto">
                   <div className="text-6xl mb-4">📄</div>
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  <h3 
+                    className="mb-2"
+                    style={{
+                      fontFamily: "'Lora', serif",
+                      fontWeight: 600,
+                      fontSize: '1.25rem',
+                      lineHeight: 1.35,
+                      color: '#374151'
+                    }}
+                  >
                     {language === 'az' ? 'Məqalə tapılmadı' : language === 'en' ? 'No Articles Found' : 'Статьи не найдены'}
                   </h3>
                   <p className="text-gray-500">

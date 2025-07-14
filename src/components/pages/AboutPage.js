@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { Users } from 'lucide-react';
 
 const AboutPage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
@@ -78,7 +77,7 @@ const AboutPage = ({ setCurrentPage }) => {
                 <p style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: 400,
-                  fontSize: '0.95rem',
+                  fontSize: '1rem',
                   lineHeight: 1.6,
                   color: '#1E1E1E',
                   marginBottom: '1.5rem'
@@ -88,7 +87,7 @@ const AboutPage = ({ setCurrentPage }) => {
                 <p style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: 400,
-                  fontSize: '0.95rem',
+                  fontSize: '1rem',
                   lineHeight: 1.6,
                   color: '#1E1E1E',
                   marginBottom: '1.5rem'
@@ -133,12 +132,9 @@ const AboutPage = ({ setCurrentPage }) => {
       </section>
 
       {/* Our Trainers Section */}
-      <section style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '6rem', paddingBottom: '5rem'}}>
+      <section style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '2rem', paddingBottom: '5rem'}}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="w-20 h-20 flex items-center justify-center mb-6 mx-auto">
-              <Users className="w-8 h-8" style={{color: '#2166FF'}} strokeWidth={1.5} />
-            </div>
             <h2 className="mb-4" style={{
               fontFamily: "'Lora', serif",
               fontWeight: 700,
@@ -185,14 +181,14 @@ const AboutPage = ({ setCurrentPage }) => {
                         lineHeight: 1.4,
                         color: '#1E1E1E'
                       }}>{t('firuzeTitle')}</span>
-                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600}}>
+                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4}}>
                         Nitq Mütəxəssisi
                       </span>
                     </div>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.95rem',
+                      fontSize: '1rem',
                       lineHeight: 1.6,
                       color: '#1E1E1E'
                     }}>
@@ -240,14 +236,14 @@ const AboutPage = ({ setCurrentPage }) => {
                         lineHeight: 1.4,
                         color: '#1E1E1E'
                       }}>{t('pervinTitle')}</span>
-                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600}}>
+                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4}}>
                         Liderlik Təlimçisi
                       </span>
                     </div>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.95rem',
+                      fontSize: '1rem',
                       lineHeight: 1.6,
                       color: '#1E1E1E'
                     }}>
@@ -295,14 +291,14 @@ const AboutPage = ({ setCurrentPage }) => {
                         lineHeight: 1.4,
                         color: '#1E1E1E'
                       }}>{t('laleTitle')}</span>
-                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600}}>
+                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4}}>
                         Təqdimat Mütəxəssisi
                       </span>
                     </div>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.95rem',
+                      fontSize: '1rem',
                       lineHeight: 1.6,
                       color: '#1E1E1E'
                     }}>
@@ -350,14 +346,14 @@ const AboutPage = ({ setCurrentPage }) => {
                         lineHeight: 1.4,
                         color: '#1E1E1E'
                       }}>{t('aysenTitle')}</span>
-                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600}}>
+                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4}}>
                         Ünsiyyət Koçu
                       </span>
                     </div>
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.95rem',
+                      fontSize: '1rem',
                       lineHeight: 1.6,
                       color: '#1E1E1E'
                     }}>
@@ -385,16 +381,16 @@ const AboutPage = ({ setCurrentPage }) => {
       </section>
 
       {/* Client / Partner Logos Strip */}
-      <section className="pt-16 bg-white border-t border-gray-200">
+      <section className="pt-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8 pt-4">
             <h3 
               className="mb-2"
               style={{
                 fontFamily: "'Lora', serif",
-                fontWeight: 700,
-                fontSize: '1.75rem',
-                lineHeight: 1.2,
+                fontWeight: 600,
+                fontSize: '1.5rem',
+                lineHeight: 1.35,
                 color: '#1E1E1E'
               }}
             >
@@ -404,7 +400,7 @@ const AboutPage = ({ setCurrentPage }) => {
               style={{
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 400,
-                fontSize: '1.125rem',
+                fontSize: '1rem',
                 lineHeight: 1.6,
                 color: '#1E1E1E'
               }}
@@ -430,9 +426,12 @@ const AboutPage = ({ setCurrentPage }) => {
                     {/* Color background - visible on hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${logo.colorClass} rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
                     
-                    <span className={`relative z-10 font-bold transition-all duration-500 ${
-                      logo.name.length > 10 ? 'text-xs' : 'text-sm'
-                    } text-gray-700 group-hover:text-white`}>
+                    <span className={`relative z-10 transition-all duration-500 text-gray-700 group-hover:text-white`} style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: logo.name.length > 10 ? '0.75rem' : '0.875rem',
+                      lineHeight: 1.4
+                    }}>
                       {logo.name}
                     </span>
                   </div>
@@ -449,9 +448,12 @@ const AboutPage = ({ setCurrentPage }) => {
                     {/* Color background - visible on hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${logo.colorClass} rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
                     
-                    <span className={`relative z-10 font-bold transition-all duration-500 ${
-                      logo.name.length > 10 ? 'text-xs' : 'text-sm'
-                    } text-gray-700 group-hover:text-white`}>
+                    <span className={`relative z-10 transition-all duration-500 text-gray-700 group-hover:text-white`} style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: logo.name.length > 10 ? '0.75rem' : '0.875rem',
+                      lineHeight: 1.4
+                    }}>
                       {logo.name}
                     </span>
                   </div>
