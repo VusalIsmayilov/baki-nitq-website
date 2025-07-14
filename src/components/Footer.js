@@ -22,7 +22,7 @@ const Footer = ({ setCurrentPage }) => {
               fontWeight: 400,
               fontSize: '0.85rem',
               lineHeight: 1.5
-            }}>Professional speech training center in Baku, Azerbaijan</p>
+            }}>{t('centerDescription')}</p>
           </div>
           
           <div>
@@ -49,6 +49,14 @@ const Footer = ({ setCurrentPage }) => {
               }}>
                 {t('courses')}
               </button>
+              <button onClick={() => setCurrentPage('gallery')} className="block text-gray-300 hover:text-white" style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 400,
+                fontSize: '0.85rem',
+                lineHeight: 1.5
+              }}>
+                {t('gallery')}
+              </button>
               <button onClick={() => setCurrentPage('contact')} className="block text-gray-300 hover:text-white" style={{
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 400,
@@ -73,9 +81,9 @@ const Footer = ({ setCurrentPage }) => {
               fontSize: '0.85rem',
               lineHeight: 1.5
             }}>
-              <p>{siteContent.contactInfo?.address || t('addressText')}</p>
-              <p>{siteContent.contactInfo?.phone || t('phoneText')}</p>
-              <p>{siteContent.contactInfo?.email || t('emailText')}</p>
+              <p><strong>{t('address')}:</strong> {t('addressText')}</p>
+              <p><strong>{t('phone')}:</strong> {t('phoneText')}</p>
+              <p><strong>{t('email')}:</strong> {t('emailText')}</p>
             </div>
           </div>
           
@@ -135,7 +143,7 @@ const Footer = ({ setCurrentPage }) => {
             fontWeight: 400,
             fontSize: '0.85rem',
             lineHeight: 1.5
-          }}>&copy; 2025 Bakı Nitq Mərkəzi. All rights reserved.</p>
+          }}>&copy; 2025 Bakı Nitq Mərkəzi. {t('allRightsReserved')}.</p>
           <div className="flex justify-center items-center space-x-4 mt-2">
             <button 
               onClick={() => setCurrentPage('privacy')} 

@@ -553,17 +553,18 @@ const GalleryPage = ({ setCurrentPage }) => {
       />
       
       {/* Hero/Intro Band */}
-      <section style={{backgroundColor: '#FFFFFF', paddingTop: '96px', paddingBottom: '80px', minHeight: '85vh', display: 'flex', alignItems: 'center'}}>
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="mb-6" style={{
+      <section style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '2rem', paddingBottom: '160px', minHeight: '43vh'}}>
+        <div className="container mx-auto px-4">
+          <h1 className="text-center mb-6" style={{
             fontFamily: "'Lora', serif",
             fontWeight: 700,
             fontSize: 'clamp(2.6rem, 6vw, 4.2rem)',
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
+            textShadow: '0 2px 4px rgba(0,0,0,0.1)',
             color: '#1E1E1E'
           }}>{t('galleryTitle')}</h1>
-          <p className="max-w-4xl mx-auto" style={{
+          <p className="text-center max-w-4xl mx-auto" style={{
             fontFamily: "'Poppins', sans-serif",
             fontWeight: 400,
             fontSize: '1.125rem',
@@ -1227,10 +1228,15 @@ const GalleryPage = ({ setCurrentPage }) => {
           </div>
         )}
         
-        {/* Conversion CTA Section - Appears for both tabs */}
-        <ConversionCTA setCurrentPage={setCurrentPage} />
         </div>
       </div>
+      
+      {/* Conversion CTA Section - Appears for both tabs */}
+      <section style={{backgroundColor: '#FFFFFF', paddingTop: '6rem', paddingBottom: '5rem', marginBottom: '4rem'}}>
+        <div className="container mx-auto px-4">
+          <ConversionCTA setCurrentPage={setCurrentPage} />
+        </div>
+      </section>
       
       {/* Lightbox Modal */}
       {selectedImage && (

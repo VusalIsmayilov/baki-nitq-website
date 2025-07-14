@@ -131,11 +131,11 @@ const ContactPage = () => {
   };
   
   return (
-    <div className="contact-section">
+    <div style={{backgroundColor: '#FFFFFF', padding: '4rem 0'}}>
       {/* Hero Band */}
-      <section style={{backgroundColor: '#FFFFFF', paddingTop: '72px', paddingBottom: '56px', minHeight: '85vh', display: 'flex', alignItems: 'center'}}>
+      <section style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '2rem', paddingBottom: '160px', minHeight: '43vh'}}>
         <div className="container mx-auto px-4">
-          <h1 className="text-center mb-4" style={{
+          <h1 className="text-center mb-6" style={{
             fontFamily: "'Lora', serif",
             fontWeight: 700,
             fontSize: 'clamp(2.6rem, 6vw, 4.2rem)',
@@ -159,7 +159,8 @@ const ContactPage = () => {
         </div>
       </section>
       
-      <div className="container mx-auto px-4" style={{paddingTop: '4rem', paddingBottom: '4rem'}}>
+      <section style={{backgroundColor: '#FFFFFF', paddingTop: '4rem', paddingBottom: '4rem'}}>
+        <div className="container mx-auto px-4">
         
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-6">
           <div 
@@ -171,14 +172,13 @@ const ContactPage = () => {
               transform: visibleCards.includes(0) ? 'translateY(0)' : 'translateY(8px)'
             }}
           >
-            <h2 className="mb-6" style={{
+            <h3 className="mb-6" style={{
               fontFamily: "'Lora', serif",
-              fontWeight: 700,
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
+              fontWeight: 600,
+              fontSize: '1.5rem',
+              lineHeight: 1.35,
               color: '#1E1E1E'
-            }}>{t('contactInfo')}</h2>
+            }}>{t('contactInfo')}</h3>
             <div className="space-y-6">
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-0.5" style={{color: '#2166FF'}} />
@@ -186,15 +186,15 @@ const ContactPage = () => {
                   <h4 className="mb-1" style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 500,
-                    fontSize: '0.875rem',
-                    color: '#1E1E1E'
+                    fontSize: '0.75rem',
+                    color: '#666666'
                   }}>{t('address')}</h4>
                   <p style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 400,
-                    fontSize: '0.875rem',
-                    lineHeight: 1.5,
-                    color: '#5B5B5B'
+                    fontSize: '1rem',
+                    lineHeight: 1.6,
+                    color: '#1E1E1E'
                   }}>{siteContent.contactInfo?.address || t('addressText')}</p>
                 </div>
               </div>
@@ -205,8 +205,8 @@ const ContactPage = () => {
                   <h4 className="mb-1" style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 500,
-                    fontSize: '0.875rem',
-                    color: '#1E1E1E'
+                    fontSize: '0.75rem',
+                    color: '#666666'
                   }}>{t('phone')}</h4>
                   <a 
                     href={`tel:${siteContent.contactInfo?.phone || t('phoneText')}`}
@@ -214,8 +214,8 @@ const ContactPage = () => {
                     style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#2166FF',
                       textDecoration: 'none'
                     }}
@@ -234,8 +234,8 @@ const ContactPage = () => {
                   <h4 className="mb-1" style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 500,
-                    fontSize: '0.875rem',
-                    color: '#1E1E1E'
+                    fontSize: '0.75rem',
+                    color: '#666666'
                   }}>{t('email')}</h4>
                   <a 
                     href={`mailto:${siteContent.contactInfo?.email || t('emailText')}`}
@@ -243,8 +243,8 @@ const ContactPage = () => {
                     style={{
                       fontFamily: "'Poppins', sans-serif",
                       fontWeight: 400,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5,
+                      fontSize: '1rem',
+                      lineHeight: 1.6,
                       color: '#2166FF',
                       textDecoration: 'none'
                     }}
@@ -267,15 +267,15 @@ const ContactPage = () => {
                   <h4 className="mb-1" style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 500,
-                    fontSize: '0.875rem',
-                    color: '#1E1E1E'
+                    fontSize: '0.75rem',
+                    color: '#666666'
                   }}>{t('hours')}</h4>
                   <p style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 400,
-                    fontSize: '0.875rem',
-                    lineHeight: 1.5,
-                    color: '#5B5B5B'
+                    fontSize: '1rem',
+                    lineHeight: 1.6,
+                    color: '#1E1E1E'
                   }}>{siteContent.contactInfo?.hours || t('hoursText')}</p>
                 </div>
               </div>
@@ -290,8 +290,8 @@ const ContactPage = () => {
                   <h4 className="mb-1" style={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 500,
-                    fontSize: '0.875rem',
-                    color: '#1E1E1E'
+                    fontSize: '0.75rem',
+                    color: '#666666'
                   }}>{t('followUs')}</h4>
                   <div className="flex items-center gap-4">
                     <a 
@@ -343,8 +343,9 @@ const ContactPage = () => {
                     <MapPin className="w-8 h-8 mx-auto mb-2" />
                     <p style={{
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: '0.875rem',
-                      fontWeight: 500
+                      fontSize: '0.75rem',
+                      fontWeight: 500,
+                      color: '#666666'
                     }}>Aynalı Plaza</p>
                   </div>
                 </div>
@@ -356,8 +357,9 @@ const ContactPage = () => {
                       <ExternalLink className="w-4 h-4" />
                       <span style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.875rem',
-                        fontWeight: 600
+                        fontSize: '0.75rem',
+                        fontWeight: 500,
+                        color: '#666666'
                       }}>{t('viewOnYandexMaps')}</span>
                     </div>
                   </div>
@@ -375,22 +377,21 @@ const ContactPage = () => {
               transform: visibleCards.includes(1) ? 'translateY(0)' : 'translateY(8px)'
             }}
           >
-            <h2 className="mb-6" style={{
+            <h3 className="mb-6" style={{
               fontFamily: "'Lora', serif",
-              fontWeight: 700,
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
+              fontWeight: 600,
+              fontSize: '1.5rem',
+              lineHeight: 1.35,
               color: '#1E1E1E'
-            }}>{t('sendMessage')}</h2>
+            }}>{t('sendMessage')}</h3>
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name Field */}
               <div>
                 <label htmlFor="name" className="block mb-2" style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: 500,
-                  fontSize: '0.875rem',
-                  color: '#1E1E1E'
+                  fontSize: '0.75rem',
+                  color: '#666666'
                 }}>
                   {t('name')} <span className="text-red-500 text-xs">*</span>
                 </label>
@@ -406,11 +407,11 @@ const ContactPage = () => {
                   }`}
                   style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.875rem'
+                    fontSize: '1rem'
                   }}
                 />
                 {errors.name && (
-                  <p className="mt-1 text-xs text-red-500" style={{fontFamily: "'Poppins', sans-serif"}}>
+                  <p className="mt-1 text-red-500" style={{fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 500}}>
                     {errors.name}
                   </p>
                 )}
@@ -421,8 +422,8 @@ const ContactPage = () => {
                 <label htmlFor="phoneNumber" className="block mb-2" style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: 500,
-                  fontSize: '0.875rem',
-                  color: '#1E1E1E'
+                  fontSize: '0.75rem',
+                  color: '#666666'
                 }}>
                   {t('phoneNumber')}
                 </label>
@@ -438,11 +439,11 @@ const ContactPage = () => {
                   }`}
                   style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.875rem'
+                    fontSize: '1rem'
                   }}
                 />
                 {errors.phoneNumber && (
-                  <p className="mt-1 text-xs text-red-500" style={{fontFamily: "'Poppins', sans-serif"}}>
+                  <p className="mt-1 text-red-500" style={{fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 500}}>
                     {errors.phoneNumber}
                   </p>
                 )}
@@ -453,8 +454,8 @@ const ContactPage = () => {
                 <label htmlFor="email" className="block mb-2" style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: 500,
-                  fontSize: '0.875rem',
-                  color: '#1E1E1E'
+                  fontSize: '0.75rem',
+                  color: '#666666'
                 }}>
                   {t('email')} <span className="text-red-500 text-xs">*</span>
                 </label>
@@ -470,11 +471,11 @@ const ContactPage = () => {
                   }`}
                   style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.875rem'
+                    fontSize: '1rem'
                   }}
                 />
                 {errors.email && (
-                  <p className="mt-1 text-xs text-red-500" style={{fontFamily: "'Poppins', sans-serif"}}>
+                  <p className="mt-1 text-red-500" style={{fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 500}}>
                     {errors.email}
                   </p>
                 )}
@@ -485,8 +486,8 @@ const ContactPage = () => {
                 <label htmlFor="message" className="block mb-2" style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: 500,
-                  fontSize: '0.875rem',
-                  color: '#1E1E1E'
+                  fontSize: '0.75rem',
+                  color: '#666666'
                 }}>
                   {t('message')} <span className="text-red-500 text-xs">*</span>
                 </label>
@@ -502,11 +503,11 @@ const ContactPage = () => {
                   }`}
                   style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.875rem'
+                    fontSize: '1rem'
                   }}
                 />
                 {errors.message && (
-                  <p className="mt-1 text-xs text-red-500" style={{fontFamily: "'Poppins', sans-serif"}}>
+                  <p className="mt-1 text-red-500" style={{fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 500}}>
                     {errors.message}
                   </p>
                 )}
@@ -523,7 +524,7 @@ const ContactPage = () => {
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: '1rem',
                   fontWeight: 600,
-                  letterSpacing: '4px',
+                  letterSpacing: '0.5px',
                   cursor: isLoading ? 'not-allowed' : 'pointer'
                 }}
                 onMouseEnter={(e) => {
@@ -547,7 +548,8 @@ const ContactPage = () => {
             </form>
           </div>
         </div>
-      </div>
+        </div>
+      </section>
       
       {/* Success Toast */}
       {showToast && (
@@ -560,8 +562,9 @@ const ContactPage = () => {
             </div>
             <span style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: '0.875rem',
-              fontWeight: 500
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              color: 'white'
             }}>
               {t('messageSuccessToast')}
             </span>

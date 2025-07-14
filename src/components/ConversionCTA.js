@@ -5,15 +5,8 @@ const ConversionCTA = ({ setCurrentPage, className = "" }) => {
   const { t } = useLanguage();
 
   return (
-    <div className={`mt-16 ${className}`}>
-      <div 
-        className="bg-white max-w-2xl mx-auto text-center p-8"
-        style={{
-          borderRadius: '12px',
-          boxShadow: '0 6px 18px rgba(0,0,0,0.06)'
-        }}
-      >
-        <h3 className="mb-4" style={{
+    <>
+        <h3 className="mb-4 text-center" style={{
           fontFamily: "'Lora', serif",
           fontWeight: 600,
           fontSize: '1.5rem',
@@ -23,7 +16,7 @@ const ConversionCTA = ({ setCurrentPage, className = "" }) => {
           {t('needHelpChoosing')}
         </h3>
         
-        <p className="mb-6" style={{
+        <p className="mb-6 text-center" style={{
           fontFamily: "'Poppins', sans-serif",
           fontWeight: 400,
           fontSize: '1.125rem',
@@ -92,8 +85,7 @@ const ConversionCTA = ({ setCurrentPage, className = "" }) => {
             {t('whatsappUs')}
           </a>
         </div>
-      </div>
-    </div>
+    </>
   );
 };
 

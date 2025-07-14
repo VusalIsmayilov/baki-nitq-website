@@ -36,7 +36,7 @@ const AboutPage = ({ setCurrentPage }) => {
   return (
     <div className="about-section" style={{backgroundColor: '#FFFFFF'}}>
       {/* Combined Hero and Main Content Section */}
-      <section className="about-intro" style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '2rem', paddingBottom: '160px', minHeight: '85vh', display: 'flex', alignItems: 'center'}}>
+      <section className="about-intro" style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '2rem', paddingBottom: '160px', minHeight: '85vh'}}>
         <div className="container mx-auto px-4">
           <h1 className="text-center mb-6" style={{
             fontFamily: "'Lora', serif",
