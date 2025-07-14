@@ -7,7 +7,7 @@ const TestimonialsPage = () => {
   const { testimonials } = useContent();
   
   return (
-    <div className="py-16 bg-white min-h-screen">
+    <div className="py-16 bg-white" style={{minHeight: '85vh', display: 'flex', alignItems: 'center'}}>
       <div className="container mx-auto px-4">
         <h1 
         className="text-center mb-12"

@@ -5,7 +5,7 @@ const PrivacyPage = () => {
   const { t } = useLanguage();
   
   return (
-    <div className="py-16">
+    <div className="py-16" style={{minHeight: '85vh', display: 'flex', alignItems: 'center'}}>
       <div className="container mx-auto px-4">
         <h1 
           className="text-center mb-12"

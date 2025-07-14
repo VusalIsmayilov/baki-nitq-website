@@ -315,7 +315,7 @@ const CoursesPage = ({ setCurrentPage }) => {
   return (
     <div>
       {/* Hero Banner */}
-      <section style={{backgroundColor: '#FFFFFF', paddingTop: '4rem', paddingBottom: '4rem'}}>
+      <section style={{backgroundColor: '#FFFFFF', paddingTop: '4rem', paddingBottom: '4rem', minHeight: '85vh', display: 'flex', alignItems: 'center'}}>
         <div className="container mx-auto px-4 text-center">
           <h1 className="mb-6" style={{
             fontFamily: "'Lora', serif",

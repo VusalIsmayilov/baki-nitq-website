@@ -133,7 +133,7 @@ const ContactPage = () => {
   return (
     <div className="contact-section">
       {/* Hero Band */}
-      <section style={{backgroundColor: '#FFFFFF', paddingTop: '72px', paddingBottom: '56px'}}>
+      <section style={{backgroundColor: '#FFFFFF', paddingTop: '72px', paddingBottom: '56px', minHeight: '85vh', display: 'flex', alignItems: 'center'}}>
         <div className="container mx-auto px-4">
           <h1 className="text-center mb-4" style={{
             fontFamily: "'Lora', serif",
