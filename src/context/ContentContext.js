@@ -24,6 +24,26 @@ export const ContentProvider = ({ children }) => {
       en: 'To be the leading center in speech training in Azerbaijan and contribute to the development of communication culture in society.',
       ru: 'Стать ведущим центром обучения речи в Азербайджане и внести вклад в развитие культуры общения в обществе.'
     },
+    coursesHeroTitle: {
+      az: 'Kurslar və Xidmətlər',
+      en: 'Courses and Services',
+      ru: 'Курсы и Услуги'
+    },
+    coursesHeroDescription: {
+      az: 'Nitq mədəniyyəti, liderlik və ünsiyyət bacarıqlarınızı inkişaf etdirmək üçün peşəkar təlim proqramlarımız',
+      en: 'Professional training programs to develop your speech culture, leadership and communication skills',
+      ru: 'Профессиональные учебные программы для развития вашей культуры речи, лидерских и коммуникативных навыков'
+    },
+    galleryHeroTitle: {
+      az: 'Öyrən və İştirak Et',
+      en: 'Learn and Participate',
+      ru: 'Учитесь и Участвуйте'
+    },
+    galleryHeroDescription: {
+      az: 'Ünsiyyət bacarıqlarınızı inkişaf etdirmək üçün praktiki seminarlar, canlı vebinarlar və dərin resurslar tapın.',
+      en: 'Find practical seminars, live webinars and in-depth resources to develop your communication skills.',
+      ru: 'Найдите практические семинары, живые вебинары и глубокие ресурсы для развития ваших коммуникативных навыков.'
+    },
     contactInfo: {
       phone: '+994102271404',
       email: 'info@bakinitqmerkezi.az',
@@ -32,6 +52,108 @@ export const ContentProvider = ({ children }) => {
       instagram: 'https://instagram.com/bakinitqmerkezi',
       facebook: 'https://facebook.com/bakinitqmerkezi'
     },
+    trainers: [
+      {
+        id: 'firuze',
+        name: {
+          az: 'Firuzə Aslanova',
+          en: 'Firuze Aslanova',
+          ru: 'Фируза Асланова'
+        },
+        title: {
+          az: 'Baş Təlimçi',
+          en: 'Head Trainer',
+          ru: 'Главный Тренер'
+        },
+        specialty: {
+          az: 'Nitq Mütəxəssisi',
+          en: 'Speech Specialist',
+          ru: 'Специалист по Речи'
+        },
+        description: {
+          az: 'Nitq mədəniyyəti və diksiya sahəsində 15 illik təcrübəyə malik olan Firuzə xanım, yüzlərlə tələbənin uğurlu nitq bacarıqları əldə etməsinə kömək edib. Azərbaycan Dillər Universitetinin məzunu olan və bir çox beynəlxalq sertifikata malik olan mütəxəssis, fərdi yanaşma ilə hər bir tələbənin ehtiyaclarına uyğun təlim metodları tətbiq edir.',
+          en: 'Firuze Aslanova has 15 years of experience in speech culture and diction, helping hundreds of students achieve successful speech skills. A graduate of Azerbaijan University of Languages and holder of many international certificates, she applies training methods tailored to each student\'s needs with an individual approach.',
+          ru: 'Фируза Асланова имеет 15-летний опыт в области культуры речи и дикции, помогая сотням студентов достичь успешных речевых навыков. Выпускница Азербайджанского университета языков и обладательница многих международных сертификатов, она применяет методы обучения, адаптированные к потребностям каждого студента с индивидуальным подходом.'
+        },
+        image: '/images/trainers/firuze.jpg',
+        active: true
+      },
+      {
+        id: 'pervin',
+        name: {
+          az: 'Pərvin Pərlan',
+          en: 'Pervin Perlan',
+          ru: 'Первин Перлан'
+        },
+        title: {
+          az: 'Liderlik Təlimçisi',
+          en: 'Leadership Trainer',
+          ru: 'Тренер по Лидерству'
+        },
+        specialty: {
+          az: 'Liderlik Təlimçisi',
+          en: 'Leadership Trainer',
+          ru: 'Тренер по Лидерству'
+        },
+        description: {
+          az: 'Korporativ mühitdə liderlik və komanda idarəetməsi sahəsində mütəxəssis olan Pərvin xanım, 10 ildən çox təcrübə ilə böyük şirkətlərin rəhbər heyətlərini təlim edib. MBA dərəcəsi və beynəlxalq liderlik sertifikatları olan təlimçi, praktik yanaşma ilə iştirakçıların liderlik bacarıqlarını inkişaf etdirir.',
+          en: 'Pervin Perlan, a specialist in leadership and team management in corporate environments, has trained executive teams of large companies with more than 10 years of experience. A trainer with an MBA degree and international leadership certificates, she develops participants\' leadership skills with a practical approach.',
+          ru: 'Первин Перлан, специалист по лидерству и управлению командой в корпоративной среде, обучала исполнительные команды крупных компаний с более чем 10-летним опытом. Тренер со степенью MBA и международными сертификатами по лидерству, она развивает лидерские навыки участников с практическим подходом.'
+        },
+        image: '/images/trainers/pervin.jpg',
+        active: true
+      },
+      {
+        id: 'lale',
+        name: {
+          az: 'Lalə Mustafayeva',
+          en: 'Lale Mustafayeva',
+          ru: 'Лале Мустафаева'
+        },
+        title: {
+          az: 'Təqdimat Mütəxəssisi',
+          en: 'Presentation Specialist',
+          ru: 'Специалист по Презентациям'
+        },
+        specialty: {
+          az: 'Təqdimat Mütəxəssisi',
+          en: 'Presentation Specialist',
+          ru: 'Специалист по Презентациям'
+        },
+        description: {
+          az: 'Biznes təqdimatları və ictimai çıxış sahəsində mütəxəssis olan Lalə xanım, müxtəlif sahələrdən olan peşəkarların təqdimat bacarıqlarını inkişaf etdirib. Təqdimat dizaynı və storytelling üzrə ixtisaslaşmış təlimçi, yaradıcı üsullarla iştirakçıların auditoriya qarşısında özgüvənlə çıxış etmələrini təmin edir.',
+          en: 'Lale Mustafayeva, a specialist in business presentations and public speaking, has developed presentation skills of professionals from various fields. A trainer specialized in presentation design and storytelling, she ensures participants speak confidently in front of audiences through creative methods.',
+          ru: 'Лале Мустафаева, специалист по бизнес-презентациям и публичным выступлениям, развила презентационные навыки профессионалов из различных областей. Тренер, специализирующийся на дизайне презентаций и сторителлинге, она обеспечивает уверенное выступление участников перед аудиторией через творческие методы.'
+        },
+        image: '/images/trainers/lale.jpg',
+        active: true
+      },
+      {
+        id: 'aysen',
+        name: {
+          az: 'Ayşən Hüseynova',
+          en: 'Aysen Huseynova',
+          ru: 'Айшен Гусейнова'
+        },
+        title: {
+          az: 'Ünsiyyət Koçu',
+          en: 'Communication Coach',
+          ru: 'Коуч по Коммуникации'
+        },
+        specialty: {
+          az: 'Ünsiyyət Koçu',
+          en: 'Communication Coach',
+          ru: 'Коуч по Коммуникации'
+        },
+        description: {
+          az: 'Psixologiya təhsilli olan Ayşən xanım, ünsiyyət problemləri və sosial anxiety ilə mübarizə sahəsində ixtisaslaşıb. Fərdi və qrup terapiya təcrübəsi olan mütəxəssis, tələbələrin özgüvənini artırmaq və effektiv ünsiyyət bacarıqları qazanmalarına yardım etmək üçün müasir psixoloji metodlardan istifadə edir.',
+          en: 'Aysen Huseynova, with a psychology education, specializes in communication problems and combating social anxiety. A specialist with individual and group therapy experience, she uses modern psychological methods to increase students\' confidence and help them acquire effective communication skills.',
+          ru: 'Айшен Гусейнова, с психологическим образованием, специализируется на проблемах коммуникации и борьбе с социальной тревожностью. Специалист с опытом индивидуальной и групповой терапии, она использует современные психологические методы для повышения уверенности студентов и помощи им в приобретении эффективных коммуникативных навыков.'
+        },
+        image: '/images/trainers/aysen.jpg',
+        active: true
+      }
+    ],
     siteSettings: {
       siteName: 'Bakı Nitq Mərkəzi',
       defaultLanguage: 'az',
@@ -780,6 +902,40 @@ export const ContentProvider = ({ children }) => {
     return teamMembers.filter(member => member.active);
   };
 
+  // Trainer Management Functions
+  const addTrainer = (trainerData) => {
+    const newTrainer = {
+      id: Date.now().toString(),
+      ...trainerData,
+      active: true
+    };
+    setSiteContent(prev => ({
+      ...prev,
+      trainers: [...prev.trainers, newTrainer]
+    }));
+    return newTrainer;
+  };
+
+  const updateTrainer = (trainerId, trainerData) => {
+    setSiteContent(prev => ({
+      ...prev,
+      trainers: prev.trainers.map(trainer => 
+        trainer.id === trainerId ? { ...trainer, ...trainerData } : trainer
+      )
+    }));
+  };
+
+  const deleteTrainer = (trainerId) => {
+    setSiteContent(prev => ({
+      ...prev,
+      trainers: prev.trainers.filter(trainer => trainer.id !== trainerId)
+    }));
+  };
+
+  const getActiveTrainers = () => {
+    return siteContent.trainers.filter(trainer => trainer.active);
+  };
+
   // Activity Management Functions
   const addActivity = (activityData) => {
     const newActivity = {
@@ -862,6 +1018,12 @@ export const ContentProvider = ({ children }) => {
       updateTeamMember,
       deleteTeamMember,
       getActiveTeamMembers,
+      
+      // Trainer Management
+      addTrainer,
+      updateTrainer,
+      deleteTrainer,
+      getActiveTrainers,
       
       // Activity Management
       addActivity,

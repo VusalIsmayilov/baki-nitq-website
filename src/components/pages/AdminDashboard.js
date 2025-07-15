@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
-import { FileText, Upload, BarChart3, Edit, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Newspaper, Eye, EyeOff, Star } from 'lucide-react';
+import { FileText, Upload, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Newspaper, Eye, EyeOff, Star } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { t, language } = useLanguage();
@@ -43,7 +43,11 @@ const AdminDashboard = () => {
     addTeamMember,
     updateTeamMember,
     deleteTeamMember,
-    getActiveTeamMembers
+    getActiveTeamMembers,
+    addTrainer,
+    updateTrainer,
+    deleteTrainer,
+    getActiveTrainers
   } = useContent();
   
   const [activeSection, setActiveSection] = useState('overview');
@@ -51,12 +55,20 @@ const AdminDashboard = () => {
     homeHero: { ...siteContent.homeHero },
     homeDesc: { ...siteContent.homeDesc },
     aboutMission: { ...siteContent.aboutMission },
-    aboutVision: { ...siteContent.aboutVision }
+    aboutVision: { ...siteContent.aboutVision },
+    coursesHeroTitle: { ...siteContent.coursesHeroTitle },
+    coursesHeroDescription: { ...siteContent.coursesHeroDescription },
+    galleryHeroTitle: { ...siteContent.galleryHeroTitle },
+    galleryHeroDescription: { ...siteContent.galleryHeroDescription }
   });
   
   // Team Management State
   const [editingTeamMember, setEditingTeamMember] = useState(null);
   const [showTeamForm, setShowTeamForm] = useState(false);
+  
+  // Trainer Management State
+  const [editingTrainer, setEditingTrainer] = useState(null);
+  const [showTrainerForm, setShowTrainerForm] = useState(false);
   const [showCourseForm, setShowCourseForm] = useState(false);
   const [showTestimonialForm, setShowTestimonialForm] = useState(false);
   const [showNewsForm, setShowNewsForm] = useState(false);
@@ -72,7 +84,11 @@ const AdminDashboard = () => {
       homeHero: { ...siteContent.homeHero },
       homeDesc: { ...siteContent.homeDesc },
       aboutMission: { ...siteContent.aboutMission },
-      aboutVision: { ...siteContent.aboutVision }
+      aboutVision: { ...siteContent.aboutVision },
+      coursesHeroTitle: { ...siteContent.coursesHeroTitle },
+      coursesHeroDescription: { ...siteContent.coursesHeroDescription },
+      galleryHeroTitle: { ...siteContent.galleryHeroTitle },
+      galleryHeroDescription: { ...siteContent.galleryHeroDescription }
     });
     setHasUnsavedChanges(false);
   }, [siteContent]);
@@ -83,7 +99,11 @@ const AdminDashboard = () => {
       homeHero: siteContent.homeHero,
       homeDesc: siteContent.homeDesc,
       aboutMission: siteContent.aboutMission,
-      aboutVision: siteContent.aboutVision
+      aboutVision: siteContent.aboutVision,
+      coursesHeroTitle: siteContent.coursesHeroTitle,
+      coursesHeroDescription: siteContent.coursesHeroDescription,
+      galleryHeroTitle: siteContent.galleryHeroTitle,
+      galleryHeroDescription: siteContent.galleryHeroDescription
     });
     setHasUnsavedChanges(hasChanges);
   }, [editingContent, siteContent]);
@@ -91,6 +111,7 @@ const AdminDashboard = () => {
   const adminSections = [
     { id: 'overview', name: 'Overview', icon: BarChart3 },
     { id: 'content', name: 'Content Management', icon: FileText },
+    { id: 'trainers', name: 'Trainers Management', icon: Users },
     { id: 'courses', name: 'Course Management', icon: BookOpen },
     { id: 'news', name: 'News & Activities', icon: Newspaper },
     { id: 'team', name: 'Team Management', icon: Users },
@@ -123,7 +144,11 @@ const AdminDashboard = () => {
       homeHero: { ...siteContent.homeHero },
       homeDesc: { ...siteContent.homeDesc },
       aboutMission: { ...siteContent.aboutMission },
-      aboutVision: { ...siteContent.aboutVision }
+      aboutVision: { ...siteContent.aboutVision },
+      coursesHeroTitle: { ...siteContent.coursesHeroTitle },
+      coursesHeroDescription: { ...siteContent.coursesHeroDescription },
+      galleryHeroTitle: { ...siteContent.galleryHeroTitle },
+      galleryHeroDescription: { ...siteContent.galleryHeroDescription }
     });
     alert('✅ Content reset to original values!');
   };
@@ -354,26 +379,88 @@ const AdminDashboard = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Mission Statement ({language.toUpperCase()})
+                  Hero Title ({language.toUpperCase()})
                 </label>
                 <textarea
                   value={editingContent.aboutMission[language]}
                   onChange={(e) => handleContentEdit('aboutMission', language, e.target.value)}
                   rows={3}
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter mission statement..."
+                  placeholder="Enter hero title..."
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Vision Statement ({language.toUpperCase()})
+                  Hero Description ({language.toUpperCase()})
                 </label>
                 <textarea
                   value={editingContent.aboutVision[language]}
                   onChange={(e) => handleContentEdit('aboutVision', language, e.target.value)}
                   rows={3}
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter vision statement..."
+                  placeholder="Enter hero description..."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Courses Page Content */}
+          <div className="border-b pb-6">
+            <h4 className="text-lg font-semibold mb-4">Courses Page Content</h4>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Hero Title ({language.toUpperCase()})
+                </label>
+                <textarea
+                  value={editingContent.coursesHeroTitle[language]}
+                  onChange={(e) => handleContentEdit('coursesHeroTitle', language, e.target.value)}
+                  rows={3}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter courses hero title..."
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Hero Description ({language.toUpperCase()})
+                </label>
+                <textarea
+                  value={editingContent.coursesHeroDescription[language]}
+                  onChange={(e) => handleContentEdit('coursesHeroDescription', language, e.target.value)}
+                  rows={3}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter courses hero description..."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Resources and Activities Page Content */}
+          <div className="border-b pb-6">
+            <h4 className="text-lg font-semibold mb-4">Resources and Activities Page Content</h4>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Hero Title ({language.toUpperCase()})
+                </label>
+                <textarea
+                  value={editingContent.galleryHeroTitle[language]}
+                  onChange={(e) => handleContentEdit('galleryHeroTitle', language, e.target.value)}
+                  rows={3}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter resources and activities hero title..."
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Hero Description ({language.toUpperCase()})
+                </label>
+                <textarea
+                  value={editingContent.galleryHeroDescription[language]}
+                  onChange={(e) => handleContentEdit('galleryHeroDescription', language, e.target.value)}
+                  rows={3}
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter resources and activities hero description..."
                 />
               </div>
             </div>
@@ -729,10 +816,345 @@ const AdminDashboard = () => {
     );
   };
 
+  // Trainer Management Functions
+  const handleAddTrainer = () => {
+    setEditingTrainer(null);
+    setShowTrainerForm(true);
+  };
+
+  const handleEditTrainer = (trainer) => {
+    setEditingTrainer(trainer);
+    setShowTrainerForm(true);
+  };
+
+  const handleDeleteTrainer = (trainerId) => {
+    if (window.confirm('Are you sure you want to delete this trainer?')) {
+      deleteTrainer(trainerId);
+    }
+  };
+
+  const handleSubmitTrainer = (trainerData) => {
+    if (editingTrainer) {
+      updateTrainer(editingTrainer.id, trainerData);
+    } else {
+      addTrainer(trainerData);
+    }
+    setShowTrainerForm(false);
+    setEditingTrainer(null);
+  };
+
+  const renderTrainersManagement = () => {
+    const activeTrainers = getActiveTrainers();
+    
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Trainers Management</h2>
+          <button
+            onClick={handleAddTrainer}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Add New Trainer
+          </button>
+        </div>
+
+        {/* Trainers List */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {activeTrainers.map((trainer) => (
+            <div
+              key={trainer.id}
+              className="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                    <span className="text-lg font-bold text-gray-600">
+                      {trainer.name.az.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{trainer.name.az}</h3>
+                    <p className="text-sm text-gray-600">{trainer.title.az}</p>
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleEditTrainer(trainer)}
+                    className="text-blue-600 hover:text-blue-800 transition-colors"
+                    title="Edit"
+                  >
+                    <Edit2 size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteTrainer(trainer.id)}
+                    className="text-red-600 hover:text-red-800 transition-colors"
+                    title="Delete"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+              
+              <div className="text-sm text-gray-700 mb-3">
+                <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                  {trainer.specialty.az}
+                </span>
+              </div>
+              
+              <p className="text-sm text-gray-600 line-clamp-3">
+                {trainer.description.az.substring(0, 100)}...
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Trainer Form Modal */}
+        {showTrainerForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold">
+                  {editingTrainer ? 'Edit Trainer' : 'Add New Trainer'}
+                </h3>
+                <button
+                  onClick={() => setShowTrainerForm(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              
+              <TrainerForm
+                trainer={editingTrainer}
+                onSubmit={handleSubmitTrainer}
+                onCancel={() => setShowTrainerForm(false)}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Trainer Form Component
+  const TrainerForm = ({ trainer, onSubmit, onCancel }) => {
+    const [formData, setFormData] = useState({
+      name: {
+        az: trainer?.name?.az || '',
+        en: trainer?.name?.en || '',
+        ru: trainer?.name?.ru || ''
+      },
+      title: {
+        az: trainer?.title?.az || '',
+        en: trainer?.title?.en || '',
+        ru: trainer?.title?.ru || ''
+      },
+      specialty: {
+        az: trainer?.specialty?.az || '',
+        en: trainer?.specialty?.en || '',
+        ru: trainer?.specialty?.ru || ''
+      },
+      description: {
+        az: trainer?.description?.az || '',
+        en: trainer?.description?.en || '',
+        ru: trainer?.description?.ru || ''
+      },
+      image: trainer?.image || '',
+      active: trainer?.active !== undefined ? trainer.active : true
+    });
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onSubmit(formData);
+    };
+
+    const handleChange = (field, language, value) => {
+      setFormData(prev => ({
+        ...prev,
+        [field]: {
+          ...prev[field],
+          [language]: value
+        }
+      }));
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Name Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+          <div className="space-y-2">
+            <input
+              type="text"
+              placeholder="Name (Azerbaijani)"
+              value={formData.name.az}
+              onChange={(e) => handleChange('name', 'az', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Name (English)"
+              value={formData.name.en}
+              onChange={(e) => handleChange('name', 'en', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Name (Russian)"
+              value={formData.name.ru}
+              onChange={(e) => handleChange('name', 'ru', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Title Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+          <div className="space-y-2">
+            <input
+              type="text"
+              placeholder="Title (Azerbaijani)"
+              value={formData.title.az}
+              onChange={(e) => handleChange('title', 'az', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Title (English)"
+              value={formData.title.en}
+              onChange={(e) => handleChange('title', 'en', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Title (Russian)"
+              value={formData.title.ru}
+              onChange={(e) => handleChange('title', 'ru', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Specialty Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Specialty</label>
+          <div className="space-y-2">
+            <input
+              type="text"
+              placeholder="Specialty (Azerbaijani)"
+              value={formData.specialty.az}
+              onChange={(e) => handleChange('specialty', 'az', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Specialty (English)"
+              value={formData.specialty.en}
+              onChange={(e) => handleChange('specialty', 'en', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Specialty (Russian)"
+              value={formData.specialty.ru}
+              onChange={(e) => handleChange('specialty', 'ru', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Description Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <div className="space-y-2">
+            <textarea
+              placeholder="Description (Azerbaijani)"
+              value={formData.description.az}
+              onChange={(e) => handleChange('description', 'az', e.target.value)}
+              rows={4}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <textarea
+              placeholder="Description (English)"
+              value={formData.description.en}
+              onChange={(e) => handleChange('description', 'en', e.target.value)}
+              rows={4}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <textarea
+              placeholder="Description (Russian)"
+              value={formData.description.ru}
+              onChange={(e) => handleChange('description', 'ru', e.target.value)}
+              rows={4}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Image URL */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+          <input
+            type="url"
+            placeholder="https://example.com/image.jpg"
+            value={formData.image}
+            onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        {/* Active Status */}
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="active"
+            checked={formData.active}
+            onChange={(e) => setFormData(prev => ({ ...prev, active: e.target.checked }))}
+            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label htmlFor="active" className="ml-2 block text-sm text-gray-900">
+            Active
+          </label>
+        </div>
+
+        {/* Form Actions */}
+        <div className="flex justify-end space-x-4">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            {trainer ? 'Update' : 'Add'} Trainer
+          </button>
+        </div>
+      </form>
+    );
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case 'overview': return renderOverview();
       case 'content': return renderContentManagement();
+      case 'trainers': return renderTrainersManagement();
       case 'courses': return renderCourseManagement();
       case 'news': return renderNewsManagement();
       case 'team': return renderTeamManagement();

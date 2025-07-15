@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useContent } from '../../context/ContentContext';
 
 const AboutPage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
+  const { getActiveTrainers } = useContent();
   const [expandedTrainers, setExpandedTrainers] = useState({});
 
   // Partner logos data with colors
@@ -157,12 +159,14 @@ const AboutPage = ({ setCurrentPage }) => {
           </div>
           
           <div className="grid lg:grid-cols-2 gap-12">
-              {/* Firuzə Aslanova */}
-              <div className="bg-white p-8 transition-all duration-300 transform" style={{borderRadius: '12px', boxShadow: '0 6px 18px rgba(0,0,0,0.06)', transitionTimingFunction: 'cubic-bezier(.25,.8,.42,1)'}} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)'; }}>
+            {getActiveTrainers().map((trainer) => (
+              <div key={trainer.id} className="bg-white p-8 transition-all duration-300 transform" style={{borderRadius: '12px', boxShadow: '0 6px 18px rgba(0,0,0,0.06)', transitionTimingFunction: 'cubic-bezier(.25,.8,.42,1)'}} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)'; }}>
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6">
                   <div className="flex-shrink-0">
                     <div className="w-32 h-32 rounded-full flex items-center justify-center bg-gray-300">
-                      <span className="text-4xl text-gray-600 font-bold">FA</span>
+                      <span className="text-4xl text-gray-600 font-bold">
+                        {trainer.name[language].split(' ').map(n => n[0]).join('')}
+                      </span>
                     </div>
                   </div>
                   <div className="flex-1 text-center lg:text-left">
@@ -172,7 +176,7 @@ const AboutPage = ({ setCurrentPage }) => {
                       fontSize: '1.5rem',
                       lineHeight: 1.35,
                       color: '#1E1E1E'
-                    }}>{t('firuzeName')}</h3>
+                    }}>{trainer.name[language]}</h3>
                     <div className="flex items-center justify-center lg:justify-start mb-4">
                       <span className="mr-2" style={{
                         fontFamily: "'Poppins', sans-serif",
@@ -180,9 +184,9 @@ const AboutPage = ({ setCurrentPage }) => {
                         fontSize: '0.95rem',
                         lineHeight: 1.4,
                         color: '#1E1E1E'
-                      }}>{t('firuzeTitle')}</span>
+                      }}>{trainer.title[language]}</span>
                       <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4}}>
-                        Nitq Mütəxəssisi
+                        {trainer.specialty[language]}
                       </span>
                     </div>
                     <p style={{
@@ -192,11 +196,11 @@ const AboutPage = ({ setCurrentPage }) => {
                       lineHeight: 1.6,
                       color: '#1E1E1E'
                     }}>
-                      {expandedTrainers['firuze'] ? t('firuzeDesc') : truncateText(t('firuzeDesc'))}
+                      {expandedTrainers[trainer.id] ? trainer.description[language] : truncateText(trainer.description[language])}
                     </p>
-                    {t('firuzeDesc').split(' ').length > 72 && (
+                    {trainer.description[language].split(' ').length > 60 && (
                       <button 
-                        onClick={() => toggleTrainerExpansion('firuze')}
+                        onClick={() => toggleTrainerExpansion(trainer.id)}
                         className="mt-2 transition-colors duration-200" style={{
                           fontFamily: "'Poppins', sans-serif",
                           fontWeight: 600,
@@ -205,177 +209,13 @@ const AboutPage = ({ setCurrentPage }) => {
                           letterSpacing: '0.3px'
                         }} onMouseEnter={(e) => e.target.style.color = '#1d5def'} onMouseLeave={(e) => e.target.style.color = '#2166FF'}
                       >
-                        {expandedTrainers['firuze'] ? 'Daha az' : 'Davamı'}
+                        {expandedTrainers[trainer.id] ? 'Daha az' : 'Davamı'}
                       </button>
                     )}
                   </div>
                 </div>
               </div>
-
-              {/* Pərvin Pərlan */}
-              <div className="bg-white p-8 transition-all duration-300 transform" style={{borderRadius: '12px', boxShadow: '0 6px 18px rgba(0,0,0,0.06)', transitionTimingFunction: 'cubic-bezier(.25,.8,.42,1)'}} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)'; }}>
-                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6">
-                  <div className="flex-shrink-0">
-                    <div className="w-32 h-32 rounded-full flex items-center justify-center bg-gray-300">
-                      <span className="text-4xl text-gray-600 font-bold">PP</span>
-                    </div>
-                  </div>
-                  <div className="flex-1 text-center lg:text-left">
-                    <h3 className="mb-2" style={{
-                      fontFamily: "'Lora', serif",
-                      fontWeight: 600,
-                      fontSize: '1.5rem',
-                      lineHeight: 1.35,
-                      color: '#1E1E1E'
-                    }}>{t('pervinName')}</h3>
-                    <div className="flex items-center justify-center lg:justify-start mb-4">
-                      <span className="mr-2" style={{
-                        fontFamily: "'Poppins', sans-serif",
-                        fontWeight: 600,
-                        fontSize: '0.95rem',
-                        lineHeight: 1.4,
-                        color: '#1E1E1E'
-                      }}>{t('pervinTitle')}</span>
-                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4}}>
-                        Liderlik Təlimçisi
-                      </span>
-                    </div>
-                    <p style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontWeight: 400,
-                      fontSize: '1rem',
-                      lineHeight: 1.6,
-                      color: '#1E1E1E'
-                    }}>
-                      {expandedTrainers['pervin'] ? t('pervinDesc') : truncateText(t('pervinDesc'))}
-                    </p>
-                    {t('pervinDesc').split(' ').length > 60 && (
-                      <button 
-                        onClick={() => toggleTrainerExpansion('pervin')}
-                        className="mt-2 transition-colors duration-200" style={{
-                          fontFamily: "'Poppins', sans-serif",
-                          fontWeight: 600,
-                          fontSize: '1rem',
-                          color: '#2166FF',
-                          letterSpacing: '0.3px'
-                        }} onMouseEnter={(e) => e.target.style.color = '#1d5def'} onMouseLeave={(e) => e.target.style.color = '#2166FF'}
-                      >
-                        {expandedTrainers['pervin'] ? 'Daha az' : 'Davamı'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Lalə Mustafayeva */}
-              <div className="bg-white p-8 transition-all duration-300 transform" style={{borderRadius: '12px', boxShadow: '0 6px 18px rgba(0,0,0,0.06)', transitionTimingFunction: 'cubic-bezier(.25,.8,.42,1)'}} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)'; }}>
-                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6">
-                  <div className="flex-shrink-0">
-                    <div className="w-32 h-32 rounded-full flex items-center justify-center bg-gray-300">
-                      <span className="text-4xl text-gray-600 font-bold">LM</span>
-                    </div>
-                  </div>
-                  <div className="flex-1 text-center lg:text-left">
-                    <h3 className="mb-2" style={{
-                      fontFamily: "'Lora', serif",
-                      fontWeight: 600,
-                      fontSize: '1.5rem',
-                      lineHeight: 1.35,
-                      color: '#1E1E1E'
-                    }}>{t('laleName')}</h3>
-                    <div className="flex items-center justify-center lg:justify-start mb-4">
-                      <span className="mr-2" style={{
-                        fontFamily: "'Poppins', sans-serif",
-                        fontWeight: 600,
-                        fontSize: '0.95rem',
-                        lineHeight: 1.4,
-                        color: '#1E1E1E'
-                      }}>{t('laleTitle')}</span>
-                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4}}>
-                        Təqdimat Mütəxəssisi
-                      </span>
-                    </div>
-                    <p style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontWeight: 400,
-                      fontSize: '1rem',
-                      lineHeight: 1.6,
-                      color: '#1E1E1E'
-                    }}>
-                      {expandedTrainers['lale'] ? t('laleDesc') : truncateText(t('laleDesc'))}
-                    </p>
-                    {t('laleDesc').split(' ').length > 60 && (
-                      <button 
-                        onClick={() => toggleTrainerExpansion('lale')}
-                        className="mt-2 transition-colors duration-200" style={{
-                          fontFamily: "'Poppins', sans-serif",
-                          fontWeight: 600,
-                          fontSize: '1rem',
-                          color: '#2166FF',
-                          letterSpacing: '0.3px'
-                        }} onMouseEnter={(e) => e.target.style.color = '#1d5def'} onMouseLeave={(e) => e.target.style.color = '#2166FF'}
-                      >
-                        {expandedTrainers['lale'] ? 'Daha az' : 'Davamı'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Ayşən Hüseynova */}
-              <div className="bg-white p-8 transition-all duration-300 transform" style={{borderRadius: '12px', boxShadow: '0 6px 18px rgba(0,0,0,0.06)', transitionTimingFunction: 'cubic-bezier(.25,.8,.42,1)'}} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)'; }}>
-                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6">
-                  <div className="flex-shrink-0">
-                    <div className="w-32 h-32 rounded-full flex items-center justify-center bg-gray-300">
-                      <span className="text-4xl text-gray-600 font-bold">AH</span>
-                    </div>
-                  </div>
-                  <div className="flex-1 text-center lg:text-left">
-                    <h3 className="mb-2" style={{
-                      fontFamily: "'Lora', serif",
-                      fontWeight: 600,
-                      fontSize: '1.5rem',
-                      lineHeight: 1.35,
-                      color: '#1E1E1E'
-                    }}>{t('aysenName')}</h3>
-                    <div className="flex items-center justify-center lg:justify-start mb-4">
-                      <span className="mr-2" style={{
-                        fontFamily: "'Poppins', sans-serif",
-                        fontWeight: 600,
-                        fontSize: '0.95rem',
-                        lineHeight: 1.4,
-                        color: '#1E1E1E'
-                      }}>{t('aysenTitle')}</span>
-                      <span className="px-3 py-1 text-xs font-semibold" style={{backgroundColor: '#F0F9FF', color: '#2166FF', borderRadius: '12px', fontFamily: "'Poppins', sans-serif", fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4}}>
-                        Ünsiyyət Koçu
-                      </span>
-                    </div>
-                    <p style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontWeight: 400,
-                      fontSize: '1rem',
-                      lineHeight: 1.6,
-                      color: '#1E1E1E'
-                    }}>
-                      {expandedTrainers['aysen'] ? t('aysenDesc') : truncateText(t('aysenDesc'))}
-                    </p>
-                    {t('aysenDesc').split(' ').length > 60 && (
-                      <button 
-                        onClick={() => toggleTrainerExpansion('aysen')}
-                        className="mt-2 transition-colors duration-200" style={{
-                          fontFamily: "'Poppins', sans-serif",
-                          fontWeight: 600,
-                          fontSize: '1rem',
-                          color: '#2166FF',
-                          letterSpacing: '0.3px'
-                        }} onMouseEnter={(e) => e.target.style.color = '#1d5def'} onMouseLeave={(e) => e.target.style.color = '#2166FF'}
-                      >
-                        {expandedTrainers['aysen'] ? 'Daha az' : 'Davamı'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
+            ))}
           </div>
         </div>
       </section>
