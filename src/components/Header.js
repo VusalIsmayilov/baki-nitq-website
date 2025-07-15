@@ -103,6 +103,10 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
                 key={key}
                 onClick={() => {
                   setCurrentPage(key);
+                  // Clear URL hash when navigating to courses page
+                  if (key === 'courses') {
+                    window.history.replaceState(null, '', window.location.pathname);
+                  }
                   setTimeout(() => {
                     window.scrollTo(0, 0);
                   }, 100);
@@ -181,6 +185,10 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
                 onClick={() => {
                   setCurrentPage(key);
                   setIsMenuOpen(false);
+                  // Clear URL hash when navigating to courses page
+                  if (key === 'courses') {
+                    window.history.replaceState(null, '', window.location.pathname);
+                  }
                   setTimeout(() => {
                     window.scrollTo(0, 0);
                   }, 100);

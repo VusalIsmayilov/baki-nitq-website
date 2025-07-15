@@ -25,7 +25,7 @@ const WaveDivider = () => (
 
 const HomePage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
-  const { siteContent, testimonials, news } = useContent();
+  const { siteContent, testimonials, news, getHomeCourses, courses, getActiveTrainers } = useContent();
   const [activeService, setActiveService] = useState('speechCommunicationDev');
   const [visibleCards, setVisibleCards] = useState([]);
   const [contentKey, setContentKey] = useState(0);
@@ -39,63 +39,43 @@ const HomePage = ({ setCurrentPage }) => {
   const lottieRef1 = useRef();
   const lottieRef2 = useRef();
   const lottieRef3 = useRef();
-
-  // Training cards data from CoursesPage
-  const trainingCards = [
-    // Individual Trainings (3 cards)
-    {
-      id: 'speech',
-      title: 'Nitq təlimləri',
-      excerpt: 'İctimai çıxış həyəcanı və nitq bacarıqlarının inkişafı',
-      type: 'individual',
-      image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=600&fit=crop',
-      slug: 'speech-training'
-    },
-    {
-      id: 'leadership',
-      title: 'Liderlik və Effektiv Ünsiyyət',
-      excerpt: 'Liderlik bacarıqları və idarəetmə prosesində effektiv ünsiyyət',
-      type: 'individual',
-      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop',
-      slug: 'leadership-communication'
-    },
-    {
-      id: 'marketing',
-      title: 'Marketinq əsasları və Praktiki Marketinq',
-      excerpt: 'Marketinq strategiyaları və neoromarketinq texnikaları',
-      type: 'individual',
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
-      slug: 'marketing-training'
-    },
-    // Corporate Trainings (3 cards)
-    {
-      id: 'corporate-leadership',
-      title: 'Liderlik və Effektiv Ünsiyyət (Korporativ)',
-      excerpt: 'Korporativ mühitdə liderlik və komanda idarəçiliyi',
-      type: 'corporate',
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop',
-      slug: 'corporate-leadership'
-    },
-    {
-      id: 'leader-voice',
-      title: 'Liderin Səsi və Bədən Dili',
-      excerpt: 'Səs tonu, bədən dili və effektiv jestlərin istifadəsi',
-      type: 'corporate',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop',
-      slug: 'leader-voice'
-    },
-    {
-      id: 'speech-expression',
-      title: 'Nitq və Özünü İfadə Bacarıqları',
-      excerpt: 'Korporativ mühitdə özünü ifadə və təqdimat bacarıqları',
-      type: 'corporate',
-      image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=600&fit=crop',
-      slug: 'speech-expression'
-    }
-  ];
+  
+  // Get dynamic training cards from ContentContext (max 3 for home page)
+  const trainingCards = getHomeCourses().map(course => ({
+    id: course.id,
+    title: course.name[language],
+    excerpt: course.description[language],
+    type: course.category || 'individual',
+    image: course.image || 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=600&fit=crop',
+    slug: course.slug || course.id,
+    duration: course.duration,
+    price: course.price
+  }));
 
   // Get published news limited to 3 articles for blog section
   const publishedNews = news.filter(item => item.published).slice(0, 3);
+
+  // Get dynamic trainer data from ContentContext
+  const trainers = getActiveTrainers().map(trainer => ({
+    id: trainer.id,
+    name: trainer.name[language],
+    title: trainer.title[language],
+    specialty: trainer.specialty[language],
+    image: trainer.image,
+    bio: trainer.description[language]
+  }));
+
+  // Force re-render when courses or trainers change
+  useEffect(() => {
+    setContentKey(prev => prev + 1);
+  }, [courses, trainers]);
+
+  // Reset trainer index when trainers change
+  useEffect(() => {
+    if (trainers.length > 0 && currentTrainerIndex >= trainers.length) {
+      setCurrentTrainerIndex(0);
+    }
+  }, [trainers, currentTrainerIndex]);
 
   // Load Google Fonts
   useEffect(() => {
@@ -274,93 +254,6 @@ const HomePage = ({ setCurrentPage }) => {
     }
   ];
 
-  // Course data for grid - CMS-ready structure
-  const courses = [
-    {
-      id: 1,
-      title: 'Kamera Qarşısında İnamlı Çıxış',
-      slug: 'kamera-qarşısında-inamli-cixis',
-      excerpt: 'Televiziya və media çıxışları üçün praktiki təlim. Professional səviyyədə çıxış bacarıqları.',
-      image: '/course1.jpg',
-      type: 'individual'
-    },
-    {
-      id: 2,
-      title: 'Biznes Nitqi və Təqdimat',
-      slug: 'biznes-nitqi-ve-teqdimat',
-      excerpt: 'Korporativ mühitdə effektiv ünsiyyət. Prezentasiya hazırlama və təqdim etmə texnikaları.',
-      image: '/course2.jpg',
-      type: 'corporate'
-    },
-    {
-      id: 3,
-      title: 'Liderlik və Komanda İdarəçiliyi',
-      slug: 'liderlik-ve-komanda-idareciliyi',
-      excerpt: 'Komanda liderliyi bacarıqları. Motivasiya və delegasiya strategiyaları öyrənin.',
-      image: '/course3.jpg',
-      type: 'corporate'
-    },
-    {
-      id: 4,
-      title: 'Şəxsi Brend və İmaj',
-      slug: 'sexsi-brend-ve-imaj',
-      excerpt: 'Professional imaj yaradın. Şəxsi brendinizi inkişaf etdirmək üçün praktiki məsləhətlər.',
-      image: '/course4.jpg',
-      type: 'individual'
-    },
-    {
-      id: 5,
-      title: 'Özgüvən və Stressə Qarşı Mübarizə',
-      slug: 'ozguven-ve-stresse-qarsi-mubarize',
-      excerpt: 'Özgüvəninizi artırın və stresslə effektiv şəkildə mübarizə aparın. Psixoloji dəstək və praktiki üsullar.',
-      image: '/course5.jpg',
-      type: 'individual'
-    },
-    {
-      id: 6,
-      title: 'Korporativ Ünsiyyət və Neqosasiya',
-      slug: 'korporativ-unsiyyet-ve-neqosasiya',
-      excerpt: 'Şirkət daxili ünsiyyət və müzakirə bacarıqları. Neqosasiya strategiyaları və münaqişə həlli.',
-      image: '/course6.jpg',
-      type: 'corporate'
-    }
-  ];
-
-  // Trainer data for carousel - from About page "Peşəkar Təlimçi Heyətimiz" section
-  const trainers = [
-    {
-      id: 1,
-      name: 'Firuzə Aslanova',
-      title: 'Təsisçi, Çıxış və Nitq Bacarıqları Təlimçisi',
-      specialty: 'Nitq Mütəxəssisi',
-      image: '/trainer1.jpg',
-      bio: 'Firuzə Aslanova Bakı Nitq Mərkəzinin təsisçisi, çıxış və nitq bacarıqları təlimçisi, həmçinin peşəkar pedaqoq və jurnalistdir. Müxtəlif təhsil müəssisələrində pedaqoq kimi çalışıb və uzun müddət "Big Group" şirkətində müxbir olaraq fəaliyyət göstərib. Azərbaycanda nitq təlimi alıb və həmçinin Türkiyənin "Badi" fəaliyyət platformasında iştirak edərək "Əsas işarə dili və bədən dili" mövzusunda təlim alıb.'
-    },
-    {
-      id: 2,
-      name: 'Pərvin Pərlan',
-      title: 'Çıxış və Korporativ Ünsiyyət Təlimçisi',
-      specialty: 'Liderlik Təlimçisi',
-      image: '/trainer2.jpg',
-      bio: 'Pərvin Pərlan çıxış və korporativ ünsiyyət təlimçisi, həmçinin peşəkar marketinqçidir. 18 illik korporativ iş təcrübəsinə malikdir. Rusiyada "Ostankino" aparıcılar üçün ali məktəbini bitirib, İngiltərədə Marketinq və Kommunikasiya üzrə magistr dərəcəsi alıb və hazırda Kommunikasiya üzrə doktorluq təhsili davam etdirir. "Liderlik və Effektiv Ünsiyyət" mövzularında təlimlər keçirir.'
-    },
-    {
-      id: 3,
-      name: 'Lalə Mustafayeva',
-      title: 'Peşəkar Psixoloq',
-      specialty: 'Təqdimat Mütəxəssisi',
-      image: '/trainer3.jpg',
-      bio: 'Lalə Mustafayeva peşəkar psixoloqdur. İngiltərədə Essex Universitetində Psixologiya üzrə bakalavr dərəcəsi alıb və Britaniya Psixologiya Cəmiyyətinin (BPS) üzvüdür. İnsan psixologiyasının incəliklərini öyrənmək və fərdin psixoloji rifahını yaxşılaşdırmağa diqqət yetirir. Psixoloji sağlamlıq, stress idarəetmə, özünütəqdimat və şəxsi inkişaf mövzularında müxtəlif konfrans və seminarlarda iştirak edib.'
-    },
-    {
-      id: 4,
-      name: 'Ayşən Hüseynova',
-      title: 'Peşəkar Aparıcı və Diksiya Təlimçisi',
-      specialty: 'Ünsiyyət Koçu',
-      image: '/trainer4.jpg',
-      bio: 'Ayşən Hüseynova peşəkar aparıcı və diksiya təlimçisidir. Düzgün nitq, səlis ifadə və effektiv danışıq üçün unikal metodologiyalara malikdir. Bakı Dövlət Universitetinin Jurnalistika fakültəsini bitirib. Sonradan Türkiyədə Kocaeli Universitetində jurnalistika üzrə magistr dərəcəsi alıb. Hazırda İctimai Televiziyada "Xəbərlər" proqramının və İctimai Radioda "Xəbər Vaxtı" proqramının aparıcısıdır.'
-    }
-  ];
 
   // Filter approved testimonials
   const approvedTestimonials = testimonials.filter(testimonial => testimonial.approved);
@@ -1306,7 +1199,7 @@ const HomePage = ({ setCurrentPage }) => {
               >
                 Fərdi Təlimlər
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
+              <div key={`individual-${contentKey}`} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
                 {trainingCards
                   .filter(course => course.type === 'individual')
                   .slice(0, 3)
@@ -1315,12 +1208,8 @@ const HomePage = ({ setCurrentPage }) => {
                     key={course.id}
                     onClick={() => {
                       setCurrentPage('courses');
-                      setTimeout(() => {
-                        const individualSection = document.getElementById('individual-trainings');
-                        if (individualSection) {
-                          individualSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                      }, 200);
+                      // Use hash to ensure proper navigation
+                      window.location.hash = '#individual-trainings';
                     }}
                     className="course-card group relative block cursor-pointer"
                     style={{
@@ -1403,12 +1292,8 @@ const HomePage = ({ setCurrentPage }) => {
                 <button
                   onClick={() => {
                     setCurrentPage('courses');
-                    setTimeout(() => {
-                      const individualSection = document.getElementById('individual-trainings');
-                      if (individualSection) {
-                        individualSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      }
-                    }, 200);
+                    // Use hash to ensure proper navigation
+                    window.location.hash = '#individual-trainings';
                   }}
                   className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
                   style={{
@@ -1439,7 +1324,7 @@ const HomePage = ({ setCurrentPage }) => {
               >
                 Korporativ Təlimlər
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
+              <div key={`corporate-${contentKey}`} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
                 {trainingCards
                   .filter(course => course.type === 'corporate')
                   .slice(0, 3)
@@ -1448,12 +1333,8 @@ const HomePage = ({ setCurrentPage }) => {
                     key={course.id}
                     onClick={() => {
                       setCurrentPage('courses');
-                      setTimeout(() => {
-                        const corporateSection = document.getElementById('corporate-trainings');
-                        if (corporateSection) {
-                          corporateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                      }, 200);
+                      // Use hash to ensure proper navigation
+                      window.location.hash = '#corporate-trainings';
                     }}
                     className="course-card group relative block cursor-pointer"
                     style={{
@@ -1536,12 +1417,8 @@ const HomePage = ({ setCurrentPage }) => {
                 <button
                   onClick={() => {
                     setCurrentPage('courses');
-                    setTimeout(() => {
-                      const corporateSection = document.getElementById('corporate-trainings');
-                      if (corporateSection) {
-                        corporateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      }
-                    }, 200);
+                    // Use hash to ensure proper navigation
+                    window.location.hash = '#corporate-trainings';
                   }}
                   className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
                   style={{
@@ -1598,40 +1475,42 @@ const HomePage = ({ setCurrentPage }) => {
             
             {/* Right: Navigation Arrows */}
             <div className="flex gap-3">
-              <button
-                onClick={() => setCurrentTrainerIndex(prev => 
-                  prev === 0 ? trainers.length - 1 : prev - 1
-                )}
-                className="flex items-center justify-center transition-all duration-200"
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  backgroundColor: '#2166FF',
-                  borderRadius: '4px',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#1d5def';
-                  e.target.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = '#2166FF';
-                  e.target.style.transform = 'translateY(0)';
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <path d="m15 18-6-6 6-6"/>
-                </svg>
-              </button>
-              
-              <button
-                onClick={() => setCurrentTrainerIndex(prev => 
-                  prev === trainers.length - 1 ? 0 : prev + 1
-                )}
-                className="flex items-center justify-center transition-all duration-200"
-                style={{
-                  width: '48px',
+              {trainers.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setCurrentTrainerIndex(prev => 
+                      prev === 0 ? trainers.length - 1 : prev - 1
+                    )}
+                    className="flex items-center justify-center transition-all duration-200"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      backgroundColor: '#2166FF',
+                      borderRadius: '4px',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = '#1d5def';
+                      e.target.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = '#2166FF';
+                      e.target.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                  </button>
+                  
+                  <button
+                    onClick={() => setCurrentTrainerIndex(prev => 
+                      prev === trainers.length - 1 ? 0 : prev + 1
+                    )}
+                    className="flex items-center justify-center transition-all duration-200"
+                    style={{
+                      width: '48px',
                   height: '48px',
                   backgroundColor: '#2166FF',
                   borderRadius: '4px',
@@ -1651,10 +1530,13 @@ const HomePage = ({ setCurrentPage }) => {
                   <path d="m9 18 6-6-6-6"/>
                 </svg>
               </button>
+                </>
+              )}
             </div>
           </div>
           
           {/* Trainer Slide - Two Column Layout */}
+          {trainers.length > 0 ? (
           <div className="flex flex-col lg:flex-row gap-12 items-start">
             {/* Left Column - Square Photo */}
             <div className="w-full lg:w-auto lg:flex-shrink-0">
@@ -1663,13 +1545,27 @@ const HomePage = ({ setCurrentPage }) => {
                   width: '360px',
                   height: '360px',
                   backgroundColor: '#E7E7EE',
-                  backgroundImage: `url(${trainers[currentTrainerIndex]?.image})`,
+                  backgroundImage: trainers[currentTrainerIndex]?.image ? `url(${trainers[currentTrainerIndex].image})` : 'none',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   borderRadius: '12px',
-                  maxWidth: '100%'
+                  maxWidth: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
-              />
+              >
+                {!trainers[currentTrainerIndex]?.image && (
+                  <span style={{
+                    fontSize: '4rem',
+                    fontWeight: 'bold',
+                    color: '#6B7280',
+                    fontFamily: "'Poppins', sans-serif"
+                  }}>
+                    {trainers[currentTrainerIndex]?.name?.split(' ').map(n => n[0]).join('')}
+                  </span>
+                )}
+              </div>
             </div>
             
             {/* Right Column - Trainer Info */}
@@ -1718,6 +1614,17 @@ const HomePage = ({ setCurrentPage }) => {
               </p>
             </div>
           </div>
+          ) : (
+          <div className="text-center py-12">
+            <p style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: '1.2rem',
+              color: '#6B7280'
+            }}>
+              No active trainers available
+            </p>
+          </div>
+          )}
         </div>
       </section>
       

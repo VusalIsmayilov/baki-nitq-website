@@ -47,7 +47,12 @@ const AdminDashboard = () => {
     addTrainer,
     updateTrainer,
     deleteTrainer,
-    getActiveTrainers
+    getActiveTrainers,
+    getIndividualCourses,
+    getCorporateCourses,
+    getHomeCourses,
+    getHomeCoursesCount,
+    toggleCourseHomeVisibility
   } = useContent();
   
   const [activeSection, setActiveSection] = useState('overview');
@@ -167,7 +172,10 @@ const AdminDashboard = () => {
       alert('✅ Course updated successfully!');
     } else {
       addCourse(courseData);
-      alert('✅ Course added successfully!');
+      const homeMessage = courseData.showOnHome ? 
+        '\n💡 Course will appear on the home page!' : 
+        '\n💡 Use the eye icon to show this course on the home page.';
+      alert('✅ Course added successfully!' + homeMessage);
     }
     setShowCourseForm(false);
     setEditingCourse(null);
@@ -611,7 +619,16 @@ const AdminDashboard = () => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-lg p-6">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-semibold">Course Management</h3>
+          <div>
+            <h3 className="text-xl font-semibold">Course Management</h3>
+            <p className="text-sm text-gray-600 mt-1">
+              Home page courses: Individual {getHomeCoursesCount().individual}/3, Corporate {getHomeCoursesCount().corporate}/3 
+              (Total: {getHomeCoursesCount().total}/6)
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              💡 Click the eye icon to toggle home page visibility for each course
+            </p>
+          </div>
           <button
             onClick={() => setShowCourseForm(true)}
             className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-800 flex items-center space-x-2"
@@ -634,6 +651,14 @@ const AdminDashboard = () => {
                     <span className={`px-2 py-1 rounded text-xs ${course.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                       {course.active ? 'Active' : 'Inactive'}
                     </span>
+                    <span className={`px-2 py-1 rounded text-xs ${course.category === 'individual' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}`}>
+                      {course.category || 'Individual'}
+                    </span>
+                    {course.showOnHome && (
+                      <span className="px-2 py-1 rounded text-xs bg-yellow-100 text-yellow-800 font-medium">
+                        🏠 Home Page
+                      </span>
+                    )}
                   </div>
                   <div className="mt-2">
                     <span className="text-xs text-gray-500">
@@ -642,6 +667,24 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="flex space-x-2">
+                  <button
+                    onClick={() => {
+                      const counts = getHomeCoursesCount();
+                      const canAdd = course.showOnHome || counts[course.category] < 3;
+                      
+                      if (canAdd) {
+                        toggleCourseHomeVisibility(course.id);
+                        alert(`Course ${course.showOnHome ? 'removed from' : 'added to'} home page!`);
+                      }
+                    }}
+                    className={`p-1 ${course.showOnHome ? 'text-yellow-600 hover:text-yellow-800' : 
+                      (getHomeCoursesCount()[course.category] >= 3 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-400 hover:text-yellow-600')}`}
+                    title={course.showOnHome ? 'Remove from home page' : 
+                      (getHomeCoursesCount()[course.category] >= 3 ? `${course.category} limit reached (3/3)` : 'Add to home page')}
+                    disabled={!course.showOnHome && getHomeCoursesCount()[course.category] >= 3}
+                  >
+                    {course.showOnHome ? <Eye size={16} /> : <EyeOff size={16} />}
+                  </button>
                   <button
                     onClick={() => setEditingCurriculum(course)}
                     className="text-green-600 hover:text-green-800 p-1"
@@ -1104,16 +1147,41 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Image URL */}
+        {/* Image Upload */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Profile Image (Optional)</label>
           <input
-            type="url"
-            placeholder="https://example.com/image.jpg"
-            value={formData.image}
-            onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  setFormData(prev => ({ ...prev, image: e.target.result }));
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
+          <p className="text-xs text-gray-500 mt-1">💡 Select an image file or leave empty to show initials placeholder</p>
+          {formData.image && (
+            <div className="mt-2 flex items-center space-x-2">
+              <img 
+                src={formData.image} 
+                alt="Preview" 
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+                className="text-red-600 hover:text-red-800 text-sm"
+              >
+                Remove
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Active Status */}
@@ -1775,7 +1843,9 @@ const CourseForm = ({ course, onSubmit, onCancel }) => {
     description: course?.description || { az: '', en: '', ru: '' },
     duration: course?.duration || '',
     price: course?.price || '',
-    active: course?.active ?? true
+    active: course?.active ?? true,
+    category: course?.category || 'individual',
+    showOnHome: course?.showOnHome ?? false
   });
 
   const handleSubmit = () => {
@@ -1850,6 +1920,35 @@ const CourseForm = ({ course, onSubmit, onCancel }) => {
               className="w-full p-2 border border-gray-300 rounded-md"
               placeholder="e.g., 200 AZN"
             />
+          </div>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <select
+              value={formData.category}
+              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+              className="w-full p-2 border border-gray-300 rounded-md"
+            >
+              <option value="individual">Individual</option>
+              <option value="corporate">Corporate</option>
+            </select>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="showOnHome"
+              checked={formData.showOnHome}
+              onChange={(e) => setFormData(prev => ({ ...prev, showOnHome: e.target.checked }))}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="showOnHome" className="ml-2 block text-sm text-gray-900">
+              Show on Home Page (max 3 per category)
+            </label>
+          </div>
+          <div className="text-xs text-gray-500 mt-1">
+            💡 Check this box to display the course on the home page training section
           </div>
         </div>
       </div>

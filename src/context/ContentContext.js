@@ -381,7 +381,9 @@ export const ContentProvider = ({ children }) => {
       },
       duration: '3 months',
       price: '200 AZN',
-      active: true
+      active: true,
+      category: 'individual',
+      showOnHome: true
     },
     {
       id: 2,
@@ -417,7 +419,9 @@ export const ContentProvider = ({ children }) => {
       },
       duration: '4 months',
       price: '250 AZN',
-      active: true
+      active: true,
+      category: 'individual',
+      showOnHome: true
     },
     {
       id: 3,
@@ -453,7 +457,9 @@ export const ContentProvider = ({ children }) => {
       },
       duration: '2 months',
       price: '180 AZN',
-      active: true
+      active: true,
+      category: 'corporate',
+      showOnHome: false
     }
   ]);
 
@@ -787,6 +793,50 @@ export const ContentProvider = ({ children }) => {
     setCourses(prev => prev.filter(course => course.id !== courseId));
   };
 
+  const getIndividualCourses = () => {
+    return courses.filter(course => course.category === 'individual' && course.active);
+  };
+
+  const getCorporateCourses = () => {
+    return courses.filter(course => course.category === 'corporate' && course.active);
+  };
+
+  const getHomeCourses = () => {
+    const homeCourses = courses.filter(course => course.showOnHome && course.active);
+    const individualCourses = homeCourses.filter(course => course.category === 'individual').slice(0, 3);
+    const corporateCourses = homeCourses.filter(course => course.category === 'corporate').slice(0, 3);
+    return [...individualCourses, ...corporateCourses];
+  };
+
+  const getHomeCoursesCount = () => {
+    const homeCourses = courses.filter(course => course.showOnHome && course.active);
+    const individualCount = homeCourses.filter(course => course.category === 'individual').length;
+    const corporateCount = homeCourses.filter(course => course.category === 'corporate').length;
+    return { individual: individualCount, corporate: corporateCount, total: individualCount + corporateCount };
+  };
+
+  const toggleCourseHomeVisibility = (courseId) => {
+    setCourses(prev => prev.map(course => {
+      if (course.id === courseId) {
+        const newShowOnHome = !course.showOnHome;
+        
+        // If trying to enable home visibility, check the limit
+        if (newShowOnHome) {
+          const homeCourses = prev.filter(c => c.showOnHome && c.active && c.id !== courseId);
+          const sameCategory = homeCourses.filter(c => c.category === course.category);
+          
+          if (sameCategory.length >= 3) {
+            alert(`Maximum 3 ${course.category} courses allowed on home page. Please remove another course first.`);
+            return course; // Don't change
+          }
+        }
+        
+        return { ...course, showOnHome: newShowOnHome };
+      }
+      return course;
+    }));
+  };
+
   // Course Curriculum Management
   const updateCourseCurriculum = (courseId, language, curriculum) => {
     console.log(`🔄 Updating curriculum for course ${courseId} in ${language}:`, curriculum);
@@ -1000,6 +1050,11 @@ export const ContentProvider = ({ children }) => {
       addCourse,
       updateCourse,
       deleteCourse,
+      getIndividualCourses,
+      getCorporateCourses,
+      getHomeCourses,
+      getHomeCoursesCount,
+      toggleCourseHomeVisibility,
       
       // Course Curriculum Management
       updateCourseCurriculum,

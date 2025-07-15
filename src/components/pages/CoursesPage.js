@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useContent } from '../../context/ContentContext';
 import { Mic, Users, TrendingUp, UserCog, Volume2, MessageSquare, UserCheck, Search, Filter, ChevronDown, Target, Zap, BarChart, Building2, PieChart, BookOpen } from 'lucide-react';
 import ConversionCTA from '../ConversionCTA';
 
 const CoursesPage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
+  const { getIndividualCourses, getCorporateCourses, siteContent } = useContent();
   const [selectedTraining, setSelectedTraining] = useState(null);
   const [activeTab, setActiveTab] = useState('individual');
   const [isTabsSticky, setIsTabsSticky] = useState(false);
@@ -15,64 +17,15 @@ const CoursesPage = ({ setCurrentPage }) => {
     duration: '',
     price: ''
   });
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const tabsRef = useRef(null);
   const individualRef = useRef(null);
   const corporateRef = useRef(null);
   
-  const individualTrainings = [
-    {
-      id: 'speech',
-      title: t('speechTraining'),
-      description: t('speechTrainingDesc'),
-      category: 'individual',
-      icon: Mic
-    },
-    {
-      id: 'leadership',
-      title: t('leadershipCommunication'),
-      description: t('leadershipCommunicationDesc'),
-      category: 'individual',
-      icon: Users
-    },
-    {
-      id: 'marketing',
-      title: t('marketingTraining'),
-      description: t('marketingTrainingDesc'),
-      category: 'individual',
-      icon: TrendingUp
-    },
-    {
-      id: 'etiquette',
-      title: t('etiquetteTraining'),
-      description: t('etiquetteTrainingDesc'),
-      category: 'individual',
-      icon: UserCheck
-    }
-  ];
-
-  const corporateTrainings = [
-    {
-      id: 'corporate-leadership',
-      title: t('corporateLeadership'),
-      description: t('corporateLeadershipDesc'),
-      category: 'corporate',
-      icon: UserCog
-    },
-    {
-      id: 'leader-voice',
-      title: t('leaderVoice'),
-      description: t('leaderVoiceDesc'),
-      category: 'corporate',
-      icon: Volume2
-    },
-    {
-      id: 'speech-expression',
-      title: t('speechExpression'),
-      description: t('speechExpressionDesc'),
-      category: 'corporate',
-      icon: MessageSquare
-    }
-  ];
+  // Get dynamic course data from context
+  const individualTrainings = getIndividualCourses();
+  const corporateTrainings = getCorporateCourses();
 
   const openTrainingModal = (training) => {
     setSelectedTraining(training);
@@ -91,8 +44,8 @@ const CoursesPage = ({ setCurrentPage }) => {
         setIsTabsSticky(scrollTop > tabsTop - 100);
       }
 
-      // Update active tab based on scroll position
-      if (individualRef.current && corporateRef.current) {
+      // Update active tab based on scroll position (only if not navigating and not initial load)
+      if (!isNavigating && !isInitialLoad && individualRef.current && corporateRef.current) {
         const individualTop = individualRef.current.offsetTop - 200;
         const corporateTop = corporateRef.current.offsetTop - 200;
         const scrollTop = window.scrollY;
@@ -107,6 +60,47 @@ const CoursesPage = ({ setCurrentPage }) => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, [isNavigating, isInitialLoad]);
+
+  // Handle initial navigation to specific sections
+  useEffect(() => {
+    const handleInitialNavigation = () => {
+      const hash = window.location.hash;
+      if (hash === '#corporate-trainings') {
+        setIsNavigating(true);
+        setActiveTab('corporate');
+        setTimeout(() => {
+          if (corporateRef.current) {
+            corporateRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          setTimeout(() => setIsNavigating(false), 1000);
+        }, 100);
+      } else if (hash === '#individual-trainings') {
+        setIsNavigating(true);
+        setActiveTab('individual');
+        setTimeout(() => {
+          if (individualRef.current) {
+            individualRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          setTimeout(() => setIsNavigating(false), 1000);
+        }, 100);
+      }
+    };
+
+    // Check for hash on mount
+    handleInitialNavigation();
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleInitialNavigation);
+    return () => window.removeEventListener('hashchange', handleInitialNavigation);
+  }, []);
+
+  // Disable initial load flag after component has mounted
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   const scrollToSection = (sectionRef, tabName) => {
@@ -163,11 +157,19 @@ const CoursesPage = ({ setCurrentPage }) => {
   // Filter and search logic
   const filterTrainings = (trainings) => {
     return trainings.filter(training => {
-      const matchesSearch = training.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           training.description.toLowerCase().includes(searchTerm.toLowerCase());
+      // Handle both string and object format for title and description
+      const title = training.title ? 
+        (typeof training.title === 'string' ? training.title : training.title[language]) :
+        (training.name ? training.name[language] : '');
+      const description = training.description ? 
+        (typeof training.description === 'string' ? training.description : training.description[language]) :
+        '';
+      
+      const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           description.toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesTopic = !filters.topic || 
-                          training.title.toLowerCase().includes(filters.topic) ||
+                          title.toLowerCase().includes(filters.topic) ||
                           training.id.includes(filters.topic);
       
       // For demo purposes, all trainings match duration and price filters
@@ -182,9 +184,29 @@ const CoursesPage = ({ setCurrentPage }) => {
   const filteredCorporateTrainings = filterTrainings(corporateTrainings);
 
   const TrainingCard = ({ training, colorScheme }) => {
-    const IconComponent = training.icon;
+    // Default icons for different training types
+    const defaultIcons = {
+      individual: Mic,
+      corporate: UserCog,
+      speech: Mic,
+      leadership: Users,
+      marketing: TrendingUp,
+      etiquette: UserCheck,
+      'corporate-leadership': UserCog,
+      'leader-voice': Volume2,
+      'speech-expression': MessageSquare
+    };
+    
+    const IconComponent = training.icon || defaultIcons[training.id] || defaultIcons[training.category || 'individual'];
     const isExpanded = expandedCards[training.id];
-    const fullDescription = training.description;
+    
+    // Handle both string and object format for title and description
+    const title = training.title ? 
+      (typeof training.title === 'string' ? training.title : training.title[language]) :
+      (training.name ? training.name[language] : '');
+    const fullDescription = training.description ? 
+      (typeof training.description === 'string' ? training.description : training.description[language]) :
+      '';
     const truncatedDescription = truncateText(fullDescription, 5);
     const needsTruncation = fullDescription.split(' ').length > 60; // ~5 lines worth
     
@@ -218,7 +240,7 @@ const CoursesPage = ({ setCurrentPage }) => {
             lineHeight: 1.35,
             color: '#1E1E1E'
           }}>
-            {training.title}
+            {title}
           </h3>
         </div>
         <div className="flex-1 mb-6">
@@ -325,7 +347,7 @@ const CoursesPage = ({ setCurrentPage }) => {
             letterSpacing: '-0.02em',
             textShadow: '0 2px 4px rgba(0,0,0,0.1)',
             color: '#1E1E1E'
-          }}>{t('coursesTitle')}</h1>
+          }}>{siteContent.coursesHeroTitle ? siteContent.coursesHeroTitle[language] : t('coursesTitle')}</h1>
           <p className="text-center mb-8 max-w-3xl mx-auto" style={{
             fontFamily: "'Poppins', sans-serif",
             fontWeight: 400,
@@ -333,9 +355,10 @@ const CoursesPage = ({ setCurrentPage }) => {
             lineHeight: 1.6,
             color: '#1E1E1E'
           }}>
-            {language === 'az' ? 'Nitq mədəniyyəti, liderlik və ünsiyyət bacarıqlarınızı inkişaf etdirmək üçün peşəkar təlim proqramlarımız' :
-             language === 'en' ? 'Professional training programs to develop your speech culture, leadership and communication skills' :
-             'Профессиональные учебные программы для развития вашей культуры речи, лидерских и коммуникативных навыков'}
+            {siteContent.coursesHeroDescription ? siteContent.coursesHeroDescription[language] : 
+             (language === 'az' ? 'Nitq mədəniyyəti, liderlik və ünsiyyət bacarıqlarınızı inkişaf etdirmək üçün peşəkar təlim proqramlarımız' :
+              language === 'en' ? 'Professional training programs to develop your speech culture, leadership and communication skills' :
+              'Профессиональные учебные программы для развития вашей культуры речи, лидерских и коммуникативных навыков')}
           </p>
         </div>
       </section>
