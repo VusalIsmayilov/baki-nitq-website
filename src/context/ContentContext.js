@@ -591,6 +591,96 @@ export const ContentProvider = ({ children }) => {
     }
   ]);
 
+  const [resources, setResources] = useState([
+    {
+      id: 1,
+      title: {
+        az: 'Nitq Bacarıqlarını İnkişaf Etdirmək üçün 10 Təsirli Texnika',
+        en: '10 Effective Techniques for Developing Speech Skills',
+        ru: '10 эффективных техник для развития речевых навыков'
+      },
+      content: {
+        az: 'Bu məqalədə nitq bacarıqlarınızı təkmilləşdirmək üçün ən səmərəli 10 texnikanı öyrənəcəksiniz. Hər gün tətbiq edə biləcəyiniz praktiki məsləhətlər.',
+        en: 'In this article, you will learn the 10 most effective techniques for improving your speech skills. Practical tips you can apply every day.',
+        ru: 'В этой статье вы изучите 10 самых эффективных техник для улучшения речевых навыков. Практические советы, которые можно применять каждый день.'
+      },
+      excerpt: {
+        az: 'Nitq bacarıqlarını inkişaf etdirmək üçün praktiki təsirli texnikalar',
+        en: 'Practical effective techniques for developing speech skills',
+        ru: 'Практические эффективные техники для развития речевых навыков'
+      },
+      date: '2025-01-12',
+      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop',
+      category: {
+        az: 'Təlim Materialları',
+        en: 'Training Materials',
+        ru: 'Учебные материалы'
+      },
+      type: 'article',
+      downloadUrl: '',
+      published: true,
+      featured: true
+    },
+    {
+      id: 2,
+      title: {
+        az: 'İctimai Çıxış Zamanı Həyəcanla Mübarizə Üsulları',
+        en: 'Ways to Combat Anxiety During Public Speaking',
+        ru: 'Способы борьбы с тревогой во время публичных выступлений'
+      },
+      content: {
+        az: 'İctimai çıxış zamanı həyəcan hər kəsin qarşılaşdığı problemdir. Bu praktiki təlimat ilə həyəcanınızı idarə etməyi öyrənin.',
+        en: 'Anxiety during public speaking is a problem everyone faces. Learn to manage your anxiety with this practical guide.',
+        ru: 'Тревога во время публичных выступлений - это проблема, с которой сталкивается каждый. Научитесь управлять тревогой с помощью этого практического руководства.'
+      },
+      excerpt: {
+        az: 'İctimai çıxış həyəcanını idarə etmək üçün praktiki təlimat',
+        en: 'Practical guide to managing public speaking anxiety',
+        ru: 'Практическое руководство по управлению тревогой при публичных выступлениях'
+      },
+      date: '2025-01-08',
+      imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
+      category: {
+        az: 'İnkişaf Təlimatları',
+        en: 'Development Guides',
+        ru: 'Руководства по развитию'
+      },
+      type: 'guide',
+      downloadUrl: '',
+      published: true,
+      featured: false
+    },
+    {
+      id: 3,
+      title: {
+        az: 'Səs Təlimi və Diksiya Məşqləri - PDF Yükləyin',
+        en: 'Voice Training and Diction Exercises - Download PDF',
+        ru: 'Голосовые тренировки и упражнения по дикции - Скачать PDF'
+      },
+      content: {
+        az: 'Səsinizi gücləndirir və diksiyanızı təkmilləşdirir məşqlər toplusu. PDF formatında pulsuz yükləyə bilərsiniz.',
+        en: 'A collection of exercises that strengthen your voice and improve your diction. You can download it for free in PDF format.',
+        ru: 'Сборник упражнений, которые укрепляют голос и улучшают дикцию. Можно скачать бесплатно в PDF формате.'
+      },
+      excerpt: {
+        az: 'Səs və diksiya məşqləri toplusu - pulsuz PDF yüklə',
+        en: 'Voice and diction exercises collection - free PDF download',
+        ru: 'Сборник упражнений по голосу и дикции - бесплатное скачивание PDF'
+      },
+      date: '2025-01-05',
+      imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=600&fit=crop',
+      category: {
+        az: 'Yüklənən Resurslar',
+        en: 'Downloadable Resources',
+        ru: 'Загружаемые ресурсы'
+      },
+      type: 'download',
+      downloadUrl: '/downloads/voice-diction-exercises.pdf',
+      published: true,
+      featured: true
+    }
+  ]);
+
   const [teamMembers, setTeamMembers] = useState([
     {
       id: 1,
@@ -1007,6 +1097,48 @@ export const ContentProvider = ({ children }) => {
     setActivities(prev => prev.filter(activity => activity.id !== activityId));
   };
 
+  // Resource Management Functions
+  const addResource = (resourceData) => {
+    const newResource = {
+      id: resources.length + 1,
+      ...resourceData,
+      date: new Date().toISOString().split('T')[0],
+      published: false
+    };
+    setResources(prev => [...prev, newResource]);
+    return newResource;
+  };
+
+  const updateResource = (resourceId, resourceData) => {
+    setResources(prev => prev.map(resource => 
+      resource.id === resourceId ? { ...resource, ...resourceData } : resource
+    ));
+  };
+
+  const deleteResource = (resourceId) => {
+    setResources(prev => prev.filter(resource => resource.id !== resourceId));
+  };
+
+  const publishResource = (resourceId) => {
+    setResources(prev => prev.map(resource =>
+      resource.id === resourceId ? { ...resource, published: true } : resource
+    ));
+  };
+
+  const toggleResourceFeatured = (resourceId) => {
+    setResources(prev => prev.map(resource =>
+      resource.id === resourceId ? { ...resource, featured: !resource.featured } : resource
+    ));
+  };
+
+  const getPublishedResources = () => {
+    return resources.filter(resource => resource.published).sort((a, b) => new Date(b.date) - new Date(a.date));
+  };
+
+  const getFeaturedResources = () => {
+    return resources.filter(resource => resource.published && resource.featured).sort((a, b) => new Date(b.date) - new Date(a.date));
+  };
+
   // Analytics Functions
   const updateStats = (newStats) => {
     setSiteStats(prev => ({ ...prev, ...newStats }));
@@ -1084,6 +1216,16 @@ export const ContentProvider = ({ children }) => {
       addActivity,
       updateActivity,
       deleteActivity,
+      
+      // Resource Management
+      resources,
+      addResource,
+      updateResource,
+      deleteResource,
+      publishResource,
+      toggleResourceFeatured,
+      getPublishedResources,
+      getFeaturedResources,
       
       // Analytics
       updateStats,

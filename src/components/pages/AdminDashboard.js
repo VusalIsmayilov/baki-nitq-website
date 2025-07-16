@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
-import { FileText, Upload, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Newspaper, Eye, EyeOff, Star } from 'lucide-react';
+import { FileText, Upload, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Newspaper, Eye, EyeOff, Star, Calendar } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { t, language } = useLanguage();
@@ -13,6 +13,8 @@ const AdminDashboard = () => {
     testimonials,
     news,
     teamMembers,
+    activities,
+    resources,
     updateContent,
     updateMultipleContent,
     updateSiteSettings,
@@ -52,7 +54,15 @@ const AdminDashboard = () => {
     getCorporateCourses,
     getHomeCourses,
     getHomeCoursesCount,
-    toggleCourseHomeVisibility
+    toggleCourseHomeVisibility,
+    addActivity,
+    updateActivity,
+    deleteActivity,
+    addResource,
+    updateResource,
+    deleteResource,
+    publishResource,
+    toggleResourceFeatured
   } = useContent();
   
   const [activeSection, setActiveSection] = useState('overview');
@@ -82,6 +92,14 @@ const AdminDashboard = () => {
   const [editingNews, setEditingNews] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [editingCurriculum, setEditingCurriculum] = useState(null);
+  
+  // Activities Management State
+  const [editingActivity, setEditingActivity] = useState(null);
+  const [showActivityForm, setShowActivityForm] = useState(false);
+  
+  // Resources Management State
+  const [editingResource, setEditingResource] = useState(null);
+  const [showResourceForm, setShowResourceForm] = useState(false);
 
   // Sync editingContent with siteContent when siteContent changes
   useEffect(() => {
@@ -118,6 +136,8 @@ const AdminDashboard = () => {
     { id: 'content', name: 'Content Management', icon: FileText },
     { id: 'trainers', name: 'Trainers Management', icon: Users },
     { id: 'courses', name: 'Course Management', icon: BookOpen },
+    { id: 'activities', name: 'Activities Management', icon: Calendar },
+    { id: 'resources', name: 'Resources Management', icon: FileText },
     { id: 'news', name: 'News & Activities', icon: Newspaper },
     { id: 'team', name: 'Team Management', icon: Users },
     { id: 'testimonials', name: 'Testimonials', icon: Users },
@@ -179,6 +199,30 @@ const AdminDashboard = () => {
     }
     setShowCourseForm(false);
     setEditingCourse(null);
+  };
+
+  const handleActivitySubmit = (activityData) => {
+    if (editingActivity) {
+      updateActivity(editingActivity.id, activityData);
+      alert('✅ Activity updated successfully!');
+    } else {
+      addActivity(activityData);
+      alert('✅ Activity added successfully!');
+    }
+    setShowActivityForm(false);
+    setEditingActivity(null);
+  };
+
+  const handleResourceSubmit = (resourceData) => {
+    if (editingResource) {
+      updateResource(editingResource.id, resourceData);
+      alert('✅ Resource updated successfully!');
+    } else {
+      addResource(resourceData);
+      alert('✅ Resource added successfully!');
+    }
+    setShowResourceForm(false);
+    setEditingResource(null);
   };
 
   const handleTestimonialSubmit = (testimonialData) => {
@@ -859,6 +903,287 @@ const AdminDashboard = () => {
     );
   };
 
+  // Activities Management Functions
+  const handleAddActivity = () => {
+    setEditingActivity(null);
+    setShowActivityForm(true);
+  };
+
+  const handleEditActivity = (activity) => {
+    setEditingActivity(activity);
+    setShowActivityForm(true);
+  };
+
+  const handleDeleteActivity = (activityId) => {
+    if (window.confirm('Are you sure you want to delete this activity?')) {
+      deleteActivity(activityId);
+      alert('Activity deleted successfully!');
+    }
+  };
+
+  const renderActivitiesManagement = () => {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 
+            style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em'
+            }}
+          >
+            Activities Management
+          </h2>
+          <button
+            onClick={handleAddActivity}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+          >
+            <Plus size={16} className="mr-2" />
+            Add Activity
+          </button>
+        </div>
+
+        {/* Activities List */}
+        <div className="grid gap-6">
+          {activities.map((activity) => (
+            <div key={activity.id} className="bg-white rounded-lg shadow-lg p-6">
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* Image */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={activity.image || 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=600&fit=crop'}
+                    alt={activity.title[language]}
+                    className="w-32 h-32 rounded-lg object-cover"
+                  />
+                </div>
+                
+                {/* Content */}
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{activity.title[language]}</h3>
+                  <p className="text-gray-600 text-sm mb-3">
+                    {activity.description[language]}
+                  </p>
+                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
+                    <span>📅 {activity.date}</span>
+                    <span>🕐 {activity.time}</span>
+                    <span>📍 {activity.location[language]}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      activity.active 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {activity.active ? 'Active' : 'Inactive'}
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      activity.showOnHomepage 
+                        ? 'bg-blue-100 text-blue-800' 
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {activity.showOnHomepage ? 'On Homepage' : 'Not on Homepage'}
+                    </span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 capitalize">
+                      {activity.category}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Actions */}
+                <div className="flex flex-col space-y-2">
+                  <button
+                    onClick={() => handleEditActivity(activity)}
+                    className="bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center text-sm"
+                  >
+                    <Edit size={14} className="mr-1" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteActivity(activity.id)}
+                    className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center text-sm"
+                  >
+                    <Trash2 size={14} className="mr-1" />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Add/Edit Form */}
+        {(showActivityForm || editingActivity) && (
+          <ActivityForm
+            activity={editingActivity}
+            onSubmit={handleActivitySubmit}
+            onCancel={() => {
+              setShowActivityForm(false);
+              setEditingActivity(null);
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
+  // Resources Management Functions
+  const handleAddResource = () => {
+    setEditingResource(null);
+    setShowResourceForm(true);
+  };
+
+  const handleEditResource = (resource) => {
+    setEditingResource(resource);
+    setShowResourceForm(true);
+  };
+
+  const handleDeleteResource = (resourceId) => {
+    if (window.confirm('Are you sure you want to delete this resource?')) {
+      deleteResource(resourceId);
+      alert('Resource deleted successfully!');
+    }
+  };
+
+  const handleToggleResourcePublished = (resourceId) => {
+    publishResource(resourceId);
+    alert('Resource published successfully!');
+  };
+
+  const handleToggleResourceFeatured = (resourceId) => {
+    toggleResourceFeatured(resourceId);
+    alert('Resource featured status updated!');
+  };
+
+  const renderResourcesManagement = () => {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 
+            style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em'
+            }}
+          >
+            Resources Management
+          </h2>
+          <button
+            onClick={handleAddResource}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+          >
+            <Plus size={16} className="mr-2" />
+            Add Resource
+          </button>
+        </div>
+
+        {/* Resources List */}
+        <div className="grid gap-6">
+          {resources.map((resource) => (
+            <div key={resource.id} className="bg-white rounded-lg shadow-lg p-6">
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* Image */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={resource.imageUrl || 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=600&fit=crop'}
+                    alt={resource.title[language]}
+                    className="w-32 h-32 rounded-lg object-cover"
+                  />
+                </div>
+                
+                {/* Content */}
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{resource.title[language]}</h3>
+                  <p className="text-gray-600 text-sm mb-3">
+                    {resource.excerpt[language]}
+                  </p>
+                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
+                    <span>📅 {resource.date}</span>
+                    <span>📂 {resource.category[language]}</span>
+                    <span>📄 {resource.type}</span>
+                    {resource.downloadUrl && <span>⬇️ Downloadable</span>}
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      resource.published 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {resource.published ? 'Published' : 'Draft'}
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      resource.featured 
+                        ? 'bg-yellow-100 text-yellow-800' 
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {resource.featured ? '⭐ Featured' : 'Not Featured'}
+                    </span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 capitalize">
+                      {resource.type}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Actions */}
+                <div className="flex flex-col space-y-2">
+                  <button
+                    onClick={() => handleEditResource(resource)}
+                    className="bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center text-sm"
+                  >
+                    <Edit size={14} className="mr-1" />
+                    Edit
+                  </button>
+                  {!resource.published && (
+                    <button
+                      onClick={() => handleToggleResourcePublished(resource.id)}
+                      className="bg-green-600 text-white px-3 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center text-sm"
+                    >
+                      <Eye size={14} className="mr-1" />
+                      Publish
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleToggleResourceFeatured(resource.id)}
+                    className={`px-3 py-2 rounded-md transition-colors flex items-center text-sm ${
+                      resource.featured 
+                        ? 'bg-yellow-600 text-white hover:bg-yellow-700' 
+                        : 'bg-gray-600 text-white hover:bg-gray-700'
+                    }`}
+                  >
+                    <Star size={14} className="mr-1" />
+                    {resource.featured ? 'Unfeature' : 'Feature'}
+                  </button>
+                  <button
+                    onClick={() => handleDeleteResource(resource.id)}
+                    className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center text-sm"
+                  >
+                    <Trash2 size={14} className="mr-1" />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Add/Edit Form */}
+        {(showResourceForm || editingResource) && (
+          <ResourceForm
+            resource={editingResource}
+            onSubmit={handleResourceSubmit}
+            onCancel={() => {
+              setShowResourceForm(false);
+              setEditingResource(null);
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
   // Trainer Management Functions
   const handleAddTrainer = () => {
     setEditingTrainer(null);
@@ -1224,6 +1549,8 @@ const AdminDashboard = () => {
       case 'content': return renderContentManagement();
       case 'trainers': return renderTrainersManagement();
       case 'courses': return renderCourseManagement();
+      case 'activities': return renderActivitiesManagement();
+      case 'resources': return renderResourcesManagement();
       case 'news': return renderNewsManagement();
       case 'team': return renderTeamManagement();
       case 'contact': return <ContactInformationSection />;
@@ -2203,6 +2530,580 @@ const TeamMemberForm = ({ member, onSubmit, onCancel }) => {
         >
           Cancel
         </button>
+      </div>
+    </div>
+  );
+};
+
+// Activity Form Component
+const ActivityForm = ({ activity, onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState({
+    title: activity?.title || { az: '', en: '', ru: '' },
+    description: activity?.description || { az: '', en: '', ru: '' },
+    location: activity?.location || { az: '', en: '', ru: '' },
+    date: activity?.date || '',
+    time: activity?.time || '',
+    category: activity?.category || 'seminar',
+    image: activity?.image || '',
+    active: activity?.active ?? true,
+    showOnHomepage: activity?.showOnHomepage ?? false
+  });
+
+  const handleSubmit = () => {
+    if (formData.title.az && formData.title.en && formData.title.ru &&
+        formData.description.az && formData.description.en && formData.description.ru &&
+        formData.location.az && formData.location.en && formData.location.ru &&
+        formData.date && formData.time) {
+      onSubmit(formData);
+    } else {
+      alert('Please fill in all required fields for all languages');
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h4 className="text-lg font-semibold mb-4">{activity ? 'Edit Activity' : 'Add New Activity'}</h4>
+      
+      <div className="space-y-4">
+        {/* Title Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <input
+                type="text"
+                value={formData.title.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <input
+                type="text"
+                value={formData.title.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <input
+                type="text"
+                value={formData.title.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Description Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <textarea
+                value={formData.description.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  description: { ...prev.description, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="3"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <textarea
+                value={formData.description.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  description: { ...prev.description, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="3"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <textarea
+                value={formData.description.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  description: { ...prev.description, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="3"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Location Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <input
+                type="text"
+                value={formData.location.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  location: { ...prev.location, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <input
+                type="text"
+                value={formData.location.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  location: { ...prev.location, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <input
+                type="text"
+                value={formData.location.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  location: { ...prev.location, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Date and Time */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+            <input
+              type="date"
+              value={formData.date}
+              onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+            <input
+              type="time"
+              value={formData.time}
+              onChange={(e) => setFormData(prev => ({ ...prev, time: e.target.value }))}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Category */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+          <select
+            value={formData.category}
+            onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="seminar">Seminar</option>
+            <option value="training">Training</option>
+            <option value="workshop">Workshop</option>
+            <option value="webinar">Webinar</option>
+            <option value="masterclass">Masterclass</option>
+          </select>
+        </div>
+
+        {/* Image URL */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (Optional)</label>
+          <input
+            type="url"
+            value={formData.image}
+            onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="https://example.com/image.jpg"
+          />
+        </div>
+
+        {/* Status Checkboxes */}
+        <div className="flex space-x-6">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="active"
+              checked={formData.active}
+              onChange={(e) => setFormData(prev => ({ ...prev, active: e.target.checked }))}
+              className="mr-2"
+            />
+            <label htmlFor="active" className="text-sm font-medium text-gray-700">
+              Active (Visible on website)
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="showOnHomepage"
+              checked={formData.showOnHomepage}
+              onChange={(e) => setFormData(prev => ({ ...prev, showOnHomepage: e.target.checked }))}
+              className="mr-2"
+            />
+            <label htmlFor="showOnHomepage" className="text-sm font-medium text-gray-700">
+              Show on Homepage
+            </label>
+          </div>
+        </div>
+
+        {/* Form Actions */}
+        <div className="flex justify-end space-x-4 mt-6">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            {activity ? 'Update' : 'Add'} Activity
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Resource Form Component
+const ResourceForm = ({ resource, onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState({
+    title: resource?.title || { az: '', en: '', ru: '' },
+    content: resource?.content || { az: '', en: '', ru: '' },
+    excerpt: resource?.excerpt || { az: '', en: '', ru: '' },
+    category: resource?.category || { az: '', en: '', ru: '' },
+    type: resource?.type || 'article',
+    imageUrl: resource?.imageUrl || '',
+    downloadUrl: resource?.downloadUrl || '',
+    published: resource?.published ?? false,
+    featured: resource?.featured ?? false
+  });
+
+  const handleSubmit = () => {
+    if (formData.title.az && formData.title.en && formData.title.ru &&
+        formData.content.az && formData.content.en && formData.content.ru &&
+        formData.excerpt.az && formData.excerpt.en && formData.excerpt.ru &&
+        formData.category.az && formData.category.en && formData.category.ru) {
+      onSubmit(formData);
+    } else {
+      alert('Please fill in all required fields for all languages');
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h4 className="text-lg font-semibold mb-4">{resource ? 'Edit Resource' : 'Add New Resource'}</h4>
+      
+      <div className="space-y-4">
+        {/* Title Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <input
+                type="text"
+                value={formData.title.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <input
+                type="text"
+                value={formData.title.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <input
+                type="text"
+                value={formData.title.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  title: { ...prev.title, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Content Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <textarea
+                value={formData.content.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  content: { ...prev.content, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="4"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <textarea
+                value={formData.content.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  content: { ...prev.content, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="4"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <textarea
+                value={formData.content.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  content: { ...prev.content, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="4"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Excerpt Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Excerpt</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <textarea
+                value={formData.excerpt.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  excerpt: { ...prev.excerpt, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="2"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <textarea
+                value={formData.excerpt.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  excerpt: { ...prev.excerpt, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="2"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <textarea
+                value={formData.excerpt.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  excerpt: { ...prev.excerpt, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="2"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Category Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <input
+                type="text"
+                value={formData.category.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  category: { ...prev.category, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <input
+                type="text"
+                value={formData.category.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  category: { ...prev.category, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <input
+                type="text"
+                value={formData.category.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  category: { ...prev.category, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Type and URLs */}
+        <div className="grid md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+            <select
+              value={formData.type}
+              onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              required
+            >
+              <option value="article">Article</option>
+              <option value="guide">Guide</option>
+              <option value="download">Download</option>
+              <option value="tutorial">Tutorial</option>
+              <option value="template">Template</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (Optional)</label>
+            <input
+              type="url"
+              value={formData.imageUrl}
+              onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Download URL (Optional)</label>
+            <input
+              type="url"
+              value={formData.downloadUrl}
+              onChange={(e) => setFormData(prev => ({ ...prev, downloadUrl: e.target.value }))}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              placeholder="/downloads/file.pdf"
+            />
+          </div>
+        </div>
+
+        {/* Status Checkboxes */}
+        <div className="flex space-x-6">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="published"
+              checked={formData.published}
+              onChange={(e) => setFormData(prev => ({ ...prev, published: e.target.checked }))}
+              className="mr-2"
+            />
+            <label htmlFor="published" className="text-sm font-medium text-gray-700">
+              Published (Visible on website)
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="featured"
+              checked={formData.featured}
+              onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+              className="mr-2"
+            />
+            <label htmlFor="featured" className="text-sm font-medium text-gray-700">
+              Featured
+            </label>
+          </div>
+        </div>
+
+        {/* Form Actions */}
+        <div className="flex justify-end space-x-4 mt-6">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            {resource ? 'Update' : 'Add'} Resource
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ const WaveDivider = () => (
 
 const HomePage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
-  const { siteContent, testimonials, news, getHomeCourses, courses, getActiveTrainers } = useContent();
+  const { siteContent, testimonials, news, getHomeCourses, courses, getActiveTrainers, activities } = useContent();
   const [activeService, setActiveService] = useState('speechCommunicationDev');
   const [visibleCards, setVisibleCards] = useState([]);
   const [contentKey, setContentKey] = useState(0);
@@ -65,10 +65,10 @@ const HomePage = ({ setCurrentPage }) => {
     bio: trainer.description[language]
   }));
 
-  // Force re-render when courses or trainers change
+  // Force re-render when courses, trainers, or activities change
   useEffect(() => {
     setContentKey(prev => prev + 1);
-  }, [courses, trainers]);
+  }, [courses, trainers, activities]);
 
   // Reset trainer index when trainers change
   useEffect(() => {
@@ -189,49 +189,38 @@ const HomePage = ({ setCurrentPage }) => {
     return diffDays > 0 && diffDays < 30;
   };
 
-  // Sample event data with seats
-  const eventData = [
-    {
-      id: 1,
-      date: '2025-01-25',
-      totalSeats: 30,
-      bookedSeats: 25,
-      type: 'Seminar',
-      typeColor: 'blue'
-    },
-    {
-      id: 2, 
-      date: '2025-02-02',
-      totalSeats: 25,
-      bookedSeats: 8,
-      type: 'Masterclass',
-      typeColor: 'green'
-    },
-    {
-      id: 3,
-      date: '2025-01-30',
-      totalSeats: 20,
-      bookedSeats: 12,
-      type: 'Workshop',
-      typeColor: 'purple'
-    },
-    {
-      id: 4,
-      date: '2025-02-15',
-      totalSeats: 40,
-      bookedSeats: 35,
-      type: 'Konferans',
-      typeColor: 'orange'
-    },
-    {
-      id: 5,
-      date: '2025-01-28',
-      totalSeats: 15,
-      bookedSeats: 3,
-      type: 'İntensiv',
-      typeColor: 'red'
-    }
-  ];
+  // Helper function to format date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const months = {
+      az: ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'],
+      en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+    };
+    
+    const day = date.getDate();
+    const month = months[language][date.getMonth()];
+    const year = date.getFullYear();
+    
+    return `${day} ${month} ${year}`;
+  };
+
+  // Get activities for homepage from ContentContext
+  const homeActivities = activities
+    .filter(activity => activity.active && activity.showOnHomepage)
+    .slice(0, 3); // Show max 3 activities on home page
+
+  // Helper function to get category color
+  const getCategoryColor = (category) => {
+    const colors = {
+      seminar: 'blue',
+      training: 'green', 
+      workshop: 'purple',
+      webinar: 'orange',
+      masterclass: 'green'
+    };
+    return colors[category] || 'blue';
+  };
 
   const services = [
     {
@@ -1649,207 +1638,84 @@ const HomePage = ({ setCurrentPage }) => {
           
           {/* Upcoming Events */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {/* Event 1 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 relative overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-              {/* Early-bird ribbon */}
-              {isEarlyBird(eventData[0].date) && (
-                <div className="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full transform rotate-12 shadow-lg">
-                  Early Bird
-                </div>
-              )}
+            {homeActivities.map((activity, index) => {
+              const categoryColor = getCategoryColor(activity.category);
+              const categoryName = activity.category.charAt(0).toUpperCase() + activity.category.slice(1);
               
-              <div className="flex items-start mb-6">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">Seminar</span>
-                    <span className="text-sm text-gray-500">25 Yanvar 2025</span>
+              return (
+                <div key={activity.id || index} className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 relative overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                  {/* Early-bird ribbon */}
+                  {isEarlyBird(activity.date) && (
+                    <div className="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full transform rotate-12 shadow-lg">
+                      Early Bird
+                    </div>
+                  )}
+                  
+                  <div className="flex items-start mb-6">
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={`bg-${categoryColor}-100 text-${categoryColor}-800 text-xs font-semibold px-2 py-1 rounded`}>
+                          {categoryName}
+                        </span>
+                        <span className="text-sm text-gray-500">{formatDate(activity.date)}</span>
+                      </div>
+                      <h3 className="text-gray-800 mb-3" style={{
+                        fontFamily: "'Lora', serif",
+                        fontWeight: 600,
+                        fontSize: '1.25rem',
+                        lineHeight: 1.35
+                      }}>
+                        {activity.title[language]}
+                      </h3>
+                    </div>
                   </div>
-                  <h3 className="text-gray-800 mb-3" style={{
-                    fontFamily: "'Lora', serif",
-                    fontWeight: 600,
-                    fontSize: '1.25rem',
-                    lineHeight: 1.35
+                  
+                  <p className="text-gray-600 mb-4" style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 400,
+                    fontSize: '0.9rem',
+                    lineHeight: 1.55
                   }}>
-                    "Kameraların Qarşısında İnamlı Çıxış" Açıq Seminarı
-                  </h3>
-                </div>
-              </div>
-              
-              <p className="text-gray-600 mb-4" style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 400,
-                fontSize: '0.9rem',
-                lineHeight: 1.55
-              }}>
-                Televiziya, youtube və sosial media platformalarında professional çıxış etmək istəyənlər üçün praktiki təlim. Kamera həyəcanı, bədən dili və mesajın effektiv çatdırılması mövzularında.
-              </p>
-              
-              {/* Seats availability */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between text-sm mb-2">
-                  <span className="text-gray-600">Qalan yerlər</span>
-                  <span className="font-semibold text-gray-800">
-                    {eventData[0].totalSeats - eventData[0].bookedSeats} / {eventData[0].totalSeats} yer qalıb
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(eventData[0].bookedSeats / eventData[0].totalSeats) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm text-gray-500">
-                  <span className="mr-4">14:00-16:00</span>
-                  <span>Mərkəz</span>
-                </div>
-                <button className="btn-primary px-4 py-2" style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 600,
-                  fontSize: '0.9rem',
-                  lineHeight: 1.4
-                }}>
-                  Qeydiyyat
-                </button>
-              </div>
-            </div>
-
-            {/* Event 2 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 relative overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-              {/* Early-bird ribbon */}
-              {isEarlyBird(eventData[1].date) && (
-                <div className="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full transform rotate-12 shadow-lg">
-                  Early Bird
-                </div>
-              )}
-              
-              <div className="flex items-start mb-6">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Masterclass</span>
-                    <span className="text-sm text-gray-500">2 Fevral 2025</span>
+                    {activity.description[language]}
+                  </p>
+                  
+                  {/* Seats availability - only show if seat data is available */}
+                  {activity.totalSeats && activity.bookedSeats !== undefined && (
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between text-sm mb-2">
+                        <span className="text-gray-600">
+                          {language === 'az' ? 'Qalan yerlər' : language === 'en' ? 'Remaining seats' : 'Оставшиеся места'}
+                        </span>
+                        <span className="font-semibold text-gray-800">
+                          {activity.totalSeats - activity.bookedSeats} / {activity.totalSeats} {language === 'az' ? 'yer qalıb' : language === 'en' ? 'seats left' : 'мест осталось'}
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div 
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${(activity.bookedSeats / activity.totalSeats) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-sm text-gray-500">
+                      <span className="mr-4">{activity.time}</span>
+                      <span>{activity.location[language]}</span>
+                    </div>
+                    <button className="btn-primary px-4 py-2" style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '0.9rem',
+                      lineHeight: 1.4
+                    }}>
+                      {language === 'az' ? 'Qeydiyyat' : language === 'en' ? 'Register' : 'Регистрация'}
+                    </button>
                   </div>
-                  <h3 className="text-gray-800 mb-3" style={{
-                    fontFamily: "'Lora', serif",
-                    fontWeight: 600,
-                    fontSize: '1.25rem',
-                    lineHeight: 1.35
-                  }}>
-                    "Liderlik və Komanda İdarəçiliyi" Masterclass
-                  </h3>
                 </div>
-              </div>
-              
-              <p className="text-gray-600 mb-4" style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 400,
-                fontSize: '0.9rem',
-                lineHeight: 1.55
-              }}>
-                Şirkət rəhbərləri və komanda liderləri üçün nəzərdə tutulmuş intensiv təlim proqramı. Motivasiya, delegasiya və konflikt həlli strategiyaları üzərində praktiki işlər.
-              </p>
-              
-              {/* Seats availability */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between text-sm mb-2">
-                  <span className="text-gray-600">Qalan yerlər</span>
-                  <span className="font-semibold text-gray-800">
-                    {eventData[1].totalSeats - eventData[1].bookedSeats} / {eventData[1].totalSeats} yer qalıb
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(eventData[1].bookedSeats / eventData[1].totalSeats) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm text-gray-500">
-                  <span className="mr-4">10:00-17:00</span>
-                  <span>Online</span>
-                </div>
-                <button className="btn-primary px-4 py-2" style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 600,
-                  fontSize: '0.9rem',
-                  lineHeight: 1.4
-                }}>
-                  Qeydiyyat
-                </button>
-              </div>
-            </div>
-
-            {/* Event 3 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 relative overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-              {/* Early-bird ribbon */}
-              {isEarlyBird(eventData[2].date) && (
-                <div className="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full transform rotate-12 shadow-lg">
-                  Early Bird
-                </div>
-              )}
-              
-              <div className="flex items-start mb-6">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded">Workshop</span>
-                    <span className="text-sm text-gray-500">30 Yanvar 2025</span>
-                  </div>
-                  <h3 className="text-gray-800 mb-3" style={{
-                    fontFamily: "'Lora', serif",
-                    fontWeight: 600,
-                    fontSize: '1.25rem',
-                    lineHeight: 1.35
-                  }}>
-                    "Səsli Oxu və Təqdimat Texnikaları" Workshop
-                  </h3>
-                </div>
-              </div>
-              
-              <p className="text-gray-600 mb-4" style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 400,
-                fontSize: '0.9rem',
-                lineHeight: 1.55
-              }}>
-                Səsli oxuma, artikulyasiya və təqdimat bacarıqlarını inkişaf etdirən praktiki workshop. Təcrübəli təlimçilərlə birebir məşqlər və qrup təqdimatları.
-              </p>
-              
-              {/* Seats availability */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between text-sm mb-2">
-                  <span className="text-gray-600">Qalan yerlər</span>
-                  <span className="font-semibold text-gray-800">
-                    {eventData[2].totalSeats - eventData[2].bookedSeats} / {eventData[2].totalSeats} yer qalıb
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(eventData[2].bookedSeats / eventData[2].totalSeats) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm text-gray-500">
-                  <span className="mr-4">15:00-18:00</span>
-                  <span>Mərkəz</span>
-                </div>
-                <button className="btn-primary px-4 py-2" style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 600,
-                  fontSize: '0.9rem',
-                  lineHeight: 1.4
-                }}>
-                  Qeydiyyat
-                </button>
-              </div>
-            </div>
-
+              );
+            })}
           </div>
           
           {/* More Activities Link */}

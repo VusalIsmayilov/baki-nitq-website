@@ -6,7 +6,7 @@ import ConversionCTA from '../ConversionCTA';
 
 const GalleryPage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
-  const { activities, news } = useContent();
+  const { activities, news, resources } = useContent();
   const [selectedImage, setSelectedImage] = useState(null);
   const [activeTab, setActiveTab] = useState('events');
   const [isTabsSticky, setIsTabsSticky] = useState(false);
@@ -290,16 +290,18 @@ const GalleryPage = ({ setCurrentPage }) => {
     setSelectedImage(null);
   };
 
-  // Convert news to article format and filter based on search and tags
-  const convertedArticles = news.filter(item => item.published).map(item => ({
+  // Convert resources to article format and filter based on search and tags
+  const convertedArticles = resources.filter(item => item.published).map(item => ({
     id: item.id,
     title: item.title[language] || item.title.az,
-    type: 'article',
+    type: item.type || 'article',
     coverImage: item.imageUrl,
-    tags: [item.category[language]?.toLowerCase() || item.category.az?.toLowerCase() || 'article'],
+    tags: [item.category[language]?.toLowerCase() || item.category.az?.toLowerCase() || 'resource'],
     readTime: language === 'az' ? '5 dəq oxu' : language === 'en' ? '5 min read' : '5 мин чтения',
     date: item.date,
-    excerpt: item.excerpt[language] || item.excerpt.az
+    excerpt: item.excerpt[language] || item.excerpt.az,
+    downloadUrl: item.downloadUrl,
+    featured: item.featured
   }));
 
   const filteredArticles = convertedArticles.filter(article => {
