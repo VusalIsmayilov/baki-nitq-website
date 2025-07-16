@@ -854,7 +854,24 @@ const HomePage = ({ setCurrentPage }) => {
               </div>
               
               <button 
-                onClick={() => setCurrentPage('about')}
+                onClick={() => {
+                  setCurrentPage('about');
+                  // Add a small delay to ensure the page loads before scrolling
+                  setTimeout(() => {
+                    const trainersSection = document.getElementById('trainers-section');
+                    if (trainersSection) {
+                      // Get the section position and subtract header height
+                      const sectionTop = trainersSection.offsetTop;
+                      const headerHeight = 80; // Approximate header height
+                      const scrollPosition = sectionTop - headerHeight;
+                      
+                      window.scrollTo({
+                        top: scrollPosition,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }, 100);
+                }}
                 className="group flex items-center gap-2 transition-all duration-150"
                 style={{
                   backgroundColor: '#2166FF',
@@ -960,7 +977,25 @@ const HomePage = ({ setCurrentPage }) => {
             >
               {/* Primary Button */}
               <button 
-                onClick={() => setCurrentPage('courses')}
+                onClick={() => {
+                  setCurrentPage('courses');
+                  // Navigate to training solutions section
+                  setTimeout(() => {
+                    const trainingSolutionsSection = document.getElementById('training-solutions-section');
+                    if (trainingSolutionsSection) {
+                      // Get the section position and subtract header height plus moving section
+                      const sectionTop = trainingSolutionsSection.offsetTop;
+                      const headerHeight = 80;
+                      const movingSectionHeight = 100; // Additional offset for moving/sticky section
+                      const scrollPosition = sectionTop - headerHeight - movingSectionHeight;
+                      
+                      window.scrollTo({
+                        top: scrollPosition,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }, 100);
+                }}
                 className="primary-btn group flex items-center gap-2 transition-all duration-150"
                 style={{
                   backgroundColor: '#FFFFFF',
@@ -994,7 +1029,14 @@ const HomePage = ({ setCurrentPage }) => {
               
               {/* Secondary Button */}
               <button 
-                onClick={() => setCurrentPage('about')}
+                onClick={() => {
+                  setCurrentPage('contact');
+                  // Clear any hash from URL and scroll to top
+                  setTimeout(() => {
+                    window.history.replaceState(null, '', window.location.pathname);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }, 100);
+                }}
                 className="secondary-btn group flex items-center gap-2 transition-all duration-150"
                 style={{
                   backgroundColor: 'transparent',

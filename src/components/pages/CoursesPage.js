@@ -364,7 +364,7 @@ const CoursesPage = ({ setCurrentPage }) => {
       </section>
 
       {/* Training Solutions Subsection */}
-      <section className="py-16" style={{backgroundColor: '#FFFFFF'}}>
+      <section id="training-solutions-section" className="py-16" style={{backgroundColor: '#FFFFFF'}}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h3 

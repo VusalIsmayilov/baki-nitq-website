@@ -134,7 +134,7 @@ const AboutPage = ({ setCurrentPage }) => {
       </section>
 
       {/* Our Trainers Section */}
-      <section style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '2rem', paddingBottom: '5rem'}}>
+      <section id="trainers-section" style={{backgroundColor: '#FFFFFF', position: 'relative', paddingTop: '2rem', paddingBottom: '5rem'}}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="mb-4" style={{
