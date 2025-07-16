@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
 
 const Footer = ({ setCurrentPage }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { siteContent } = useContent();
   
   return (
@@ -81,9 +81,9 @@ const Footer = ({ setCurrentPage }) => {
               fontSize: '0.85rem',
               lineHeight: 1.5
             }}>
-              <p><strong>{t('address')}:</strong> {t('addressText')}</p>
-              <p><strong>{t('phone')}:</strong> {t('phoneText')}</p>
-              <p><strong>{t('email')}:</strong> {t('emailText')}</p>
+              <p><strong>{t('address')}:</strong> {siteContent.contactInfo?.address?.[language] || t('addressText')}</p>
+              <p><strong>{t('phone')}:</strong> {siteContent.contactInfo?.phone || t('phoneText')}</p>
+              <p><strong>{t('email')}:</strong> {siteContent.contactInfo?.email || t('emailText')}</p>
             </div>
           </div>
           

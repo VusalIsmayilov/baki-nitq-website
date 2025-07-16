@@ -1,8 +1,10 @@
 import { Users, Phone, MessageCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useContent } from '../context/ContentContext';
 
 const ConversionCTA = ({ setCurrentPage, className = "" }) => {
   const { t } = useLanguage();
+  const { siteContent } = useContent();
 
   return (
     <>
@@ -55,7 +57,7 @@ const ConversionCTA = ({ setCurrentPage, className = "" }) => {
           
           {/* Phone Link */}
           <a
-            href="tel:+994102271404"
+            href={`tel:${siteContent.contactInfo?.phone || '+994102271404'}`}
             className="flex items-center gap-2 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200"
             style={{
               fontFamily: "'Poppins', sans-serif",
@@ -70,7 +72,7 @@ const ConversionCTA = ({ setCurrentPage, className = "" }) => {
           
           {/* WhatsApp Link */}
           <a
-            href="https://wa.me/994102271404"
+            href={`https://wa.me/${(siteContent.contactInfo?.phone || '+994102271404').replace(/[^\d]/g, '')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-3 border border-green-300 rounded-lg text-green-700 hover:bg-green-50 transition-all duration-200"

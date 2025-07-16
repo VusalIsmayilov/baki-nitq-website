@@ -4,7 +4,7 @@ import { useContent } from '../../context/ContentContext';
 import { MapPin, Phone, Mail, Instagram, Facebook, ArrowRight, ExternalLink } from 'lucide-react';
 
 const ContactPage = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { siteContent } = useContent();
   const [formData, setFormData] = useState({
     name: '',
@@ -195,7 +195,7 @@ const ContactPage = () => {
                     fontSize: '1rem',
                     lineHeight: 1.6,
                     color: '#1E1E1E'
-                  }}>{siteContent.contactInfo?.address || t('addressText')}</p>
+                  }}>{siteContent.contactInfo?.address?.[language] || t('addressText')}</p>
                 </div>
               </div>
               
@@ -276,7 +276,7 @@ const ContactPage = () => {
                     fontSize: '1rem',
                     lineHeight: 1.6,
                     color: '#1E1E1E'
-                  }}>{siteContent.contactInfo?.hours || t('hoursText')}</p>
+                  }}>{siteContent.contactInfo?.hours?.[language] || t('hoursText')}</p>
                 </div>
               </div>
               

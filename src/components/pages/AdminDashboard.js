@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
-import { FileText, Upload, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Newspaper, Eye, EyeOff, Star, Calendar } from 'lucide-react';
+import { FileText, Upload, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Eye, EyeOff, Star, Calendar } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { t, language } = useLanguage();
@@ -11,8 +11,6 @@ const AdminDashboard = () => {
     siteStats, 
     courses,
     testimonials,
-    news,
-    teamMembers,
     activities,
     resources,
     updateContent,
@@ -35,17 +33,6 @@ const AdminDashboard = () => {
     updateTestimonial,
     deleteTestimonial,
     approveTestimonial,
-    addNews,
-    updateNews,
-    deleteNews,
-    publishNews,
-    toggleNewsFeatured,
-    getPublishedNews,
-    getFeaturedNews,
-    addTeamMember,
-    updateTeamMember,
-    deleteTeamMember,
-    getActiveTeamMembers,
     addTrainer,
     updateTrainer,
     deleteTrainer,
@@ -77,19 +64,13 @@ const AdminDashboard = () => {
     galleryHeroDescription: { ...siteContent.galleryHeroDescription }
   });
   
-  // Team Management State
-  const [editingTeamMember, setEditingTeamMember] = useState(null);
-  const [showTeamForm, setShowTeamForm] = useState(false);
-  
   // Trainer Management State
   const [editingTrainer, setEditingTrainer] = useState(null);
   const [showTrainerForm, setShowTrainerForm] = useState(false);
   const [showCourseForm, setShowCourseForm] = useState(false);
   const [showTestimonialForm, setShowTestimonialForm] = useState(false);
-  const [showNewsForm, setShowNewsForm] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
-  const [editingNews, setEditingNews] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [editingCurriculum, setEditingCurriculum] = useState(null);
   
@@ -100,6 +81,7 @@ const AdminDashboard = () => {
   // Resources Management State
   const [editingResource, setEditingResource] = useState(null);
   const [showResourceForm, setShowResourceForm] = useState(false);
+  
 
   // Sync editingContent with siteContent when siteContent changes
   useEffect(() => {
@@ -133,18 +115,14 @@ const AdminDashboard = () => {
 
   const adminSections = [
     { id: 'overview', name: 'Overview', icon: BarChart3 },
+    { id: 'analytics', name: 'Analytics', icon: BarChart3 },
     { id: 'content', name: 'Content Management', icon: FileText },
     { id: 'trainers', name: 'Trainers Management', icon: Users },
     { id: 'courses', name: 'Course Management', icon: BookOpen },
     { id: 'activities', name: 'Activities Management', icon: Calendar },
     { id: 'resources', name: 'Resources Management', icon: FileText },
-    { id: 'news', name: 'News & Activities', icon: Newspaper },
-    { id: 'team', name: 'Team Management', icon: Users },
-    { id: 'testimonials', name: 'Testimonials', icon: Users },
-    { id: 'media', name: 'Media & Gallery', icon: Upload },
-    { id: 'contact', name: 'Contact Information', icon: Globe },
-    { id: 'analytics', name: 'Analytics', icon: BarChart3 },
-    { id: 'settings', name: 'Settings', icon: Settings }
+    { id: 'testimonials', name: 'Testimonials Management', icon: Users },
+    { id: 'contact', name: 'Contact Information', icon: Globe }
   ];
 
   const handleContentEdit = (section, lang, newValue) => {
@@ -237,30 +215,7 @@ const AdminDashboard = () => {
     setEditingTestimonial(null);
   };
 
-  const handleNewsSubmit = (newsData) => {
-    if (editingNews) {
-      updateNews(editingNews.id, newsData);
-      alert('✅ News updated successfully!');
-    } else {
-      addNews(newsData);
-      alert('✅ News added successfully!');
-    }
-    setShowNewsForm(false);
-    setEditingNews(null);
-  };
 
-  const handlePublishToggle = (newsId) => {
-    const newsItem = news.find(item => item.id === newsId);
-    if (newsItem) {
-      updateNews(newsId, { published: !newsItem.published });
-      alert(`✅ News ${newsItem.published ? 'unpublished' : 'published'} successfully!`);
-    }
-  };
-
-  const handleFeaturedToggle = (newsId) => {
-    toggleNewsFeatured(newsId);
-    alert('✅ Featured status updated successfully!');
-  };
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -302,9 +257,9 @@ const AdminDashboard = () => {
             fontSize: '1.25rem',
             lineHeight: 1.35,
             color: '#78350F'
-          }}>Published News</h3>
-          <p className="text-3xl font-bold text-yellow-700">{getPublishedNews().length}</p>
-          <p className="text-sm text-yellow-600">{getFeaturedNews().length} featured</p>
+          }}>Active Resources</h3>
+          <p className="text-3xl font-bold text-yellow-700">{resources.length}</p>
+          <p className="text-sm text-yellow-600">{resources.filter(r => r.featured).length} featured</p>
         </div>
         <div className="bg-purple-50 rounded-lg p-6">
           <h3 style={{
@@ -337,13 +292,6 @@ const AdminDashboard = () => {
             <span className="block font-semibold">Edit Content</span>
           </button>
           <button 
-            onClick={() => setActiveSection('news')}
-            className="p-4 bg-orange-50 rounded-lg text-center hover:bg-orange-100 transition-colors"
-          >
-            <Newspaper className="mx-auto text-orange-600 mb-2" size={24} />
-            <span className="block font-semibold">Manage News</span>
-          </button>
-          <button 
             onClick={() => setActiveSection('media')}
             className="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors"
           >
@@ -368,6 +316,279 @@ const AdminDashboard = () => {
       </div>
     </div>
   );
+
+  const renderAnalytics = () => {
+    // Calculate analytics data
+    const totalActivities = activities.length;
+    const totalResources = resources.length;
+    const totalCourses = courses.length;
+    const totalTestimonials = testimonials.length;
+    const approvedTestimonials = testimonials.filter(t => t.approved).length;
+    const pendingTestimonials = testimonials.filter(t => !t.approved).length;
+    const publishedResources = resources.filter(r => r.published).length;
+    const featuredResources = resources.filter(r => r.featured).length;
+    const activeCourses = courses.filter(c => c.active).length;
+    const homeVisibleCourses = courses.filter(c => c.showOnHome).length;
+    const individualCourses = courses.filter(c => c.category === 'individual').length;
+    const corporateCourses = courses.filter(c => c.category === 'corporate').length;
+    const activeTrainers = getActiveTrainers().length;
+
+    // Mock analytics data for demonstration
+    const mockAnalytics = {
+      visitors: {
+        total: 15420,
+        thisMonth: 2340,
+        lastMonth: 2100,
+        growth: '+11.4%'
+      },
+      pageViews: {
+        total: 45680,
+        thisMonth: 7200,
+        lastMonth: 6800,
+        growth: '+5.9%'
+      },
+      bounceRate: {
+        current: 32.5,
+        lastMonth: 35.2,
+        change: '-2.7%'
+      },
+      avgSessionDuration: {
+        current: '3m 45s',
+        lastMonth: '3m 20s',
+        change: '+12.5%'
+      },
+      topPages: [
+        { page: 'Homepage', views: 12450, percentage: 27.2 },
+        { page: 'Courses', views: 8920, percentage: 19.5 },
+        { page: 'Contact', views: 5680, percentage: 12.4 },
+        { page: 'Gallery', views: 4210, percentage: 9.2 },
+        { page: 'About', views: 3850, percentage: 8.4 }
+      ],
+      referrers: [
+        { source: 'Direct', visits: 6750, percentage: 43.8 },
+        { source: 'Google', visits: 4230, percentage: 27.4 },
+        { source: 'Facebook', visits: 2180, percentage: 14.1 },
+        { source: 'Instagram', visits: 1560, percentage: 10.1 },
+        { source: 'Other', visits: 700, percentage: 4.5 }
+      ],
+      devices: [
+        { type: 'Mobile', users: 8950, percentage: 58.0 },
+        { type: 'Desktop', users: 5240, percentage: 34.0 },
+        { type: 'Tablet', users: 1230, percentage: 8.0 }
+      ]
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 
+            style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em'
+            }}
+          >
+            Analytics Dashboard
+          </h2>
+          <div className="text-sm text-gray-600">
+            Last updated: {new Date().toLocaleString()}
+          </div>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-blue-50 rounded-lg p-6">
+            <h3 style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 600,
+              fontSize: '1.25rem',
+              lineHeight: 1.35,
+              color: '#1E3A8A'
+            }}>Total Visitors</h3>
+            <p className="text-3xl font-bold text-blue-700">{mockAnalytics.visitors.total.toLocaleString()}</p>
+            <p className="text-sm text-blue-600">{mockAnalytics.visitors.growth} from last month</p>
+          </div>
+          <div className="bg-green-50 rounded-lg p-6">
+            <h3 style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 600,
+              fontSize: '1.25rem',
+              lineHeight: 1.35,
+              color: '#14532D'
+            }}>Page Views</h3>
+            <p className="text-3xl font-bold text-green-700">{mockAnalytics.pageViews.total.toLocaleString()}</p>
+            <p className="text-sm text-green-600">{mockAnalytics.pageViews.growth} from last month</p>
+          </div>
+          <div className="bg-yellow-50 rounded-lg p-6">
+            <h3 style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 600,
+              fontSize: '1.25rem',
+              lineHeight: 1.35,
+              color: '#78350F'
+            }}>Bounce Rate</h3>
+            <p className="text-3xl font-bold text-yellow-700">{mockAnalytics.bounceRate.current}%</p>
+            <p className="text-sm text-yellow-600">{mockAnalytics.bounceRate.change} from last month</p>
+          </div>
+          <div className="bg-purple-50 rounded-lg p-6">
+            <h3 style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 600,
+              fontSize: '1.25rem',
+              lineHeight: 1.35,
+              color: '#581C87'
+            }}>Avg. Session</h3>
+            <p className="text-3xl font-bold text-purple-700">{mockAnalytics.avgSessionDuration.current}</p>
+            <p className="text-sm text-purple-600">{mockAnalytics.avgSessionDuration.change} from last month</p>
+          </div>
+        </div>
+
+        {/* Content Performance */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h3 style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.5rem',
+            lineHeight: 1.35,
+            color: '#1E1E1E'
+          }} className="mb-6">Content Performance</h3>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">{totalCourses}</div>
+              <div className="text-sm text-gray-600">Total Courses</div>
+              <div className="text-xs text-gray-500">{activeCourses} active, {homeVisibleCourses} on homepage</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">{totalActivities}</div>
+              <div className="text-sm text-gray-600">Total Activities</div>
+              <div className="text-xs text-gray-500">Events and workshops</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-yellow-600">{totalResources}</div>
+              <div className="text-sm text-gray-600">Total Resources</div>
+              <div className="text-xs text-gray-500">{publishedResources} published, {featuredResources} featured</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">{totalTestimonials}</div>
+              <div className="text-sm text-gray-600">Total Testimonials</div>
+              <div className="text-xs text-gray-500">{approvedTestimonials} approved, {pendingTestimonials} pending</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Top Pages and Traffic Sources */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 600,
+              fontSize: '1.25rem',
+              lineHeight: 1.35,
+              color: '#1E1E1E'
+            }} className="mb-4">Top Pages</h3>
+            <div className="space-y-3">
+              {mockAnalytics.topPages.map((page, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-xs font-semibold text-blue-600">
+                      {index + 1}
+                    </div>
+                    <span className="font-medium">{page.page}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-semibold">{page.views.toLocaleString()}</div>
+                    <div className="text-xs text-gray-500">{page.percentage}%</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 600,
+              fontSize: '1.25rem',
+              lineHeight: 1.35,
+              color: '#1E1E1E'
+            }} className="mb-4">Traffic Sources</h3>
+            <div className="space-y-3">
+              {mockAnalytics.referrers.map((source, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      source.source === 'Direct' ? 'bg-blue-500' :
+                      source.source === 'Google' ? 'bg-green-500' :
+                      source.source === 'Facebook' ? 'bg-blue-600' :
+                      source.source === 'Instagram' ? 'bg-pink-500' :
+                      'bg-gray-500'
+                    }`}></div>
+                    <span className="font-medium">{source.source}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-semibold">{source.visits.toLocaleString()}</div>
+                    <div className="text-xs text-gray-500">{source.percentage}%</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Device Analytics */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h3 style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.25rem',
+            lineHeight: 1.35,
+            color: '#1E1E1E'
+          }} className="mb-4">Device Usage</h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            {mockAnalytics.devices.map((device, index) => (
+              <div key={index} className="text-center">
+                <div className="text-2xl font-bold text-gray-700">{device.users.toLocaleString()}</div>
+                <div className="text-sm text-gray-600">{device.type}</div>
+                <div className="text-xs text-gray-500">{device.percentage}% of traffic</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Course Analytics */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h3 style={{
+            fontFamily: "'Lora', serif",
+            fontWeight: 600,
+            fontSize: '1.25rem',
+            lineHeight: 1.35,
+            color: '#1E1E1E'
+          }} className="mb-4">Course Analytics</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">{individualCourses}</div>
+              <div className="text-sm text-gray-600">Individual Courses</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">{corporateCourses}</div>
+              <div className="text-sm text-gray-600">Corporate Courses</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-yellow-600">{activeTrainers}</div>
+              <div className="text-sm text-gray-600">Active Trainers</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">{homeVisibleCourses}</div>
+              <div className="text-sm text-gray-600">Homepage Courses</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderContentManagement = () => (
     <div className="space-y-6">
@@ -543,121 +764,6 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const renderNewsManagement = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-semibold">{t('newsManagement')}</h3>
-          <button
-            onClick={() => setShowNewsForm(true)}
-            className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 flex items-center space-x-2"
-          >
-            <Plus size={18} />
-            <span>{t('addNews')}</span>
-          </button>
-        </div>
-        
-        <div className="space-y-4">
-          {news.length === 0 ? (
-            <div className="text-center py-8">
-              <Newspaper className="mx-auto text-gray-400 mb-4" size={48} />
-              <p className="text-gray-600">No news articles yet. Create your first news article!</p>
-            </div>
-          ) : (
-            news.map((newsItem) => (
-              <div key={newsItem.id} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <h4 className="font-semibold text-lg">{newsItem.title[language]}</h4>
-                      <div className="flex items-center space-x-2">
-                        {newsItem.published ? (
-                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
-                            {t('published')}
-                          </span>
-                        ) : (
-                          <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs font-medium">
-                            {t('draft')}
-                          </span>
-                        )}
-                        {newsItem.featured && (
-                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">
-                            ⭐ {t('featured')}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-gray-600 mb-2">{newsItem.excerpt[language]}</p>
-                    <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <span>📅 {formatDate(newsItem.date)}</span>
-                      <span>📂 {newsItem.category[language]}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2 ml-4">
-                    <button
-                      onClick={() => handlePublishToggle(newsItem.id)}
-                      className={`p-2 rounded text-white ${
-                        newsItem.published 
-                          ? 'bg-red-500 hover:bg-red-600' 
-                          : 'bg-green-500 hover:bg-green-600'
-                      }`}
-                      title={newsItem.published ? t('unpublish') : t('publish')}
-                    >
-                      {newsItem.published ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
-                    <button
-                      onClick={() => handleFeaturedToggle(newsItem.id)}
-                      className={`p-2 rounded ${
-                        newsItem.featured 
-                          ? 'bg-yellow-500 text-white hover:bg-yellow-600' 
-                          : 'bg-gray-300 text-gray-600 hover:bg-gray-400'
-                      }`}
-                      title={t('toggleFeatured')}
-                    >
-                      <Star size={16} />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setEditingNews(newsItem);
-                        setShowNewsForm(true);
-                      }}
-                      className="text-blue-600 hover:text-blue-800 p-2"
-                      title={t('edit')}
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (window.confirm('Are you sure you want to delete this news article?')) {
-                          deleteNews(newsItem.id);
-                          alert('✅ News article deleted successfully!');
-                        }
-                      }}
-                      className="text-red-600 hover:text-red-800 p-2"
-                      title={t('delete')}
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      {showNewsForm && (
-        <NewsForm
-          news={editingNews}
-          onSubmit={handleNewsSubmit}
-          onCancel={() => {
-            setShowNewsForm(false);
-            setEditingNews(null);
-          }}
-        />
-      )}
-    </div>
-  );
 
   const renderCourseManagement = () => (
     <div className="space-y-6">
@@ -788,120 +894,6 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const handleAddTeamMember = (memberData) => {
-    addTeamMember(memberData);
-    setShowTeamForm(false);
-    alert('Team member added successfully!');
-  };
-
-  const handleUpdateTeamMember = (memberData) => {
-    updateTeamMember(editingTeamMember.id, memberData);
-    setEditingTeamMember(null);
-    alert('Team member updated successfully!');
-  };
-
-  const handleDeleteTeamMember = (memberId) => {
-    if (window.confirm('Are you sure you want to delete this team member?')) {
-      deleteTeamMember(memberId);
-      alert('Team member deleted successfully!');
-    }
-  };
-
-  const renderTeamManagement = () => {
-
-    return (
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h2 
-            style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 700,
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em'
-            }}
-          >
-            Team Management
-          </h2>
-          <button
-            onClick={() => setShowTeamForm(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-          >
-            <Plus size={16} className="mr-2" />
-            Add Team Member
-          </button>
-        </div>
-
-        {/* Team Members List */}
-        <div className="grid gap-6">
-          {teamMembers.map((member) => (
-            <div key={member.id} className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex flex-col lg:flex-row gap-6">
-                {/* Image */}
-                <div className="flex-shrink-0">
-                  <img
-                    src={member.imageUrl}
-                    alt={member.name}
-                    className="w-32 h-32 rounded-lg object-cover"
-                  />
-                </div>
-                
-                {/* Content */}
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{member.name}</h3>
-                  <p className="text-lg text-blue-600 font-medium mb-3">
-                    {member.position[language]}
-                  </p>
-                  <p className="text-gray-600 text-sm line-clamp-3">
-                    {member.story[language]}
-                  </p>
-                  <div className="flex items-center mt-4 space-x-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      member.active 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {member.active ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Actions */}
-                <div className="flex flex-col space-y-2">
-                  <button
-                    onClick={() => setEditingTeamMember(member)}
-                    className="bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center text-sm"
-                  >
-                    <Edit size={14} className="mr-1" />
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteTeamMember(member.id)}
-                    className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center text-sm"
-                  >
-                    <Trash2 size={14} className="mr-1" />
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Add/Edit Form */}
-        {(showTeamForm || editingTeamMember) && (
-          <TeamMemberForm
-            member={editingTeamMember}
-            onSubmit={editingTeamMember ? handleUpdateTeamMember : handleAddTeamMember}
-            onCancel={() => {
-              setShowTeamForm(false);
-              setEditingTeamMember(null);
-            }}
-          />
-        )}
-      </div>
-    );
-  };
 
   // Activities Management Functions
   const handleAddActivity = () => {
@@ -1177,6 +1169,128 @@ const AdminDashboard = () => {
             onCancel={() => {
               setShowResourceForm(false);
               setEditingResource(null);
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
+  // Testimonials Management Functions
+  const handleAddTestimonial = () => {
+    setEditingTestimonial(null);
+    setShowTestimonialForm(true);
+  };
+
+  const handleEditTestimonial = (testimonial) => {
+    setEditingTestimonial(testimonial);
+    setShowTestimonialForm(true);
+  };
+
+  const handleDeleteTestimonial = (testimonialId) => {
+    if (window.confirm('Are you sure you want to delete this testimonial?')) {
+      deleteTestimonial(testimonialId);
+      alert('✅ Testimonial deleted successfully!');
+    }
+  };
+
+  const handleApproveTestimonial = (testimonialId) => {
+    approveTestimonial(testimonialId);
+    alert('✅ Testimonial approved successfully!');
+  };
+
+  const renderTestimonialsManagement = () => {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 
+            style={{
+              fontFamily: "'Lora', serif",
+              fontWeight: 700,
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em'
+            }}
+          >
+            Testimonials Management
+          </h2>
+          <button
+            onClick={handleAddTestimonial}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+          >
+            <Plus size={16} className="mr-2" />
+            Add Testimonial
+          </button>
+        </div>
+
+        {/* Testimonials List */}
+        <div className="grid gap-6">
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="bg-white rounded-lg shadow-lg p-6">
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* Avatar */}
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                    <Users size={24} className="text-gray-500" />
+                  </div>
+                </div>
+                
+                {/* Content */}
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{testimonial.name}</h3>
+                  <p className="text-gray-600 text-sm mb-3 line-clamp-3">
+                    {testimonial.text[language]}
+                  </p>
+                  <div className="flex items-center space-x-2 mb-3">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      testimonial.approved 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {testimonial.approved ? 'Approved' : 'Pending'}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Actions */}
+                <div className="flex flex-col space-y-2">
+                  {!testimonial.approved && (
+                    <button
+                      onClick={() => handleApproveTestimonial(testimonial.id)}
+                      className="bg-green-600 text-white px-3 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center text-sm"
+                    >
+                      <Check size={14} className="mr-1" />
+                      Approve
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleEditTestimonial(testimonial)}
+                    className="bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center text-sm"
+                  >
+                    <Edit size={14} className="mr-1" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteTestimonial(testimonial.id)}
+                    className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center text-sm"
+                  >
+                    <Trash2 size={14} className="mr-1" />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Add/Edit Form */}
+        {(showTestimonialForm || editingTestimonial) && (
+          <TestimonialForm
+            testimonial={editingTestimonial}
+            onSubmit={handleTestimonialSubmit}
+            onCancel={() => {
+              setShowTestimonialForm(false);
+              setEditingTestimonial(null);
             }}
           />
         )}
@@ -1546,13 +1660,13 @@ const AdminDashboard = () => {
   const renderContent = () => {
     switch (activeSection) {
       case 'overview': return renderOverview();
+      case 'analytics': return renderAnalytics();
       case 'content': return renderContentManagement();
       case 'trainers': return renderTrainersManagement();
       case 'courses': return renderCourseManagement();
       case 'activities': return renderActivitiesManagement();
       case 'resources': return renderResourcesManagement();
-      case 'news': return renderNewsManagement();
-      case 'team': return renderTeamManagement();
+      case 'testimonials': return renderTestimonialsManagement();
       case 'contact': return <ContactInformationSection />;
       default: return renderOverview();
     }
@@ -1612,329 +1726,6 @@ const AdminDashboard = () => {
   );
 };
 
-// News Form Component
-const NewsForm = ({ news, onSubmit, onCancel }) => {
-  const { t } = useLanguage();
-  const [formData, setFormData] = useState({
-    title: news?.title || { az: '', en: '', ru: '' },
-    content: news?.content || { az: '', en: '', ru: '' },
-    excerpt: news?.excerpt || { az: '', en: '', ru: '' },
-    category: news?.category || { az: '', en: '', ru: '' },
-    imageUrl: news?.imageUrl || '',
-    published: news?.published ?? false,
-    featured: news?.featured ?? false
-  });
-  const [imageUploadError, setImageUploadError] = useState('');
-
-  const handleSubmit = () => {
-    if (formData.title.az && formData.title.en && formData.title.ru && 
-        formData.content.az && formData.content.en && formData.content.ru) {
-      onSubmit(formData);
-    } else {
-      alert('Please fill in all required fields for all languages');
-    }
-  };
-
-  return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h4 className="text-lg font-semibold mb-4">{news ? t('editNews') : t('addNews')}</h4>
-      
-      <div className="space-y-6">
-        {/* Title Fields */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">{t('newsTitle')}</label>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
-              <input
-                type="text"
-                value={formData.title.az}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  title: { ...prev.title, az: e.target.value }
-                }))}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Xəbər başlığı..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">English</label>
-              <input
-                type="text"
-                value={formData.title.en}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  title: { ...prev.title, en: e.target.value }
-                }))}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="News title..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Russian</label>
-              <input
-                type="text"
-                value={formData.title.ru}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  title: { ...prev.title, ru: e.target.value }
-                }))}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Заголовок новости..."
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Excerpt Fields */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">{t('newsExcerpt')}</label>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
-              <textarea
-                value={formData.excerpt.az}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  excerpt: { ...prev.excerpt, az: e.target.value }
-                }))}
-                rows={2}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Qısa məzmun..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">English</label>
-              <textarea
-                value={formData.excerpt.en}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  excerpt: { ...prev.excerpt, en: e.target.value }
-                }))}
-                rows={2}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Short excerpt..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Russian</label>
-              <textarea
-                value={formData.excerpt.ru}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  excerpt: { ...prev.excerpt, ru: e.target.value }
-                }))}
-                rows={2}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Краткое содержание..."
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Content Fields */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">{t('newsContent')}</label>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
-              <textarea
-                value={formData.content.az}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  content: { ...prev.content, az: e.target.value }
-                }))}
-                rows={4}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Tam məzmun..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">English</label>
-              <textarea
-                value={formData.content.en}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  content: { ...prev.content, en: e.target.value }
-                }))}
-                rows={4}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Full content..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Russian</label>
-              <textarea
-                value={formData.content.ru}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  content: { ...prev.content, ru: e.target.value }
-                }))}
-                rows={4}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Полное содержание..."
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Category Fields */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">{t('newsCategory')}</label>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
-              <input
-                type="text"
-                value={formData.category.az}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  category: { ...prev.category, az: e.target.value }
-                }))}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Kateqoriya..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">English</label>
-              <input
-                type="text"
-                value={formData.category.en}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  category: { ...prev.category, en: e.target.value }
-                }))}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Category..."
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Russian</label>
-              <input
-                type="text"
-                value={formData.category.ru}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  category: { ...prev.category, ru: e.target.value }
-                }))}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Категория..."
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Image Upload and Settings */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">News Image</label>
-            
-            {/* File Upload */}
-            <div className="mb-4">
-              <label className="block text-xs text-gray-500 mb-2">Upload from Computer</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  setImageUploadError('');
-                  
-                  if (file) {
-                    // Validate file size (5MB max)
-                    if (file.size > 5 * 1024 * 1024) {
-                      setImageUploadError('File size must be less than 5MB');
-                      return;
-                    }
-                    
-                    // Validate file type
-                    if (!file.type.startsWith('image/')) {
-                      setImageUploadError('Please select a valid image file');
-                      return;
-                    }
-                    
-                    // Create a local URL for preview
-                    const imageUrl = URL.createObjectURL(file);
-                    setFormData(prev => ({ ...prev, imageUrl }));
-                  }
-                }}
-                className="w-full p-2 border border-gray-300 rounded-md text-sm"
-              />
-              <p className="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (max 5MB)</p>
-              {imageUploadError && (
-                <p className="text-xs text-red-500 mt-1">{imageUploadError}</p>
-              )}
-            </div>
-            
-            {/* URL Input as alternative */}
-            <div className="mb-4">
-              <label className="block text-xs text-gray-500 mb-2">Or Enter Image URL</label>
-              <input
-                type="url"
-                value={formData.imageUrl?.startsWith('blob:') ? '' : (formData.imageUrl || '')}
-                onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
-                className="w-full p-2 border border-gray-300 rounded-md text-sm"
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
-            
-            {/* Preview */}
-            {formData.imageUrl && (
-              <div className="mt-2">
-                <label className="block text-xs text-gray-500 mb-2">Preview</label>
-                <img
-                  src={formData.imageUrl}
-                  alt="Preview"
-                  className="w-32 h-24 rounded-lg object-cover border-2 border-gray-200"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-            )}
-          </div>
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-700">{t('newsStatus')}</label>
-            <div className="flex items-center space-x-4">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={formData.published}
-                  onChange={(e) => setFormData(prev => ({ ...prev, published: e.target.checked }))}
-                  className="mr-2"
-                />
-                {t('published')}
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={formData.featured}
-                  onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
-                  className="mr-2"
-                />
-                {t('featured')}
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex space-x-4 mt-6">
-        <button
-          onClick={handleSubmit}
-          className="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700"
-        >
-          {news ? t('save') : t('addNews')}
-        </button>
-        <button
-          onClick={onCancel}
-          className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600"
-        >
-          {t('cancel')}
-        </button>
-      </div>
-    </div>
-  );
-};
 
 // Contact Information Component
 const ContactInformationSection = () => {
@@ -1942,8 +1733,8 @@ const ContactInformationSection = () => {
   const [contactData, setContactData] = useState({
     phone: siteContent.contactInfo?.phone || '+994102271404',
     email: siteContent.contactInfo?.email || 'info@bakinitqmerkezi.az',
-    address: siteContent.contactInfo?.address || 'Bakı şəhəri, Nərimanov rayonu, Əhməd Rəcəbli 156, Aynalı Plaza',
-    hours: siteContent.contactInfo?.hours || 'Monday - Friday: 9:00-18:00',
+    address: siteContent.contactInfo?.address || { az: '', en: '', ru: '' },
+    hours: siteContent.contactInfo?.hours || { az: '', en: '', ru: '' },
     instagram: siteContent.contactInfo?.instagram || 'https://instagram.com/bakinitqmerkezi',
     facebook: siteContent.contactInfo?.facebook || 'https://facebook.com/bakinitqmerkezi'
   });
@@ -1951,6 +1742,14 @@ const ContactInformationSection = () => {
 
   const handleContactChange = (field, value) => {
     setContactData(prev => ({ ...prev, [field]: value }));
+    setHasUnsavedContactChanges(true);
+  };
+
+  const handleMultilingualChange = (field, language, value) => {
+    setContactData(prev => ({
+      ...prev,
+      [field]: { ...prev[field], [language]: value }
+    }));
     setHasUnsavedContactChanges(true);
   };
 
@@ -1963,56 +1762,133 @@ const ContactInformationSection = () => {
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <h3 className="text-xl font-semibold mb-6">Contact Information Management</h3>
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <h4 className="text-lg font-semibold text-gray-800">Basic Information</h4>
-          <input
-            type="text"
-            value={contactData.phone}
-            onChange={(e) => handleContactChange('phone', e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md"
-            placeholder="Phone Number"
-          />
-          <input
-            type="email"
-            value={contactData.email}
-            onChange={(e) => handleContactChange('email', e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md"
-            placeholder="Email Address"
-          />
-          <input
-            type="text"
-            value={contactData.address}
-            onChange={(e) => handleContactChange('address', e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md"
-            placeholder="Address"
-          />
-          <input
-            type="text"
-            value={contactData.hours}
-            onChange={(e) => handleContactChange('hours', e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md"
-            placeholder="Working Hours"
-          />
+      
+      <div className="space-y-6">
+        {/* Basic Contact Info */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-800">Basic Information</h4>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+              <input
+                type="text"
+                value={contactData.phone}
+                onChange={(e) => handleContactChange('phone', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder="Phone Number"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <input
+                type="email"
+                value={contactData.email}
+                onChange={(e) => handleContactChange('email', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder="Email Address"
+              />
+            </div>
+          </div>
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-gray-800">Social Media</h4>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Instagram URL</label>
+              <input
+                type="url"
+                value={contactData.instagram}
+                onChange={(e) => handleContactChange('instagram', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder="Instagram URL"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Facebook URL</label>
+              <input
+                type="url"
+                value={contactData.facebook}
+                onChange={(e) => handleContactChange('facebook', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder="Facebook URL"
+              />
+            </div>
+          </div>
         </div>
-        <div className="space-y-4">
-          <h4 className="text-lg font-semibold text-gray-800">Social Media</h4>
-          <input
-            type="url"
-            value={contactData.instagram}
-            onChange={(e) => handleContactChange('instagram', e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md"
-            placeholder="Instagram URL"
-          />
-          <input
-            type="url"
-            value={contactData.facebook}
-            onChange={(e) => handleContactChange('facebook', e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md"
-            placeholder="Facebook URL"
-          />
+
+        {/* Multilingual Address */}
+        <div>
+          <h4 className="text-lg font-semibold text-gray-800 mb-4">Address (All Languages)</h4>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Azerbaijani</label>
+              <textarea
+                value={contactData.address.az}
+                onChange={(e) => handleMultilingualChange('address', 'az', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                rows="3"
+                placeholder="Azərbaycan dilində ünvan"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">English</label>
+              <textarea
+                value={contactData.address.en}
+                onChange={(e) => handleMultilingualChange('address', 'en', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                rows="3"
+                placeholder="Address in English"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Russian</label>
+              <textarea
+                value={contactData.address.ru}
+                onChange={(e) => handleMultilingualChange('address', 'ru', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                rows="3"
+                placeholder="Адрес на русском языке"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Multilingual Working Hours */}
+        <div>
+          <h4 className="text-lg font-semibold text-gray-800 mb-4">Working Hours (All Languages)</h4>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Azerbaijani</label>
+              <input
+                type="text"
+                value={contactData.hours.az}
+                onChange={(e) => handleMultilingualChange('hours', 'az', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder="İş saatları (Az)"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">English</label>
+              <input
+                type="text"
+                value={contactData.hours.en}
+                onChange={(e) => handleMultilingualChange('hours', 'en', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder="Working hours (En)"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Russian</label>
+              <input
+                type="text"
+                value={contactData.hours.ru}
+                onChange={(e) => handleMultilingualChange('hours', 'ru', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                placeholder="Рабочие часы (Ru)"
+              />
+            </div>
+          </div>
         </div>
       </div>
+
       <button
         onClick={saveContactInfo}
         className={`mt-6 px-6 py-2 rounded-md font-semibold ${
@@ -3102,6 +2978,126 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             {resource ? 'Update' : 'Add'} Resource
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Testimonial Form Component
+const TestimonialForm = ({ testimonial, onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState({
+    name: testimonial?.name || '',
+    text: testimonial?.text || { az: '', en: '', ru: '' },
+    approved: testimonial?.approved ?? false
+  });
+
+  const handleSubmit = () => {
+    if (formData.name && 
+        formData.text.az && formData.text.en && formData.text.ru) {
+      onSubmit(formData);
+    } else {
+      alert('Please fill in all required fields for all languages');
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h4 className="text-lg font-semibold mb-4">{testimonial ? 'Edit Testimonial' : 'Add New Testimonial'}</h4>
+      
+      <div className="space-y-4">
+        {/* Name Field */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+          <input
+            type="text"
+            value={formData.name}
+            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            className="w-full p-3 border border-gray-300 rounded-md"
+            placeholder="Full Name"
+            required
+          />
+        </div>
+
+        {/* Text Fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Testimonial Text</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Azerbaijani</label>
+              <textarea
+                value={formData.text.az}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  text: { ...prev.text, az: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="4"
+                placeholder="Testimonial in Azerbaijani"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">English</label>
+              <textarea
+                value={formData.text.en}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  text: { ...prev.text, en: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="4"
+                placeholder="Testimonial in English"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Russian</label>
+              <textarea
+                value={formData.text.ru}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  text: { ...prev.text, ru: e.target.value }
+                }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                rows="4"
+                placeholder="Testimonial in Russian"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Approval Status */}
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="approved"
+            checked={formData.approved}
+            onChange={(e) => setFormData(prev => ({ ...prev, approved: e.target.checked }))}
+            className="mr-2"
+          />
+          <label htmlFor="approved" className="text-sm font-medium text-gray-700">
+            Approved (will appear on website)
+          </label>
+        </div>
+
+        {/* Form Actions */}
+        <div className="flex justify-end space-x-4 mt-6">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            {testimonial ? 'Update' : 'Add'} Testimonial
           </button>
         </div>
       </div>

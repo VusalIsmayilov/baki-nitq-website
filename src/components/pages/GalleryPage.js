@@ -6,7 +6,7 @@ import ConversionCTA from '../ConversionCTA';
 
 const GalleryPage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
-  const { activities, news, resources } = useContent();
+  const { activities, news, resources, siteContent } = useContent();
   const [selectedImage, setSelectedImage] = useState(null);
   const [activeTab, setActiveTab] = useState('events');
   const [isTabsSticky, setIsTabsSticky] = useState(false);
@@ -357,7 +357,7 @@ const GalleryPage = ({ setCurrentPage }) => {
             "name": "Bakı Nitq Mərkəzi",
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "Əhməd Rəcəbli 156, Aynalı Plaza",
+              "streetAddress": siteContent.contactInfo?.address?.az || "Əhməd Rəcəbli 156, Aynalı Plaza",
               "addressLocality": "Bakı",
               "addressCountry": "AZ"
             }

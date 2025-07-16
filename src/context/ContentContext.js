@@ -47,8 +47,16 @@ export const ContentProvider = ({ children }) => {
     contactInfo: {
       phone: '+994102271404',
       email: 'info@bakinitqmerkezi.az',
-      address: 'Bakı şəhəri, Nərimanov rayonu, Əhməd Rəcəbli 156, Aynalı Plaza',
-      hours: 'Monday - Friday: 9:00-18:00',
+      address: {
+        az: 'Bakı şəhəri, Nərimanov rayonu, Əhməd Rəcəbli 156, Aynalı Plaza',
+        en: 'Baku city, Narimanov district, Ahmad Rajabli 156, Aynali Plaza',
+        ru: 'город Баку, Нариманов район, Ахмед Раджабли 156, Айналы Плаза'
+      },
+      hours: {
+        az: 'Bazar ertəsi - Cümə: 9:00-18:00',
+        en: 'Monday - Friday: 9:00-18:00',
+        ru: 'Понедельник - Пятница: 9:00-18:00'
+      },
       instagram: 'https://instagram.com/bakinitqmerkezi',
       facebook: 'https://facebook.com/bakinitqmerkezi'
     },
