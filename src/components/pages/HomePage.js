@@ -1569,12 +1569,46 @@ const HomePage = ({ setCurrentPage }) => {
                       <span className="mr-4">{activity.time}</span>
                       <span>{activity.location[language]}</span>
                     </div>
-                    <button className="btn-primary px-4 py-2" style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontWeight: 600,
-                      fontSize: '0.9rem',
-                      lineHeight: 1.4
-                    }}>
+                    <button 
+                      onClick={() => {
+                        setCurrentPage('contact');
+                        // Scroll to contact forms after navigation
+                        setTimeout(() => {
+                          const contactSection = document.getElementById('contact-forms') || 
+                                               document.querySelector('.contact-forms-container') ||
+                                               document.querySelector('[data-section="contact-forms"]');
+                          if (contactSection) {
+                            const sectionTop = contactSection.offsetTop;
+                            const headerHeight = 80;
+                            const scrollPosition = sectionTop - headerHeight;
+                            
+                            window.scrollTo({
+                              top: scrollPosition,
+                              behavior: 'smooth'
+                            });
+                          } else {
+                            // If no specific contact forms section, scroll to middle of page
+                            setTimeout(() => {
+                              const pageHeight = document.body.scrollHeight;
+                              const viewportHeight = window.innerHeight;
+                              const scrollPosition = Math.max(0, (pageHeight - viewportHeight) / 2);
+                              
+                              window.scrollTo({
+                                top: scrollPosition,
+                                behavior: 'smooth'
+                              });
+                            }, 200);
+                          }
+                        }, 100);
+                      }}
+                      className="btn-primary px-4 py-2" 
+                      style={{
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
+                        lineHeight: 1.4
+                      }}
+                    >
                       {language === 'az' ? 'Qeydiyyat' : language === 'en' ? 'Register' : 'Регистрация'}
                     </button>
                   </div>
