@@ -41,7 +41,8 @@ const HomePage = ({ setCurrentPage }) => {
   const lottieRef3 = useRef();
   
   // Get dynamic training cards from ContentContext (max 3 for home page)
-  const trainingCards = getHomeCourses().map(course => ({
+  const homeCourses = getHomeCourses();
+  const trainingCards = homeCourses.length > 0 ? homeCourses.map(course => ({
     id: course.id,
     title: course.name[language],
     excerpt: course.description[language],
@@ -50,7 +51,27 @@ const HomePage = ({ setCurrentPage }) => {
     slug: course.slug || course.id,
     duration: course.duration,
     price: course.price
-  }));
+  })) : [
+    // Fallback test data if no courses exist
+    {
+      id: 'test-individual-1',
+      title: 'Test Individual Course',
+      excerpt: 'This is a test individual course',
+      type: 'individual',
+      image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=600&fit=crop'
+    },
+    {
+      id: 'test-corporate-1', 
+      title: 'Test Corporate Course',
+      excerpt: 'This is a test corporate course',
+      type: 'corporate',
+      image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=600&fit=crop'
+    }
+  ];
+  
+  console.log('HomePage homeCourses from context:', homeCourses);
+  console.log('HomePage trainingCards:', trainingCards);
+  
 
   // Get published news limited to 3 articles for blog section
   const publishedNews = news.filter(item => item.published).slice(0, 3);
@@ -979,22 +1000,38 @@ const HomePage = ({ setCurrentPage }) => {
               <button 
                 onClick={() => {
                   setCurrentPage('courses');
-                  // Navigate to training solutions section
+                  // Navigate to training solutions section with longer timeout
                   setTimeout(() => {
                     const trainingSolutionsSection = document.getElementById('training-solutions-section');
                     if (trainingSolutionsSection) {
                       // Get the section position and subtract header height plus moving section
                       const sectionTop = trainingSolutionsSection.offsetTop;
                       const headerHeight = 80;
-                      const movingSectionHeight = 100; // Additional offset for moving/sticky section
+                      const movingSectionHeight = 150; // Additional offset for moving/sticky section
                       const scrollPosition = sectionTop - headerHeight - movingSectionHeight;
                       
                       window.scrollTo({
                         top: scrollPosition,
                         behavior: 'smooth'
                       });
+                    } else {
+                      // Fallback: try again with longer delay
+                      setTimeout(() => {
+                        const section = document.getElementById('training-solutions-section');
+                        if (section) {
+                          const sectionTop = section.offsetTop;
+                          const headerHeight = 80;
+                          const movingSectionHeight = 150;
+                          const scrollPosition = sectionTop - headerHeight - movingSectionHeight;
+                          
+                          window.scrollTo({
+                            top: scrollPosition,
+                            behavior: 'smooth'
+                          });
+                        }
+                      }, 300);
                     }
-                  }, 100);
+                  }, 200);
                 }}
                 className="primary-btn group flex items-center gap-2 transition-all duration-150"
                 style={{
@@ -1197,7 +1234,41 @@ const HomePage = ({ setCurrentPage }) => {
                 {/* Button - always at bottom */}
                 <div className="text-center mt-auto">
                   <button 
-                    onClick={() => setCurrentPage('courses')}
+                    onClick={() => {
+                      setCurrentPage('courses');
+                      // Navigate to training solutions section (same as Başlayın button)
+                      setTimeout(() => {
+                        const trainingSolutionsSection = document.getElementById('training-solutions-section');
+                        if (trainingSolutionsSection) {
+                          // Get the section position and subtract header height plus moving section
+                          const sectionTop = trainingSolutionsSection.offsetTop;
+                          const headerHeight = 80;
+                          const movingSectionHeight = 150; // Additional offset for moving/sticky section
+                          const scrollPosition = sectionTop - headerHeight - movingSectionHeight;
+                          
+                          window.scrollTo({
+                            top: scrollPosition,
+                            behavior: 'smooth'
+                          });
+                        } else {
+                          // Fallback: try again with longer delay
+                          setTimeout(() => {
+                            const section = document.getElementById('training-solutions-section');
+                            if (section) {
+                              const sectionTop = section.offsetTop;
+                              const headerHeight = 80;
+                              const movingSectionHeight = 150;
+                              const scrollPosition = sectionTop - headerHeight - movingSectionHeight;
+                              
+                              window.scrollTo({
+                                top: scrollPosition,
+                                behavior: 'smooth'
+                              });
+                            }
+                          }, 300);
+                        }
+                      }, 200);
+                    }}
                     className="btn-primary px-6 py-2"
                     style={{
                       fontFamily: "'Poppins', sans-serif",
@@ -1216,255 +1287,7 @@ const HomePage = ({ setCurrentPage }) => {
           
           {/* Training Cards - Separated by Type */}
           <div className="mt-16">
-            {/* Individual Trainings */}
-            <div className="mb-12">
-              <h3 
-                className="mb-6"
-                style={{
-                  fontFamily: "'Lora', serif",
-                  fontWeight: 600,
-                  fontSize: '1.5rem',
-                  lineHeight: 1.3,
-                  color: '#1E1E1E'
-                }}
-              >
-                Fərdi Təlimlər
-              </h3>
-              <div key={`individual-${contentKey}`} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
-                {trainingCards
-                  .filter(course => course.type === 'individual')
-                  .slice(0, 3)
-                  .map((course) => (
-                  <div
-                    key={course.id}
-                    onClick={() => {
-                      setCurrentPage('courses');
-                      // Use hash to ensure proper navigation
-                      window.location.hash = '#individual-trainings';
-                    }}
-                    className="course-card group relative block cursor-pointer"
-                    style={{
-                      aspectRatio: '1',
-                      borderRadius: '12px',
-                      boxShadow: '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF',
-                      overflow: 'hidden',
-                      transform: 'translateY(0px)',
-                      transition: 'all 300ms cubic-bezier(0.25, 0.8, 0.42, 1)',
-                      backgroundColor: '#E7E7EE',
-                      backgroundImage: `url(${course.image})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                      e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.10), inset 0 0 0 3px #2166FF';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0px)';
-                      e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF';
-                    }}
-                    aria-label={`${course.title} - ${course.excerpt}`}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div 
-                      className="absolute bottom-0 left-0 w-full flex flex-col justify-between px-4 py-3 group-hover:bg-opacity-92 transition-all duration-300"
-                      style={{
-                        backgroundColor: '#204BFF',
-                        height: '30%',
-                        minHeight: '80px',
-                        borderTopLeftRadius: '4px',
-                        borderTopRightRadius: '4px'
-                      }}
-                    >
-                      <div>
-                        <h4 
-                          className="mb-2"
-                          style={{
-                            fontFamily: "'Lora', serif",
-                            fontWeight: 600,
-                            fontSize: '1.125rem',
-                            lineHeight: 1.3,
-                            color: '#FFFFFF',
-                            margin: '0 0 8px 0'
-                          }}
-                        >
-                          {course.title}
-                        </h4>
-                        <p 
-                          className="line-clamp-2"
-                          style={{
-                            fontFamily: "'Poppins', sans-serif",
-                            fontWeight: 400,
-                            fontSize: '14px',
-                            lineHeight: 1.4,
-                            color: 'rgba(255, 255, 255, 0.9)',
-                            margin: '0',
-                            overflow: 'hidden',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical'
-                          }}
-                        >
-                          {course.excerpt}
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <ArrowRight 
-                          className="w-4 h-4 text-white transform translate-x-1 group-hover:translate-x-0 transition-transform duration-200" 
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* More Individual Trainings Link */}
-              <div className="text-center mt-8">
-                <button
-                  onClick={() => {
-                    setCurrentPage('courses');
-                    // Use hash to ensure proper navigation
-                    window.location.hash = '#individual-trainings';
-                  }}
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
-                  style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: 600,
-                    textDecoration: 'none'
-                  }}
-                >
-                  Daha çox fərdi təlim
-                  <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-            </div>
 
-            {/* Corporate Trainings */}
-            <div className="mb-12">
-              <h3 
-                className="mb-6"
-                style={{
-                  fontFamily: "'Lora', serif",
-                  fontWeight: 600,
-                  fontSize: '1.5rem',
-                  lineHeight: 1.3,
-                  color: '#1E1E1E'
-                }}
-              >
-                Korporativ Təlimlər
-              </h3>
-              <div key={`corporate-${contentKey}`} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
-                {trainingCards
-                  .filter(course => course.type === 'corporate')
-                  .slice(0, 3)
-                  .map((course) => (
-                  <div
-                    key={course.id}
-                    onClick={() => {
-                      setCurrentPage('courses');
-                      // Use hash to ensure proper navigation
-                      window.location.hash = '#corporate-trainings';
-                    }}
-                    className="course-card group relative block cursor-pointer"
-                    style={{
-                      aspectRatio: '1',
-                      borderRadius: '12px',
-                      boxShadow: '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF',
-                      overflow: 'hidden',
-                      transform: 'translateY(0px)',
-                      transition: 'all 300ms cubic-bezier(0.25, 0.8, 0.42, 1)',
-                      backgroundColor: '#E7E7EE',
-                      backgroundImage: `url(${course.image})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                      e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.10), inset 0 0 0 3px #2166FF';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0px)';
-                      e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.06), inset 0 0 0 3px #2166FF';
-                    }}
-                    aria-label={`${course.title} - ${course.excerpt}`}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div 
-                      className="absolute bottom-0 left-0 w-full flex flex-col justify-between px-4 py-3 group-hover:bg-opacity-92 transition-all duration-300"
-                      style={{
-                        backgroundColor: '#204BFF',
-                        height: '30%',
-                        minHeight: '80px',
-                        borderTopLeftRadius: '4px',
-                        borderTopRightRadius: '4px'
-                      }}
-                    >
-                      <div>
-                        <h4 
-                          className="mb-2"
-                          style={{
-                            fontFamily: "'Lora', serif",
-                            fontWeight: 600,
-                            fontSize: '1.125rem',
-                            lineHeight: 1.3,
-                            color: '#FFFFFF',
-                            margin: '0 0 8px 0'
-                          }}
-                        >
-                          {course.title}
-                        </h4>
-                        <p 
-                          className="line-clamp-2"
-                          style={{
-                            fontFamily: "'Poppins', sans-serif",
-                            fontWeight: 400,
-                            fontSize: '14px',
-                            lineHeight: 1.4,
-                            color: 'rgba(255, 255, 255, 0.9)',
-                            margin: '0',
-                            overflow: 'hidden',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical'
-                          }}
-                        >
-                          {course.excerpt}
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <ArrowRight 
-                          className="w-4 h-4 text-white transform translate-x-1 group-hover:translate-x-0 transition-transform duration-200" 
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* More Corporate Trainings Link */}
-              <div className="text-center mt-8">
-                <button
-                  onClick={() => {
-                    setCurrentPage('courses');
-                    // Use hash to ensure proper navigation
-                    window.location.hash = '#corporate-trainings';
-                  }}
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
-                  style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: 600,
-                    textDecoration: 'none'
-                  }}
-                >
-                  Daha çox korporativ təlim
-                  <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-            </div>
           </div>
           
         </div>

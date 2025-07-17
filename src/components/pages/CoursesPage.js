@@ -212,6 +212,7 @@ const CoursesPage = ({ setCurrentPage }) => {
     
     return (
       <div className="bg-white transition-all duration-300 ease-out transform flex flex-col h-full" 
+          data-course-id={training.id}
            style={{
              borderRadius: '12px',
              boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
@@ -993,7 +994,11 @@ const CoursesPage = ({ setCurrentPage }) => {
                       {selectedTraining.category === 'individual' ? '👤' : '🏢'}
                     </span>
                   </div>
-                  <h2 className="text-3xl font-bold text-gray-900">{selectedTraining.title}</h2>
+                  <h2 className="text-3xl font-bold text-gray-900">
+                    {typeof selectedTraining.title === 'string' ? selectedTraining.title : 
+                     (selectedTraining.title ? selectedTraining.title[language] : 
+                      (selectedTraining.name ? selectedTraining.name[language] : ''))}
+                  </h2>
                 </div>
                 <button
                   onClick={closeTrainingModal}
@@ -1014,7 +1019,11 @@ const CoursesPage = ({ setCurrentPage }) => {
                     fontWeight: 600,
                     fontSize: '1.5rem',
                     lineHeight: 1.35
-                  }}>{selectedTraining.title}</h3>
+                  }}>
+                    {typeof selectedTraining.title === 'string' ? selectedTraining.title : 
+                     (selectedTraining.title ? selectedTraining.title[language] : 
+                      (selectedTraining.name ? selectedTraining.name[language] : ''))}
+                  </h3>
                 </div>
                 
                 <div className="prose max-w-none">
@@ -1030,7 +1039,8 @@ const CoursesPage = ({ setCurrentPage }) => {
                     lineHeight: 1.6,
                     color: '#1E1E1E'
                   }}>
-                    {selectedTraining.description}
+                    {typeof selectedTraining.description === 'string' ? selectedTraining.description : 
+                     (selectedTraining.description ? selectedTraining.description[language] : '')}
                   </p>
                 </div>
                 
