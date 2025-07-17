@@ -9,7 +9,6 @@ const AdminDashboard = () => {
   const { 
     siteContent, 
     mediaLibrary, 
-    siteStats, 
     courses,
     testimonials,
     activities,
@@ -121,7 +120,6 @@ const AdminDashboard = () => {
 
   const adminSections = [
     { id: 'overview', name: 'Overview', icon: BarChart3 },
-    { id: 'analytics', name: 'Analytics', icon: BarChart3 },
     { id: 'content', name: 'Content', icon: FileText },
     { id: 'trainers', name: 'Trainers', icon: Users },
     { id: 'courses', name: 'Courses', icon: BookOpen },
@@ -248,21 +246,6 @@ const AdminDashboard = () => {
         }}>Admin Dashboard Features</h2>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Analytics */}
-          <div className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center mb-3">
-              <BarChart3 className="text-blue-600 mr-2" size={20} />
-              <h3 className="font-semibold text-gray-900">Analytics</h3>
-            </div>
-            <p className="text-sm text-gray-600 mb-2">Monitor website performance and user engagement</p>
-            <ul className="text-xs text-gray-500 space-y-1">
-              <li>• View visitor statistics</li>
-              <li>• Track page views and bounce rates</li>
-              <li>• Monitor session duration</li>
-              <li>• Analyze user behavior</li>
-            </ul>
-          </div>
-
           {/* Content Management */}
           <div className="border border-gray-200 rounded-lg p-4">
             <div className="flex items-center mb-3">
@@ -403,278 +386,6 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const renderAnalytics = () => {
-    // Calculate analytics data
-    const totalActivities = activities.length;
-    const totalResources = resources.length;
-    const totalCourses = courses.length;
-    const totalTestimonials = testimonials.length;
-    const approvedTestimonials = testimonials.filter(t => t.approved).length;
-    const pendingTestimonials = testimonials.filter(t => !t.approved).length;
-    const publishedResources = resources.filter(r => r.published).length;
-    const featuredResources = resources.filter(r => r.featured).length;
-    const activeCourses = courses.filter(c => c.active).length;
-    const homeVisibleCourses = courses.filter(c => c.showOnHome).length;
-    const individualCourses = courses.filter(c => c.category === 'individual').length;
-    const corporateCourses = courses.filter(c => c.category === 'corporate').length;
-    const activeTrainers = getActiveTrainers().length;
-
-    // Mock analytics data for demonstration
-    const mockAnalytics = {
-      visitors: {
-        total: 15420,
-        thisMonth: 2340,
-        lastMonth: 2100,
-        growth: '+11.4%'
-      },
-      pageViews: {
-        total: 45680,
-        thisMonth: 7200,
-        lastMonth: 6800,
-        growth: '+5.9%'
-      },
-      bounceRate: {
-        current: 32.5,
-        lastMonth: 35.2,
-        change: '-2.7%'
-      },
-      avgSessionDuration: {
-        current: '3m 45s',
-        lastMonth: '3m 20s',
-        change: '+12.5%'
-      },
-      topPages: [
-        { page: 'Homepage', views: 12450, percentage: 27.2 },
-        { page: 'Courses', views: 8920, percentage: 19.5 },
-        { page: 'Contact', views: 5680, percentage: 12.4 },
-        { page: 'Gallery', views: 4210, percentage: 9.2 },
-        { page: 'About', views: 3850, percentage: 8.4 }
-      ],
-      referrers: [
-        { source: 'Direct', visits: 6750, percentage: 43.8 },
-        { source: 'Google', visits: 4230, percentage: 27.4 },
-        { source: 'Facebook', visits: 2180, percentage: 14.1 },
-        { source: 'Instagram', visits: 1560, percentage: 10.1 },
-        { source: 'Other', visits: 700, percentage: 4.5 }
-      ],
-      devices: [
-        { type: 'Mobile', users: 8950, percentage: 58.0 },
-        { type: 'Desktop', users: 5240, percentage: 34.0 },
-        { type: 'Tablet', users: 1230, percentage: 8.0 }
-      ]
-    };
-
-    return (
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h2 
-            style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 700,
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em'
-            }}
-          >
-            Analytics Dashboard
-          </h2>
-          <div className="text-sm text-gray-600">
-            Last updated: {new Date().toLocaleString()}
-          </div>
-        </div>
-
-        {/* Key Metrics */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-blue-50 rounded-lg p-6">
-            <h3 style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 600,
-              fontSize: '1.25rem',
-              lineHeight: 1.35,
-              color: '#1E3A8A'
-            }}>Total Visitors</h3>
-            <p className="text-3xl font-bold text-blue-700">{mockAnalytics.visitors.total.toLocaleString()}</p>
-            <p className="text-sm text-blue-600">{mockAnalytics.visitors.growth} from last month</p>
-          </div>
-          <div className="bg-green-50 rounded-lg p-6">
-            <h3 style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 600,
-              fontSize: '1.25rem',
-              lineHeight: 1.35,
-              color: '#14532D'
-            }}>Page Views</h3>
-            <p className="text-3xl font-bold text-green-700">{mockAnalytics.pageViews.total.toLocaleString()}</p>
-            <p className="text-sm text-green-600">{mockAnalytics.pageViews.growth} from last month</p>
-          </div>
-          <div className="bg-yellow-50 rounded-lg p-6">
-            <h3 style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 600,
-              fontSize: '1.25rem',
-              lineHeight: 1.35,
-              color: '#78350F'
-            }}>Bounce Rate</h3>
-            <p className="text-3xl font-bold text-yellow-700">{mockAnalytics.bounceRate.current}%</p>
-            <p className="text-sm text-yellow-600">{mockAnalytics.bounceRate.change} from last month</p>
-          </div>
-          <div className="bg-purple-50 rounded-lg p-6">
-            <h3 style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 600,
-              fontSize: '1.25rem',
-              lineHeight: 1.35,
-              color: '#581C87'
-            }}>Avg. Session</h3>
-            <p className="text-3xl font-bold text-purple-700">{mockAnalytics.avgSessionDuration.current}</p>
-            <p className="text-sm text-purple-600">{mockAnalytics.avgSessionDuration.change} from last month</p>
-          </div>
-        </div>
-
-        {/* Content Performance */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 style={{
-            fontFamily: "'Lora', serif",
-            fontWeight: 600,
-            fontSize: '1.5rem',
-            lineHeight: 1.35,
-            color: '#1E1E1E'
-          }} className="mb-6">Content Performance</h3>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{totalCourses}</div>
-              <div className="text-sm text-gray-600">Total Courses</div>
-              <div className="text-xs text-gray-500">{activeCourses} active, {homeVisibleCourses} on homepage</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{totalActivities}</div>
-              <div className="text-sm text-gray-600">Total Activities</div>
-              <div className="text-xs text-gray-500">Events and workshops</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">{totalResources}</div>
-              <div className="text-sm text-gray-600">Total Resources</div>
-              <div className="text-xs text-gray-500">{publishedResources} published, {featuredResources} featured</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{totalTestimonials}</div>
-              <div className="text-sm text-gray-600">Total Testimonials</div>
-              <div className="text-xs text-gray-500">{approvedTestimonials} approved, {pendingTestimonials} pending</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Top Pages and Traffic Sources */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 600,
-              fontSize: '1.25rem',
-              lineHeight: 1.35,
-              color: '#1E1E1E'
-            }} className="mb-4">Top Pages</h3>
-            <div className="space-y-3">
-              {mockAnalytics.topPages.map((page, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-xs font-semibold text-blue-600">
-                      {index + 1}
-                    </div>
-                    <span className="font-medium">{page.page}</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-semibold">{page.views.toLocaleString()}</div>
-                    <div className="text-xs text-gray-500">{page.percentage}%</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 style={{
-              fontFamily: "'Lora', serif",
-              fontWeight: 600,
-              fontSize: '1.25rem',
-              lineHeight: 1.35,
-              color: '#1E1E1E'
-            }} className="mb-4">Traffic Sources</h3>
-            <div className="space-y-3">
-              {mockAnalytics.referrers.map((source, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-3 h-3 rounded-full ${
-                      source.source === 'Direct' ? 'bg-blue-500' :
-                      source.source === 'Google' ? 'bg-green-500' :
-                      source.source === 'Facebook' ? 'bg-blue-600' :
-                      source.source === 'Instagram' ? 'bg-pink-500' :
-                      'bg-gray-500'
-                    }`}></div>
-                    <span className="font-medium">{source.source}</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-semibold">{source.visits.toLocaleString()}</div>
-                    <div className="text-xs text-gray-500">{source.percentage}%</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Device Analytics */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 style={{
-            fontFamily: "'Lora', serif",
-            fontWeight: 600,
-            fontSize: '1.25rem',
-            lineHeight: 1.35,
-            color: '#1E1E1E'
-          }} className="mb-4">Device Usage</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            {mockAnalytics.devices.map((device, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl font-bold text-gray-700">{device.users.toLocaleString()}</div>
-                <div className="text-sm text-gray-600">{device.type}</div>
-                <div className="text-xs text-gray-500">{device.percentage}% of traffic</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Course Analytics */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 style={{
-            fontFamily: "'Lora', serif",
-            fontWeight: 600,
-            fontSize: '1.25rem',
-            lineHeight: 1.35,
-            color: '#1E1E1E'
-          }} className="mb-4">Course Analytics</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{individualCourses}</div>
-              <div className="text-sm text-gray-600">Individual Courses</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{corporateCourses}</div>
-              <div className="text-sm text-gray-600">Corporate Courses</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">{activeTrainers}</div>
-              <div className="text-sm text-gray-600">Active Trainers</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{homeVisibleCourses}</div>
-              <div className="text-sm text-gray-600">Homepage Courses</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   const renderContentManagement = () => (
     <div className="space-y-6">
@@ -1746,7 +1457,6 @@ const AdminDashboard = () => {
   const renderContent = () => {
     switch (activeSection) {
       case 'overview': return renderOverview();
-      case 'analytics': return renderAnalytics();
       case 'content': return renderContentManagement();
       case 'trainers': return renderTrainersManagement();
       case 'courses': return renderCourseManagement();

@@ -164,8 +164,7 @@ export const ContentProvider = ({ children }) => {
     ],
     siteSettings: {
       siteName: 'Bakı Nitq Mərkəzi',
-      defaultLanguage: 'az',
-      enableAnalytics: true
+      defaultLanguage: 'az'
     }
   });
 
@@ -332,27 +331,6 @@ export const ContentProvider = ({ children }) => {
     }
   ]);
 
-  const [siteStats, setSiteStats] = useState({
-    totalVisitors: 1247,
-    totalPageViews: 3891,
-    averageSessionTime: '3:24',
-    topPages: [
-      { page: 'Home', views: 1203 },
-      { page: 'Courses', views: 856 },
-      { page: 'About', views: 634 },
-      { page: 'Contact', views: 498 }
-    ],
-    languageUsage: {
-      az: 65,
-      en: 25,
-      ru: 10
-    },
-    trafficSources: {
-      direct: 45,
-      search: 32,
-      social: 23
-    }
-  });
 
   const [courses, setCourses] = useState([
     {
@@ -1304,17 +1282,12 @@ export const ContentProvider = ({ children }) => {
     }
   };
 
-  // Analytics Functions
-  const updateStats = (newStats) => {
-    setSiteStats(prev => ({ ...prev, ...newStats }));
-  };
 
   return (
     <ContentContext.Provider value={{
       // State
       siteContent,
       mediaLibrary,
-      siteStats,
       courses,
       activities,
       testimonials,
@@ -1407,9 +1380,6 @@ export const ContentProvider = ({ children }) => {
       validateAdminCredentials,
       changeAdminPassword,
       changeAdminUsername,
-      
-      // Analytics
-      updateStats,
       
       // Direct state setters for advanced operations
       setSiteContent,
