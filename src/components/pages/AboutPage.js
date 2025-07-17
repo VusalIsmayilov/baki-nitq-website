@@ -4,20 +4,11 @@ import { useContent } from '../../context/ContentContext';
 
 const AboutPage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
-  const { getActiveTrainers } = useContent();
+  const { getActiveTrainers, getActivePartners } = useContent();
   const [expandedTrainers, setExpandedTrainers] = useState({});
 
-  // Partner logos data with colors
-  const partnerLogos = [
-    { name: 'TECHCORP', colorClass: 'from-blue-500 to-blue-700', textColor: 'text-blue-600' },
-    { name: 'AZƏRBAYCAN BANK', colorClass: 'from-green-500 to-green-700', textColor: 'text-green-600' },
-    { name: 'SOCAR', colorClass: 'from-red-500 to-red-700', textColor: 'text-red-600' },
-    { name: 'BDU', colorClass: 'from-purple-500 to-purple-700', textColor: 'text-purple-600' },
-    { name: 'TƏHSİL NAZİRLİYİ', colorClass: 'from-indigo-500 to-indigo-700', textColor: 'text-indigo-600' },
-    { name: 'İTV', colorClass: 'from-orange-500 to-orange-700', textColor: 'text-orange-600' },
-    { name: 'AZERCELL', colorClass: 'from-teal-500 to-teal-700', textColor: 'text-teal-600' },
-    { name: 'KPMG', colorClass: 'from-gray-500 to-gray-700', textColor: 'text-gray-600' }
-  ];
+  // Get active partners from context
+  const partnerLogos = getActivePartners();
 
   const toggleTrainerExpansion = (trainerId) => {
     setExpandedTrainers(prev => ({

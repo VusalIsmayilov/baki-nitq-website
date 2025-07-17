@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
-import { FileText, Upload, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Eye, EyeOff, Star, Calendar } from 'lucide-react';
+import { FileText, Upload, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Eye, EyeOff, Star, Calendar, Lock, Key, User } from 'lucide-react';
+import PartnersManagementPage from './PartnersManagementPage';
 
 const AdminDashboard = () => {
   const { t, language } = useLanguage();
@@ -49,7 +50,12 @@ const AdminDashboard = () => {
     updateResource,
     deleteResource,
     publishResource,
-    toggleResourceFeatured
+    toggleResourceFeatured,
+    adminCredentials,
+    updateAdminCredentials,
+    validateAdminCredentials,
+    changeAdminPassword,
+    changeAdminUsername
   } = useContent();
   
   const [activeSection, setActiveSection] = useState('overview');
@@ -116,13 +122,15 @@ const AdminDashboard = () => {
   const adminSections = [
     { id: 'overview', name: 'Overview', icon: BarChart3 },
     { id: 'analytics', name: 'Analytics', icon: BarChart3 },
-    { id: 'content', name: 'Content Management', icon: FileText },
-    { id: 'trainers', name: 'Trainers Management', icon: Users },
-    { id: 'courses', name: 'Course Management', icon: BookOpen },
-    { id: 'activities', name: 'Activities Management', icon: Calendar },
-    { id: 'resources', name: 'Resources Management', icon: FileText },
-    { id: 'testimonials', name: 'Testimonials Management', icon: Users },
-    { id: 'contact', name: 'Contact Information', icon: Globe }
+    { id: 'content', name: 'Content', icon: FileText },
+    { id: 'trainers', name: 'Trainers', icon: Users },
+    { id: 'courses', name: 'Courses', icon: BookOpen },
+    { id: 'activities', name: 'Activities', icon: Calendar },
+    { id: 'resources', name: 'Resources', icon: FileText },
+    { id: 'testimonials', name: 'Testimonials', icon: Users },
+    { id: 'partners', name: 'Partners', icon: Globe },
+    { id: 'contact', name: 'Contact', icon: Globe },
+    { id: 'admin-settings', name: 'Settings', icon: Settings }
   ];
 
   const handleContentEdit = (section, lang, newValue) => {
@@ -1667,7 +1675,9 @@ const AdminDashboard = () => {
       case 'activities': return renderActivitiesManagement();
       case 'resources': return renderResourcesManagement();
       case 'testimonials': return renderTestimonialsManagement();
+      case 'partners': return <PartnersManagementPage />;
       case 'contact': return <ContactInformationSection />;
+      case 'admin-settings': return <AdminSettingsSection />;
       default: return renderOverview();
     }
   };
@@ -1695,21 +1705,21 @@ const AdminDashboard = () => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar Navigation */}
           <div className="lg:w-64 bg-white rounded-lg shadow-lg p-4">
-            <nav className="space-y-2">
+            <nav className="space-y-2 text-left">
               {adminSections.map((section) => {
                 const Icon = section.icon;
                 return (
                   <button
                     key={section.id}
                     onClick={() => setActiveSection(section.id)}
-                    className={`w-full flex items-center space-x-3 px-3 py-3 rounded-md transition-colors ${
+                    className={`w-full flex items-center justify-start space-x-3 px-3 py-2.5 rounded-md transition-colors text-left min-h-[42px] ${
                       activeSection === section.id
                         ? 'bg-blue-100 text-blue-900 font-semibold'
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
-                    <Icon size={18} />
-                    <span>{section.name}</span>
+                    <Icon size={18} className="flex-shrink-0" />
+                    <span className="text-left text-sm font-medium">{section.name}</span>
                   </button>
                 );
               })}
@@ -1728,6 +1738,215 @@ const AdminDashboard = () => {
 
 
 // Contact Information Component
+const AdminSettingsSection = () => {
+  const { adminCredentials, changeAdminPassword, changeAdminUsername } = useContent();
+  const [formData, setFormData] = useState({
+    newUsername: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [message, setMessage] = useState({ type: '', text: '' });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleUsernameChange = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage({ type: '', text: '' });
+
+    if (!formData.newUsername.trim()) {
+      setMessage({ type: 'error', text: 'Username cannot be empty' });
+      setIsLoading(false);
+      return;
+    }
+
+    const result = changeAdminUsername(formData.newUsername);
+    setMessage({ type: result.success ? 'success' : 'error', text: result.message });
+    
+    if (result.success) {
+      setFormData(prev => ({ ...prev, newUsername: '' }));
+    }
+    setIsLoading(false);
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage({ type: '', text: '' });
+
+    if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
+      setMessage({ type: 'error', text: 'All password fields are required' });
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      setMessage({ type: 'error', text: 'New passwords do not match' });
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.newPassword.length < 6) {
+      setMessage({ type: 'error', text: 'New password must be at least 6 characters long' });
+      setIsLoading(false);
+      return;
+    }
+
+    const result = changeAdminPassword(formData.currentPassword, formData.newPassword);
+    setMessage({ type: result.success ? 'success' : 'error', text: result.message });
+    
+    if (result.success) {
+      setFormData(prev => ({ ...prev, currentPassword: '', newPassword: '', confirmPassword: '' }));
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Admin Settings</h2>
+        
+        {message.text && (
+          <div className={`p-4 mb-6 rounded-lg ${
+            message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+          }`}>
+            {message.text}
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Current Info */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <User className="w-5 h-5" />
+              Current Admin Info
+            </h3>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Username</label>
+                <div className="mt-1 p-3 bg-white rounded-lg border">
+                  <span className="font-mono text-gray-900">{adminCredentials.username}</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Last Changed</label>
+                <div className="mt-1 p-3 bg-white rounded-lg border">
+                  <span className="text-gray-600">
+                    {new Date(adminCredentials.lastChanged).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Change Username */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Edit2 className="w-5 h-5" />
+              Change Username
+            </h3>
+            <form onSubmit={handleUsernameChange} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  New Username
+                </label>
+                <input
+                  type="text"
+                  value={formData.newUsername}
+                  onChange={(e) => setFormData(prev => ({ ...prev, newUsername: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter new username"
+                  minLength="3"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              >
+                {isLoading ? 'Updating...' : 'Update Username'}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Change Password */}
+        <div className="mt-8 bg-gray-50 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <Lock className="w-5 h-5" />
+            Change Password
+          </h3>
+          <form onSubmit={handlePasswordChange} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  value={formData.currentPassword}
+                  onChange={(e) => setFormData(prev => ({ ...prev, currentPassword: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter current password"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  value={formData.newPassword}
+                  onChange={(e) => setFormData(prev => ({ ...prev, newPassword: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter new password"
+                  minLength="6"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  value={formData.confirmPassword}
+                  onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Confirm new password"
+                  required
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+            >
+              {isLoading ? 'Updating...' : 'Change Password'}
+            </button>
+          </form>
+        </div>
+
+        {/* Security Notice */}
+        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="flex items-center gap-2">
+            <Key className="w-5 h-5 text-yellow-600" />
+            <h4 className="text-sm font-medium text-yellow-800">Security Notice</h4>
+          </div>
+          <p className="mt-2 text-sm text-yellow-700">
+            • Keep your admin credentials secure and change them regularly<br/>
+            • Use a strong password with at least 6 characters<br/>
+            • Don't share your admin credentials with anyone
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ContactInformationSection = () => {
   const { siteContent, updateContactInfo } = useContent();
   const [contactData, setContactData] = useState({

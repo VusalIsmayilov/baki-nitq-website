@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useContent } from '../../context/ContentContext';
 
 const LoginPage = ({ setIsAdmin, setCurrentPage }) => {
   const [username, setUsername] = useState('');
@@ -8,9 +9,10 @@ const LoginPage = ({ setIsAdmin, setCurrentPage }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const { t } = useLanguage();
+  const { validateAdminCredentials } = useContent();
   
   const handleLogin = () => {
-    if (username === 'admin' && password === 'admin123') {
+    if (validateAdminCredentials(username, password)) {
       setIsAdmin(true);
       setCurrentPage('admin');
       setError('');

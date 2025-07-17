@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
-import { ChevronRight, ChevronDown, User, ArrowUpRight, ArrowRight } from 'lucide-react';
+import { ChevronRight, ChevronDown, ArrowUpRight, ArrowRight } from 'lucide-react';
 import Lottie from 'lottie-react';
 import targetIconAnimation from '../../animations/targetIcon.json';
 import usersIconAnimation from '../../animations/usersIcon.json';
@@ -25,7 +25,7 @@ const WaveDivider = () => (
 
 const HomePage = ({ setCurrentPage }) => {
   const { t, language } = useLanguage();
-  const { siteContent, testimonials, news, getHomeCourses, courses, getActiveTrainers, activities } = useContent();
+  const { siteContent, testimonials, news, getHomeCourses, courses, getActiveTrainers, activities, getActivePartners } = useContent();
   const [activeService, setActiveService] = useState('speechCommunicationDev');
   const [visibleCards, setVisibleCards] = useState([]);
   const [contentKey, setContentKey] = useState(0);
@@ -268,14 +268,6 @@ const HomePage = ({ setCurrentPage }) => {
   // Filter approved testimonials
   const approvedTestimonials = testimonials.filter(testimonial => testimonial.approved);
 
-  // Sample avatar images for testimonials
-  const avatarImages = {
-    1: 'https://images.unsplash.com/photo-1494790108755-2616b612ce8b?w=100&h=100&fit=crop&crop=face',
-    2: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
-    3: 'https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=100&h=100&fit=crop&crop=face',
-    4: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop&crop=face',
-    5: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face'
-  };
 
   // Auto-scroll for testimonials carousel
   useEffect(() => {
@@ -299,17 +291,8 @@ const HomePage = ({ setCurrentPage }) => {
     }
   }, [isCarouselHovered, approvedTestimonials.length]);
 
-  // Partner logos data with colors
-  const partnerLogos = [
-    { name: 'TECHCORP', colorClass: 'from-blue-500 to-blue-700', textColor: 'text-blue-600' },
-    { name: 'AZƏRBAYCAN BANK', colorClass: 'from-green-500 to-green-700', textColor: 'text-green-600' },
-    { name: 'SOCAR', colorClass: 'from-red-500 to-red-700', textColor: 'text-red-600' },
-    { name: 'BDU', colorClass: 'from-purple-500 to-purple-700', textColor: 'text-purple-600' },
-    { name: 'TƏHSİL NAZİRLİYİ', colorClass: 'from-indigo-500 to-indigo-700', textColor: 'text-indigo-600' },
-    { name: 'İTV', colorClass: 'from-orange-500 to-orange-700', textColor: 'text-orange-600' },
-    { name: 'AZERCELL', colorClass: 'from-teal-500 to-teal-700', textColor: 'text-teal-600' },
-    { name: 'KPMG', colorClass: 'from-gray-500 to-gray-700', textColor: 'text-gray-600' }
-  ];
+  // Get active partners from context
+  const partnerLogos = getActivePartners();
   
   return (
     <div>
@@ -1723,48 +1706,6 @@ const HomePage = ({ setCurrentPage }) => {
                         e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)';
                       }}
                     >
-                      {/* Avatar at top center */}
-                      <div 
-                        className="avatar-container"
-                        style={{
-                          width: '96px',
-                          height: '96px',
-                          borderRadius: '50%',
-                          overflow: 'hidden',
-                          margin: '0 auto 24px auto',
-                          marginTop: '12px',
-                          backgroundColor: '#E7E7EE'
-                        }}
-                      >
-                        {avatarImages[testimonial.id] ? (
-                          <img 
-                            src={avatarImages[testimonial.id]} 
-                            alt={`${testimonial.name} foto`}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover'
-                            }}
-                            loading="lazy"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'flex';
-                            }}
-                          />
-                        ) : null}
-                        <div 
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            backgroundColor: '#E7E7EE',
-                            display: avatarImages[testimonial.id] ? 'none' : 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                          }}
-                        >
-                          <User className="w-8 h-8 text-gray-500" />
-                        </div>
-                      </div>
 
                       {/* Name */}
                       <h4 

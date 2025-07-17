@@ -689,6 +689,78 @@ export const ContentProvider = ({ children }) => {
     }
   ]);
 
+  const [adminCredentials, setAdminCredentials] = useState(() => {
+    const savedCredentials = localStorage.getItem('adminCredentials');
+    return savedCredentials ? JSON.parse(savedCredentials) : {
+      username: 'admin',
+      password: 'password123',
+      lastChanged: new Date().toISOString()
+    };
+  });
+
+  const [partners, setPartners] = useState([
+    {
+      id: 1,
+      name: 'TECHCORP',
+      logo: null,
+      website: 'https://techcorp.az',
+      colorClass: 'from-blue-500 to-blue-700',
+      textColor: 'text-blue-600',
+      active: true,
+      order: 1
+    },
+    {
+      id: 2,
+      name: 'AZƏRBAYCAN BANK',
+      logo: null,
+      website: 'https://azbank.az',
+      colorClass: 'from-green-500 to-green-700',
+      textColor: 'text-green-600',
+      active: true,
+      order: 2
+    },
+    {
+      id: 3,
+      name: 'SOCAR',
+      logo: null,
+      website: 'https://socar.az',
+      colorClass: 'from-red-500 to-red-700',
+      textColor: 'text-red-600',
+      active: true,
+      order: 3
+    },
+    {
+      id: 4,
+      name: 'BDU',
+      logo: null,
+      website: 'https://bdu.edu.az',
+      colorClass: 'from-purple-500 to-purple-700',
+      textColor: 'text-purple-600',
+      active: true,
+      order: 4
+    },
+    {
+      id: 5,
+      name: 'TƏHSİL NAZİRLİYİ',
+      logo: null,
+      website: 'https://edu.gov.az',
+      colorClass: 'from-indigo-500 to-indigo-700',
+      textColor: 'text-indigo-600',
+      active: true,
+      order: 5
+    },
+    {
+      id: 6,
+      name: 'ENERGETIKA',
+      logo: null,
+      website: 'https://energetika.az',
+      colorClass: 'from-yellow-500 to-yellow-700',
+      textColor: 'text-yellow-600',
+      active: true,
+      order: 6
+    }
+  ]);
+
   const [teamMembers, setTeamMembers] = useState([
     {
       id: 1,
@@ -1147,6 +1219,91 @@ export const ContentProvider = ({ children }) => {
     return resources.filter(resource => resource.published && resource.featured).sort((a, b) => new Date(b.date) - new Date(a.date));
   };
 
+  // Partner Management Functions
+  const addPartner = (partnerData) => {
+    const newPartner = {
+      id: partners.length + 1,
+      name: '',
+      logo: null,
+      website: '',
+      colorClass: 'from-gray-500 to-gray-700',
+      textColor: 'text-gray-600',
+      active: true,
+      order: partners.length + 1,
+      ...partnerData
+    };
+    setPartners(prev => [...prev, newPartner]);
+  };
+
+  const updatePartner = (partnerId, partnerData) => {
+    setPartners(prev => prev.map(partner => 
+      partner.id === partnerId ? { ...partner, ...partnerData } : partner
+    ));
+  };
+
+  const deletePartner = (partnerId) => {
+    setPartners(prev => prev.filter(partner => partner.id !== partnerId));
+  };
+
+  const togglePartnerActive = (partnerId) => {
+    setPartners(prev => prev.map(partner => 
+      partner.id === partnerId ? { ...partner, active: !partner.active } : partner
+    ));
+  };
+
+  const getActivePartners = () => {
+    return partners.filter(partner => partner.active).sort((a, b) => a.order - b.order);
+  };
+
+  const updatePartnerOrder = (partnerId, newOrder) => {
+    setPartners(prev => prev.map(partner => 
+      partner.id === partnerId ? { ...partner, order: newOrder } : partner
+    ));
+  };
+
+  // Admin Credentials Management Functions
+  const updateAdminCredentials = (newCredentials) => {
+    setAdminCredentials(prev => ({
+      ...prev,
+      ...newCredentials,
+      lastChanged: new Date().toISOString()
+    }));
+  };
+
+  const validateAdminCredentials = (username, password) => {
+    return adminCredentials.username === username && adminCredentials.password === password;
+  };
+
+  const changeAdminPassword = (oldPassword, newPassword) => {
+    if (adminCredentials.password === oldPassword) {
+      const newCredentials = {
+        ...adminCredentials,
+        password: newPassword,
+        lastChanged: new Date().toISOString()
+      };
+      setAdminCredentials(newCredentials);
+      localStorage.setItem('adminCredentials', JSON.stringify(newCredentials));
+      return { success: true, message: 'Password changed successfully' };
+    } else {
+      return { success: false, message: 'Current password is incorrect' };
+    }
+  };
+
+  const changeAdminUsername = (newUsername) => {
+    if (newUsername && newUsername.length >= 3) {
+      const newCredentials = {
+        ...adminCredentials,
+        username: newUsername,
+        lastChanged: new Date().toISOString()
+      };
+      setAdminCredentials(newCredentials);
+      localStorage.setItem('adminCredentials', JSON.stringify(newCredentials));
+      return { success: true, message: 'Username changed successfully' };
+    } else {
+      return { success: false, message: 'Username must be at least 3 characters long' };
+    }
+  };
+
   // Analytics Functions
   const updateStats = (newStats) => {
     setSiteStats(prev => ({ ...prev, ...newStats }));
@@ -1163,6 +1320,8 @@ export const ContentProvider = ({ children }) => {
       testimonials,
       news,
       teamMembers,
+      partners,
+      adminCredentials,
       
       // Content Management
       updateContent,
@@ -1234,6 +1393,20 @@ export const ContentProvider = ({ children }) => {
       toggleResourceFeatured,
       getPublishedResources,
       getFeaturedResources,
+      
+      // Partner Management
+      addPartner,
+      updatePartner,
+      deletePartner,
+      togglePartnerActive,
+      getActivePartners,
+      updatePartnerOrder,
+      
+      // Admin Credentials Management
+      updateAdminCredentials,
+      validateAdminCredentials,
+      changeAdminPassword,
+      changeAdminUsername,
       
       // Analytics
       updateStats,
