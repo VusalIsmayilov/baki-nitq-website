@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
-import { FileText, Upload, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Eye, EyeOff, Star, Calendar, Lock, Key, User } from 'lucide-react';
+import { FileText, BarChart3, Edit, Edit2, Save, X, Plus, Trash2, Users, Globe, Settings, Check, BookOpen, Eye, EyeOff, Star, Calendar, Lock, Key, User } from 'lucide-react';
 import PartnersManagementPage from './PartnersManagementPage';
 
 const AdminDashboard = () => {
@@ -235,93 +235,171 @@ const AdminDashboard = () => {
 
   const renderOverview = () => (
     <div className="space-y-6">
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-blue-50 rounded-lg p-6">
-          <h3 style={{
-            fontFamily: "'Lora', serif",
-            fontWeight: 600,
-            fontSize: '1.25rem',
-            lineHeight: 1.35,
-            color: '#1E3A8A'
-          }}>Total Visitors</h3>
-          <p className="text-3xl font-bold text-blue-700">{siteStats.totalVisitors}</p>
-          <p className="text-sm text-blue-600">+12% from last month</p>
-        </div>
-        <div className="bg-green-50 rounded-lg p-6">
-          <h3 style={{
-            fontFamily: "'Lora', serif",
-            fontWeight: 600,
-            fontSize: '1.25rem',
-            lineHeight: 1.35,
-            color: '#14532D'
-          }}>Active Courses</h3>
-          <p className="text-3xl font-bold text-green-700">{courses.filter(c => c.active).length}</p>
-          <p className="text-sm text-green-600">All courses active</p>
-        </div>
-        <div className="bg-yellow-50 rounded-lg p-6">
-          <h3 style={{
-            fontFamily: "'Lora', serif",
-            fontWeight: 600,
-            fontSize: '1.25rem',
-            lineHeight: 1.35,
-            color: '#78350F'
-          }}>Active Resources</h3>
-          <p className="text-3xl font-bold text-yellow-700">{resources.length}</p>
-          <p className="text-sm text-yellow-600">{resources.filter(r => r.featured).length} featured</p>
-        </div>
-        <div className="bg-purple-50 rounded-lg p-6">
-          <h3 style={{
-            fontFamily: "'Lora', serif",
-            fontWeight: 600,
-            fontSize: '1.25rem',
-            lineHeight: 1.35,
-            color: '#581C87'
-          }}>Testimonials</h3>
-          <p className="text-3xl font-bold text-purple-700">{testimonials.filter(t => t.approved).length}</p>
-          <p className="text-sm text-purple-600">{testimonials.filter(t => !t.approved).length} pending</p>
+
+      {/* Admin Features Overview */}
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <h2 style={{
+          fontFamily: "'Lora', serif",
+          fontWeight: 600,
+          fontSize: '1.5rem',
+          lineHeight: 1.35,
+          color: '#1E1E1E',
+          marginBottom: '1.5rem'
+        }}>Admin Dashboard Features</h2>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Analytics */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <BarChart3 className="text-blue-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Analytics</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Monitor website performance and user engagement</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• View visitor statistics</li>
+              <li>• Track page views and bounce rates</li>
+              <li>• Monitor session duration</li>
+              <li>• Analyze user behavior</li>
+            </ul>
+          </div>
+
+          {/* Content Management */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <FileText className="text-green-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Content</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Manage all website content and text</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Edit page content</li>
+              <li>• Manage multilingual content</li>
+              <li>• Update hero sections</li>
+              <li>• Modify contact information</li>
+            </ul>
+          </div>
+
+          {/* Trainers Management */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <Users className="text-purple-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Trainers</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Manage training staff and their profiles</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Add/edit trainer profiles</li>
+              <li>• Set trainer specialties</li>
+              <li>• Manage trainer visibility</li>
+              <li>• Update trainer descriptions</li>
+            </ul>
+          </div>
+
+          {/* Course Management */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <BookOpen className="text-yellow-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Courses</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Manage training courses and curriculum</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Create and edit courses</li>
+              <li>• Manage course categories</li>
+              <li>• Set course visibility</li>
+              <li>• Update curriculum content</li>
+            </ul>
+          </div>
+
+          {/* Activities Management */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <Calendar className="text-red-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Activities</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Organize events and activities</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Create and manage events</li>
+              <li>• Set event dates and times</li>
+              <li>• Manage event visibility</li>
+              <li>• Update event descriptions</li>
+            </ul>
+          </div>
+
+          {/* Resources Management */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <FileText className="text-indigo-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Resources</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Manage educational resources and materials</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Upload and organize resources</li>
+              <li>• Set featured resources</li>
+              <li>• Manage resource categories</li>
+              <li>• Control resource visibility</li>
+            </ul>
+          </div>
+
+          {/* Testimonials Management */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <Star className="text-orange-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Testimonials</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Review and manage student feedback</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Approve/reject testimonials</li>
+              <li>• Edit testimonial content</li>
+              <li>• Manage testimonial visibility</li>
+              <li>• Moderate user feedback</li>
+            </ul>
+          </div>
+
+          {/* Partners Management */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <Globe className="text-teal-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Partners</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Manage partner organizations and collaborations</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Add/edit partner information</li>
+              <li>• Set partner visibility</li>
+              <li>• Manage partner logos</li>
+              <li>• Control partner ordering</li>
+            </ul>
+          </div>
+
+          {/* Contact Information */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <Globe className="text-gray-600 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Contact</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Update contact details and information</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Edit contact information</li>
+              <li>• Update social media links</li>
+              <li>• Manage contact forms</li>
+              <li>• Set business hours</li>
+            </ul>
+          </div>
+
+          {/* Admin Settings */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <Settings className="text-gray-700 mr-2" size={20} />
+              <h3 className="font-semibold text-gray-900">Settings</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-2">Configure admin account and security</p>
+            <ul className="text-xs text-gray-500 space-y-1">
+              <li>• Change admin username</li>
+              <li>• Update admin password</li>
+              <li>• View credential history</li>
+              <li>• Security management</li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 style={{
-          fontFamily: "'Lora', serif",
-          fontWeight: 600,
-          fontSize: '1.25rem',
-          lineHeight: 1.35,
-          color: '#1E1E1E',
-          marginBottom: '1rem'
-        }}>Quick Actions</h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <button 
-            onClick={() => setActiveSection('content')}
-            className="p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors"
-          >
-            <FileText className="mx-auto text-blue-600 mb-2" size={24} />
-            <span className="block font-semibold">Edit Content</span>
-          </button>
-          <button 
-            onClick={() => setActiveSection('media')}
-            className="p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors"
-          >
-            <Upload className="mx-auto text-green-600 mb-2" size={24} />
-            <span className="block font-semibold">Manage Gallery</span>
-          </button>
-          <button 
-            onClick={() => setActiveSection('courses')}
-            className="p-4 bg-yellow-50 rounded-lg text-center hover:bg-yellow-100 transition-colors"
-          >
-            <BookOpen className="mx-auto text-yellow-600 mb-2" size={24} />
-            <span className="block font-semibold">Manage Courses</span>
-          </button>
-          <button 
-            onClick={() => setActiveSection('contact')}
-            className="p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors"
-          >
-            <Globe className="mx-auto text-purple-600 mb-2" size={24} />
-            <span className="block font-semibold">Contact Info</span>
-          </button>
-        </div>
-      </div>
     </div>
   );
 

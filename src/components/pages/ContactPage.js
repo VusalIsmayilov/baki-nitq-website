@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useContent } from '../../context/ContentContext';
 import { MapPin, Phone, Mail, Instagram, Facebook, ArrowRight, ExternalLink } from 'lucide-react';
+// import { trackContactForm, trackUserInteraction } from '../GoogleAnalytics';
 
 const ContactPage = () => {
   const { t, language } = useLanguage();

@@ -7,6 +7,7 @@ import targetIconAnimation from '../../animations/targetIcon.json';
 import usersIconAnimation from '../../animations/usersIcon.json';
 import lightbulbIconAnimation from '../../animations/lightbulbIcon.json';
 import dustParticlesAnimation from '../../animations/dustParticles.json';
+// import { trackEvent, trackUserInteraction, trackCourseInteraction } from '../GoogleAnalytics';
 
 // Wave Divider Component
 const WaveDivider = () => (
