@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ContentContext = createContext();
 
@@ -577,7 +577,9 @@ export const ContentProvider = ({ children }) => {
     }
   ]);
 
-  const [resources, setResources] = useState([
+  const [resources, setResources] = useState(() => {
+    const savedResources = localStorage.getItem('resources');
+    return savedResources ? JSON.parse(savedResources) : [
     {
       id: 1,
       title: {
@@ -604,6 +606,7 @@ export const ContentProvider = ({ children }) => {
       },
       type: 'article',
       downloadUrl: '',
+      url: '',
       published: true,
       featured: true
     },
@@ -633,6 +636,7 @@ export const ContentProvider = ({ children }) => {
       },
       type: 'guide',
       downloadUrl: '',
+      url: '',
       published: true,
       featured: false
     },
@@ -662,10 +666,16 @@ export const ContentProvider = ({ children }) => {
       },
       type: 'download',
       downloadUrl: '/downloads/voice-diction-exercises.pdf',
+      url: '',
       published: true,
       featured: true
     }
-  ]);
+  ]});
+
+  // Save resources to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('resources', JSON.stringify(resources));
+  }, [resources]);
 
   const [adminCredentials, setAdminCredentials] = useState(() => {
     const savedCredentials = localStorage.getItem('adminCredentials');
@@ -1161,7 +1171,7 @@ export const ContentProvider = ({ children }) => {
       id: resources.length + 1,
       ...resourceData,
       date: new Date().toISOString().split('T')[0],
-      published: false
+      published: resourceData.published ?? false
     };
     setResources(prev => [...prev, newResource]);
     return newResource;

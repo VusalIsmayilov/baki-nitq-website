@@ -203,7 +203,7 @@ const AdminDashboard = () => {
       alert('✅ Resource updated successfully!');
     } else {
       addResource(resourceData);
-      alert('✅ Resource added successfully!');
+      alert(`✅ Resource added successfully! ${resourceData.published ? 'It will appear on the Gallery page.' : 'It is saved as draft - click "Publish" to make it visible on the Gallery page.'}`);
     }
     setShowResourceForm(false);
     setEditingResource(null);
@@ -837,7 +837,7 @@ const AdminDashboard = () => {
 
   const handleToggleResourcePublished = (resourceId) => {
     publishResource(resourceId);
-    alert('Resource published successfully!');
+    alert('✅ Resource published successfully! It will now appear on the Gallery page.');
   };
 
   const handleToggleResourceFeatured = (resourceId) => {
@@ -2699,15 +2699,151 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
     type: resource?.type || 'article',
     imageUrl: resource?.imageUrl || '',
     downloadUrl: resource?.downloadUrl || '',
+    url: resource?.url || '',
     published: resource?.published ?? false,
     featured: resource?.featured ?? false
   });
+  
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedArticle, setUploadedArticle] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+  // Clear uploaded files when type changes
+  const handleTypeChange = (newType) => {
+    setFormData(prev => ({ ...prev, type: newType }));
+    // Clear uploaded files when switching types
+    if (newType !== 'pdf') {
+      setUploadedFile(null);
+    }
+    if (newType !== 'article' && newType !== 'guide' && newType !== 'tutorial' && newType !== 'template') {
+      setUploadedArticle(null);
+    }
+  };
+
+  // Clean up blob URLs when component unmounts
+  React.useEffect(() => {
+    return () => {
+      // Clean up blob URLs to prevent memory leaks
+      if (uploadedFile && uploadedFile.blobUrl) {
+        URL.revokeObjectURL(uploadedFile.blobUrl);
+      }
+      if (uploadedImage && uploadedImage.blobUrl) {
+        URL.revokeObjectURL(uploadedImage.blobUrl);
+      }
+      if (uploadedArticle && uploadedArticle.blobUrl) {
+        URL.revokeObjectURL(uploadedArticle.blobUrl);
+      }
+    };
+  }, [uploadedFile, uploadedImage, uploadedArticle]);
+
+  // File upload handlers
+  const handleFileUpload = async (file, type) => {
+    if (!file) return;
+    
+    // File size validation (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB');
+      return;
+    }
+    
+    // File type validation
+    if (type === 'pdf' && file.type !== 'application/pdf') {
+      alert('Please select a PDF file');
+      return;
+    }
+    
+    if (type === 'image' && !file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+    
+    if (type === 'article' && !['application/pdf', 'text/plain', 'text/markdown', 'text/html', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'].includes(file.type)) {
+      alert('Please select a valid file (PDF, DOC, DOCX, TXT, MD, HTML, PPTX, XLSX)');
+      return;
+    }
+    
+    setUploading(true);
+    try {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', type);
+      
+      // In production, replace this with your actual upload endpoint
+      // Example implementations:
+      // 1. Upload to your own server: const response = await fetch('/api/upload', { method: 'POST', body: formData });
+      // 2. Upload to AWS S3: Use AWS SDK with signed URLs
+      // 3. Upload to Cloudinary: Use their upload API
+      // 4. Upload to Firebase Storage: Use Firebase SDK
+      
+      // Create a blob URL for the uploaded file (works in demo environment)
+      const blobUrl = URL.createObjectURL(file);
+      const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+      
+      // Store the blob URL in localStorage for demo purposes
+      // In production, this would be replaced with actual file upload to server
+      // The server would return a proper URL like: https://yourserver.com/uploads/filename
+      const fileData = {
+        fileName: fileName,
+        originalName: file.name,
+        blobUrl: blobUrl,
+        type: file.type,
+        size: file.size,
+        uploadDate: new Date().toISOString()
+      };
+      
+      // Store in localStorage for demo
+      const uploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles') || '{}');
+      uploadedFiles[fileName] = fileData;
+      localStorage.setItem('uploadedFiles', JSON.stringify(uploadedFiles));
+      
+      const mockUploadUrl = `/uploads/${fileName}`;
+      
+      // Simulate upload delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      if (type === 'pdf') {
+        setFormData(prev => ({ ...prev, downloadUrl: mockUploadUrl }));
+        setUploadedFile(file);
+      } else if (type === 'image') {
+        // For images, we can use the blob URL directly
+        setFormData(prev => ({ ...prev, imageUrl: blobUrl }));
+        setUploadedImage(file);
+      } else if (type === 'article') {
+        setFormData(prev => ({ ...prev, url: mockUploadUrl }));
+        setUploadedArticle(file);
+      }
+      
+      console.log(`File uploaded successfully: ${mockUploadUrl}`);
+      
+      // Show success message
+      const successDiv = document.createElement('div');
+      successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg z-50';
+      successDiv.textContent = '✓ File uploaded successfully!';
+      document.body.appendChild(successDiv);
+      setTimeout(() => successDiv.remove(), 3000);
+      
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('File upload failed. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = () => {
     if (formData.title.az && formData.title.en && formData.title.ru &&
         formData.content.az && formData.content.en && formData.content.ru &&
         formData.excerpt.az && formData.excerpt.en && formData.excerpt.ru &&
         formData.category.az && formData.category.en && formData.category.ru) {
+      
+      // Additional validation for PDF files
+      if (formData.type === 'pdf' && !formData.downloadUrl) {
+        alert('PDF files require a download URL');
+        return;
+      }
+      
       onSubmit(formData);
     } else {
       alert('Please fill in all required fields for all languages');
@@ -2717,6 +2853,24 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <h4 className="text-lg font-semibold mb-4">{resource ? 'Edit Resource' : 'Add New Resource'}</h4>
+      
+      {/* PDF Instructions */}
+      <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <h5 className="font-medium text-blue-900 mb-2">📁 Resource Type Guide:</h5>
+        <ul className="text-sm text-blue-800 space-y-1">
+          <li>• <strong>PDF Document:</strong> Upload PDF files from your computer or provide direct links</li>
+          <li>• <strong>Article:</strong> Upload article files (PDF, DOC, DOCX, TXT, MD, HTML) or provide external links</li>
+          <li>• <strong>Guide/Tutorial:</strong> Upload instructional content files or provide external links</li>
+          <li>• <strong>Template:</strong> Upload template files (PDF, DOC, DOCX, PPTX, XLSX) or provide external links</li>
+          <li>• <strong>Download:</strong> Other downloadable files (not PDFs)</li>
+        </ul>
+        
+        {uploading && (
+          <div className="mt-2 text-sm text-blue-700">
+            📤 Uploading file... Please wait.
+          </div>
+        )}
+      </div>
       
       <div className="space-y-4">
         {/* Title Fields */}
@@ -2904,17 +3058,95 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
         </div>
 
         {/* Type and URLs */}
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Article Content</label>
+            <div className="space-y-2">
+              {/* File Upload for Articles */}
+              {(formData.type === 'article' || formData.type === 'guide' || formData.type === 'tutorial' || formData.type === 'template') && (
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.txt,.md,.html,.pptx,.xlsx"
+                    onChange={(e) => handleFileUpload(e.target.files[0], 'article')}
+                    className="flex-1 p-2 border border-gray-300 rounded-md"
+                    disabled={uploading}
+                  />
+                  <span className="text-sm text-gray-500">or</span>
+                </div>
+              )}
+              
+              {/* URL Input */}
+              <input
+                type="url"
+                value={formData.url}
+                onChange={(e) => setFormData(prev => ({ ...prev, url: e.target.value }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="https://example.com/article"
+                disabled={uploading}
+              />
+              
+              {uploadedArticle && (formData.type === 'article' || formData.type === 'guide' || formData.type === 'tutorial' || formData.type === 'template') && (
+                <div className="text-sm text-green-600">
+                  ✓ File uploaded: {uploadedArticle.name}
+                </div>
+              )}
+              
+              <p className="text-xs text-gray-500">
+                {(formData.type === 'article' || formData.type === 'guide' || formData.type === 'tutorial' || formData.type === 'template') 
+                  ? 'Upload file (PDF, DOC, DOCX, TXT, MD, HTML, PPTX, XLSX) or provide external link'
+                  : 'External link for articles (if article is hosted elsewhere)'
+                }
+              </p>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+            <div className="space-y-2">
+              {/* File Upload */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e.target.files[0], 'image')}
+                  className="flex-1 p-2 border border-gray-300 rounded-md"
+                  disabled={uploading}
+                />
+                <span className="text-sm text-gray-500">or</span>
+              </div>
+              
+              {/* URL Input */}
+              <input
+                type="url"
+                value={formData.imageUrl}
+                onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="https://example.com/image.jpg"
+                disabled={uploading}
+              />
+              
+              {uploadedImage && (
+                <div className="text-sm text-green-600">
+                  ✓ File uploaded: {uploadedImage.name}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Type and Download URL */}
+        <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
             <select
               value={formData.type}
-              onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
+              onChange={(e) => handleTypeChange(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
               required
             >
               <option value="article">Article</option>
               <option value="guide">Guide</option>
+              <option value="pdf">PDF Document</option>
               <option value="download">Download</option>
               <option value="tutorial">Tutorial</option>
               <option value="template">Template</option>
@@ -2931,14 +3163,47 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Download URL (Optional)</label>
-            <input
-              type="url"
-              value={formData.downloadUrl}
-              onChange={(e) => setFormData(prev => ({ ...prev, downloadUrl: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              placeholder="/downloads/file.pdf"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {formData.type === 'pdf' ? 'PDF File (Required)' : 'Download URL (Optional)'}
+            </label>
+            <div className="space-y-2">
+              {/* File Upload for PDF */}
+              {formData.type === 'pdf' && (
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleFileUpload(e.target.files[0], 'pdf')}
+                    className="flex-1 p-2 border border-gray-300 rounded-md"
+                    disabled={uploading}
+                  />
+                  <span className="text-sm text-gray-500">or</span>
+                </div>
+              )}
+              
+              {/* URL Input */}
+              <input
+                type="url"
+                value={formData.downloadUrl}
+                onChange={(e) => setFormData(prev => ({ ...prev, downloadUrl: e.target.value }))}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder={formData.type === 'pdf' ? 'https://example.com/document.pdf' : '/downloads/file.pdf'}
+                required={formData.type === 'pdf'}
+                disabled={uploading}
+              />
+              
+              {uploadedFile && (
+                <div className="text-sm text-green-600">
+                  ✓ File uploaded: {uploadedFile.name}
+                </div>
+              )}
+              
+              {formData.type === 'pdf' && (
+                <p className="text-xs text-gray-500">
+                  Upload PDF file from your computer or provide a direct link to the PDF document.
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -2976,15 +3241,24 @@ const ResourceForm = ({ resource, onSubmit, onCancel }) => {
             type="button"
             onClick={onCancel}
             className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+            disabled={uploading}
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
+            disabled={uploading}
           >
-            {resource ? 'Update' : 'Add'} Resource
+            {uploading ? (
+              <>
+                <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+                Uploading...
+              </>
+            ) : (
+              `${resource ? 'Update' : 'Add'} Resource`
+            )}
           </button>
         </div>
       </div>

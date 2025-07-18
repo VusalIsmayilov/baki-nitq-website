@@ -308,6 +308,7 @@ const GalleryPage = ({ setCurrentPage, galleryTab }) => {
     date: item.date,
     excerpt: item.excerpt[language] || item.excerpt.az,
     downloadUrl: item.downloadUrl,
+    url: item.url,
     featured: item.featured
   }));
 
@@ -1154,10 +1155,40 @@ const GalleryPage = ({ setCurrentPage, galleryTab }) => {
                       {/* Action Button */}
                       <button
                         onClick={() => {
+                          // Handle different types of URLs
+                          let targetUrl;
                           if (article.type === 'pdf') {
-                            window.open(article.downloadUrl, '_blank');
+                            targetUrl = article.downloadUrl;
                           } else {
-                            window.open(article.url, '_blank');
+                            targetUrl = article.url;
+                          }
+                          
+                          // Check if it's a mock uploaded file (starts with /uploads/)
+                          // In production, these would be served by your web server or CDN
+                          if (targetUrl && targetUrl.startsWith('/uploads/')) {
+                            // Get the uploaded file from localStorage
+                            const fileName = targetUrl.split('/').pop();
+                            const uploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles') || '{}');
+                            const fileData = uploadedFiles[fileName];
+                            
+                            if (fileData && fileData.blobUrl) {
+                              // Test if the blob URL is still valid
+                              try {
+                                window.open(fileData.blobUrl, '_blank');
+                              } catch (error) {
+                                // If blob URL is invalid, show helpful message
+                                alert(`The uploaded file "${fileData.originalName}" is no longer available in this session. Please re-upload the file or refresh the page.`);
+                              }
+                            } else {
+                              // Fallback message
+                              alert(`File "${fileName}" not found. In a production environment, this would be served from the server.`);
+                            }
+                          } else if (targetUrl) {
+                            // Open external URLs normally
+                            window.open(targetUrl, '_blank');
+                          } else {
+                            // No URL available
+                            alert('No file or URL available for this article.');
                           }
                         }}
                         className="w-full py-3 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2"
