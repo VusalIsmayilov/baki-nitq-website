@@ -305,7 +305,10 @@ const CoursesPage = ({ setCurrentPage }) => {
             {language === 'az' ? 'Ətraflı' : language === 'en' ? 'Learn More' : 'Подробнее'}
           </button>
           <button 
-            onClick={() => setCurrentPage('contact')}
+            onClick={() => {
+              setCurrentPage('contact');
+              window.scrollTo({ top: 0, behavior: 'auto' });
+            }}
             className="flex-1 py-3 rounded-lg font-semibold"
             style={{
               backgroundColor: 'transparent',
@@ -1077,6 +1080,7 @@ const CoursesPage = ({ setCurrentPage }) => {
                       onClick={() => {
                         closeTrainingModal();
                         setCurrentPage('contact');
+                        window.scrollTo({ top: 0, behavior: 'auto' });
                       }}
                       className="flex-1 text-white py-3 rounded-md transition-colors font-semibold"
                       style={{

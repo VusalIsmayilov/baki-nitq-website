@@ -31,7 +31,10 @@ const ConversionCTA = ({ setCurrentPage, className = "" }) => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           {/* Primary Contact Us Button */}
           <button
-            onClick={() => setCurrentPage('contact')}
+            onClick={() => {
+              setCurrentPage('contact');
+              window.scrollTo({ top: 0, behavior: 'auto' });
+            }}
             className="flex-1 sm:flex-none text-white py-3 px-6 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2"
             style={{
               backgroundColor: '#2166FF',
