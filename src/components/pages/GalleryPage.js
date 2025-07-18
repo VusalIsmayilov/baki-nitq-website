@@ -894,39 +894,13 @@ const GalleryPage = ({ setCurrentPage, galleryTab }) => {
                     </div>
                   </div>
                   
-                  {/* Spots Left Progress Bar */}
-                  <div className="mb-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span style={{
-                        fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.75rem',
-                        color: '#666666',
-                        fontWeight: 500
-                      }}>
-                        {event.spotsLeft} {t('spotsLeft')}
-                      </span>
-                      <span style={{
-                        fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.75rem',
-                        color: '#666666',
-                        fontWeight: 500
-                      }}>
-                        {event.spotsTotal - event.spotsLeft}/{event.spotsTotal}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                        style={{
-                          width: `${((event.spotsTotal - event.spotsLeft) / event.spotsTotal) * 100}%`,
-                          backgroundColor: event.spotsLeft < 10 ? '#EF4444' : '#2166FF'
-                        }}
-                      />
-                    </div>
-                  </div>
                   
                   {/* Register Button */}
                   <button
+                    onClick={() => {
+                      setCurrentPage('contact');
+                      window.scrollTo({ top: 0, behavior: 'auto' });
+                    }}
                     className="w-full text-white py-3 rounded-lg font-semibold transition-all duration-200"
                     style={{
                       backgroundColor: '#2166FF',
@@ -1179,6 +1153,13 @@ const GalleryPage = ({ setCurrentPage, galleryTab }) => {
                       
                       {/* Action Button */}
                       <button
+                        onClick={() => {
+                          if (article.type === 'pdf') {
+                            window.open(article.downloadUrl, '_blank');
+                          } else {
+                            window.open(article.url, '_blank');
+                          }
+                        }}
                         className="w-full py-3 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2"
                         style={{
                           backgroundColor: article.type === 'pdf' ? '#02A44E' : '#2166FF',
