@@ -4,11 +4,18 @@ import { useContent } from '../../context/ContentContext';
 import { Calendar, MapPin, Filter, ChevronDown, Search, Download, Clock, FileText, X } from 'lucide-react';
 import ConversionCTA from '../ConversionCTA';
 
-const GalleryPage = ({ setCurrentPage }) => {
+const GalleryPage = ({ setCurrentPage, galleryTab }) => {
   const { t, language } = useLanguage();
   const { activities, news, resources, siteContent } = useContent();
   const [selectedImage, setSelectedImage] = useState(null);
-  const [activeTab, setActiveTab] = useState('events');
+  const [activeTab, setActiveTab] = useState(galleryTab || 'events');
+  
+  // Update active tab when galleryTab prop changes
+  useEffect(() => {
+    if (galleryTab) {
+      setActiveTab(galleryTab);
+    }
+  }, [galleryTab]);
   const [isTabsSticky, setIsTabsSticky] = useState(false);
   const tabsRef = useRef(null);
   const [eventFilters, setEventFilters] = useState({
@@ -646,7 +653,7 @@ const GalleryPage = ({ setCurrentPage }) => {
         {activeTab === 'events' && (
           <div>
             {/* Filter Bar */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm">
+            <div id="events-filter-bar" className="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm">
               <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Filter className="w-5 h-5 text-gray-500" />
@@ -970,7 +977,7 @@ const GalleryPage = ({ setCurrentPage }) => {
         {activeTab === 'articles' && (
           <div>
             {/* Search and Filter Bar */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm">
+            <div id="articles-search-bar" className="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm">
               <div className="flex flex-col lg:flex-row gap-4">
                 {/* Search Input */}
                 <div className="flex-1 max-w-md">

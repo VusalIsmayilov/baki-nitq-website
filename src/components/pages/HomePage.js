@@ -23,7 +23,7 @@ const WaveDivider = () => (
   </svg>
 );
 
-const HomePage = ({ setCurrentPage }) => {
+const HomePage = ({ setCurrentPage, setGalleryTab }) => {
   const { t, language } = useLanguage();
   const { siteContent, testimonials, news, getHomeCourses, courses, getActiveTrainers, activities, getActivePartners } = useContent();
   const [activeService, setActiveService] = useState('speechCommunicationDev');
@@ -1602,20 +1602,38 @@ const HomePage = ({ setCurrentPage }) => {
           
           {/* More Activities Link */}
           <div className="flex justify-center mt-8">
-            <a 
-              href="/resources-activities?tab=activities" 
+            <button 
+              onClick={() => {
+                setCurrentPage('gallery');
+                // Scroll to filter bar positioned in middle of screen after navigation
+                setTimeout(() => {
+                  const filterBar = document.getElementById('events-filter-bar');
+                  if (filterBar) {
+                    const elementTop = filterBar.offsetTop;
+                    const elementHeight = filterBar.offsetHeight;
+                    const windowHeight = window.innerHeight;
+                    // Position the filter bar in the middle of the screen
+                    const scrollToPosition = elementTop - (windowHeight / 2) + (elementHeight / 2) + 200;
+                    window.scrollTo({
+                      top: scrollToPosition,
+                      behavior: 'auto'
+                    });
+                  }
+                }, 300);
+              }}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
               style={{
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 600,
-                textDecoration: 'none'
+                textDecoration: 'none',
+                cursor: 'pointer'
               }}
             >
               Bütün tədbirləri görün
               <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -2085,20 +2103,39 @@ const HomePage = ({ setCurrentPage }) => {
           
           {/* More Blog Articles Link */}
           <div className="flex justify-center mt-8">
-            <a 
-              href="/resources-activities?tab=articles" 
+            <button 
+              onClick={() => {
+                setGalleryTab('articles');
+                setCurrentPage('gallery');
+                // Scroll to search bar positioned in middle of screen after navigation
+                setTimeout(() => {
+                  const searchBar = document.getElementById('articles-search-bar');
+                  if (searchBar) {
+                    const elementTop = searchBar.offsetTop;
+                    const elementHeight = searchBar.offsetHeight;
+                    const windowHeight = window.innerHeight;
+                    // Position the search bar in the middle of the screen
+                    const scrollToPosition = elementTop - (windowHeight / 2) + (elementHeight / 2) + 200;
+                    window.scrollTo({
+                      top: scrollToPosition,
+                      behavior: 'auto'
+                    });
+                  }
+                }, 300);
+              }}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
               style={{
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 600,
-                textDecoration: 'none'
+                textDecoration: 'none',
+                cursor: 'pointer'
               }}
             >
-              Daha çox məqalələr
+              Daha çox bloqlar
               <svg className="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
-            </a>
+            </button>
           </div>
         </div>
       </section>

@@ -17,11 +17,12 @@ import './App.css';
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [galleryTab, setGalleryTab] = useState('events');
   
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage setCurrentPage={setCurrentPage} />;
+        return <HomePage setCurrentPage={setCurrentPage} setGalleryTab={setGalleryTab} />;
       case 'about':
         return <AboutPage setCurrentPage={setCurrentPage} />;
       case 'courses':
@@ -29,7 +30,7 @@ const App = () => {
       case 'testimonials':
         return <TestimonialsPage />;
       case 'gallery':
-        return <GalleryPage />;
+        return <GalleryPage setCurrentPage={setCurrentPage} galleryTab={galleryTab} />;
       case 'contact':
         return <ContactPage />;
       case 'login':
