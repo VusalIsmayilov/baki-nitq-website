@@ -86,7 +86,7 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
       isScrolled ? 'shadow-md' : 'shadow-none'
     }`}>
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center py-2">
+        <div className="flex justify-between items-center py-2 min-h-[64px] overflow-hidden">
           <div className="flex items-center space-x-4">
             <img 
               src="/nitg_logo.jpg" 
@@ -97,7 +97,7 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
             />
           </div>
           
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden md:flex space-x-6 flex-1 justify-center">
             {navigation.map(({ key, icon: Icon }) => (
               <button
                 key={key}
@@ -121,51 +121,56 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
                 <span style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: key === 'contact' ? 600 : 600,
-                  textTransform: 'uppercase',
+                  textTransform: 'capitalize',
                   letterSpacing: key === 'contact' ? '0.6px' : '0.5px',
-                  fontSize: key === 'contact' ? '0.9rem' : '0.95rem',
+                  fontSize: key === 'contact' ? '0.85rem' : '0.9rem',
                   lineHeight: key === 'contact' ? 1.35 : 1.4
                 }}>{t(key)}</span>
               </button>
             ))}
           </nav>
           
-          <div className="flex items-center space-x-4">
-            <LanguageSelector />
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            {/* Language Selector - Hidden on small screens when admin is logged in */}
+            <div className={`${isAdmin ? 'hidden lg:block' : 'block'}`}>
+              <LanguageSelector />
+            </div>
             
-            {/* Admin Controls - Only show if admin access is triggered or user is already admin */}
-            {(showAdminTrigger || isAdmin) && (
-              <>
-                {isAdmin ? (
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => setCurrentPage('admin')}
-                      className="flex items-center space-x-1 px-3 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 whitespace-nowrap"
-                    >
-                      <Settings size={18} />
-                      <span>{t('dashboard')}</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setIsAdmin(false);
-                        setShowAdminTrigger(false); // Hide admin access after logout
-                      }}
-                      className="flex items-center space-x-1 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 whitespace-nowrap"
-                    >
-                      <LogOut size={18} />
-                      <span>{t('logout')}</span>
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setCurrentPage('login')}
-                    className="flex items-center space-x-1 px-3 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 whitespace-nowrap"
-                  >
-                    <User size={18} />
-                    <span>{t('adminLogin')}</span>
-                  </button>
-                )}
-              </>
+            {/* Admin Controls - Always show admin controls when user is admin */}
+            {isAdmin && (
+              <div className="flex flex-col items-center space-y-1">
+                <button
+                  onClick={() => setCurrentPage('admin')}
+                  className="hidden sm:flex items-center space-x-1 px-2 py-1 bg-blue-900 text-white rounded-md hover:bg-blue-800 whitespace-nowrap text-xs"
+                  title={t('dashboard')}
+                >
+                  <Settings size={14} />
+                  <span className="hidden md:inline">{t('dashboard')}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setIsAdmin(false);
+                    setShowAdminTrigger(false); // Hide admin access after logout
+                    setCurrentPage('home'); // Navigate to home page after logout
+                  }}
+                  className="hidden sm:flex items-center space-x-1 px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 whitespace-nowrap text-xs min-w-0"
+                  title={t('logout')}
+                >
+                  <LogOut size={14} className="flex-shrink-0" />
+                  <span className="hidden md:inline">{t('logout')}</span>
+                </button>
+              </div>
+            )}
+            
+            {/* Admin Login Button - Only show if admin access is triggered but user is not admin */}
+            {showAdminTrigger && !isAdmin && (
+              <button
+                onClick={() => setCurrentPage('login')}
+                className="flex items-center space-x-1 px-2 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 whitespace-nowrap text-sm"
+              >
+                <User size={16} />
+                <span className="hidden md:inline">{t('adminLogin')}</span>
+              </button>
             )}
             
             <button
@@ -204,45 +209,47 @@ const Header = ({ currentPage, setCurrentPage, isAdmin, setIsAdmin }) => {
               </button>
             ))}
             
-            {/* Mobile Admin Access */}
-            {(showAdminTrigger || isAdmin) && (
+            {/* Mobile Admin Controls - Always show admin controls when user is admin */}
+            {isAdmin && (
               <div className="border-t mt-4 pt-4">
-                {isAdmin ? (
-                  <>
-                    <button
-                      onClick={() => {
-                        setCurrentPage('admin');
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center space-x-2 w-full px-3 py-2 bg-blue-900 text-white rounded-md mb-2"
-                    >
-                      <Settings size={18} />
-                      <span>{t('dashboard')}</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setIsAdmin(false);
-                        setShowAdminTrigger(false);
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center space-x-2 w-full px-3 py-2 bg-red-600 text-white rounded-md"
-                    >
-                      <LogOut size={18} />
-                      <span>{t('logout')}</span>
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setCurrentPage('login');
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center space-x-2 w-full px-3 py-2 bg-blue-900 text-white rounded-md"
-                  >
-                    <User size={18} />
-                    <span>{t('adminLogin')}</span>
-                  </button>
-                )}
+                <button
+                  onClick={() => {
+                    setCurrentPage('admin');
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center space-x-2 w-full px-3 py-2 bg-blue-900 text-white rounded-md mb-2"
+                >
+                  <Settings size={18} />
+                  <span>{t('dashboard')}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setIsAdmin(false);
+                    setShowAdminTrigger(false);
+                    setIsMenuOpen(false);
+                    setCurrentPage('home'); // Navigate to home page after logout
+                  }}
+                  className="flex items-center space-x-2 w-full px-3 py-2 bg-red-600 text-white rounded-md"
+                >
+                  <LogOut size={18} />
+                  <span>{t('logout')}</span>
+                </button>
+              </div>
+            )}
+            
+            {/* Mobile Admin Login Button - Only show if admin access is triggered but user is not admin */}
+            {showAdminTrigger && !isAdmin && (
+              <div className="border-t mt-4 pt-4">
+                <button
+                  onClick={() => {
+                    setCurrentPage('login');
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center space-x-2 w-full px-3 py-2 bg-blue-900 text-white rounded-md"
+                >
+                  <User size={18} />
+                  <span>{t('adminLogin')}</span>
+                </button>
               </div>
             )}
           </div>
