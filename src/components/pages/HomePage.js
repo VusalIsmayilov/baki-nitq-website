@@ -1865,7 +1865,20 @@ const HomePage = ({ setCurrentPage, setGalleryTab }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{gap: '24px'}}>
             {/* Blog Post 1 */}
             <div
-              onClick={() => window.location.href = '/blog/effective-speech-techniques'}
+              onClick={() => {
+                setGalleryTab('articles');
+                setCurrentPage('gallery');
+                // Scroll to search bar positioned in middle of screen after navigation
+                setTimeout(() => {
+                  const searchBar = document.getElementById('articles-search-bar');
+                  if (searchBar) {
+                    const rect = searchBar.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const targetPosition = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                  }
+                }, 300);
+              }}
               className="course-card group relative block cursor-pointer"
               style={{
                 aspectRatio: '1',
@@ -1946,7 +1959,20 @@ const HomePage = ({ setCurrentPage, setGalleryTab }) => {
 
             {/* Blog Post 2 */}
             <div
-              onClick={() => window.location.href = '/blog/body-language-secrets'}
+              onClick={() => {
+                setGalleryTab('articles');
+                setCurrentPage('gallery');
+                // Scroll to search bar positioned in middle of screen after navigation
+                setTimeout(() => {
+                  const searchBar = document.getElementById('articles-search-bar');
+                  if (searchBar) {
+                    const rect = searchBar.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const targetPosition = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                  }
+                }, 300);
+              }}
               className="course-card group relative block cursor-pointer"
               style={{
                 aspectRatio: '1',
@@ -2024,7 +2050,20 @@ const HomePage = ({ setCurrentPage, setGalleryTab }) => {
 
             {/* Blog Post 3 */}
             <div
-              onClick={() => window.location.href = '/blog/confidence-building'}
+              onClick={() => {
+                setGalleryTab('articles');
+                setCurrentPage('gallery');
+                // Scroll to search bar positioned in middle of screen after navigation
+                setTimeout(() => {
+                  const searchBar = document.getElementById('articles-search-bar');
+                  if (searchBar) {
+                    const rect = searchBar.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const targetPosition = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                  }
+                }, 300);
+              }}
               className="course-card group relative block cursor-pointer"
               style={{
                 aspectRatio: '1',
